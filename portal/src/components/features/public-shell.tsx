@@ -68,24 +68,18 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
               ))}
             </nav>
 
-            {/* Collapsed to icon and two words, expanding on hover and
-                focus. The slot holds the collapsed width and the control is
-                positioned inside it, so growing opens leftward over the nav
-                instead of pushing everything along. Nothing reflows. */}
-            <span className="public-ask-slot">
-              <button
-                type="button"
-                onClick={() => setAskOpen(true)}
-                className="public-ask"
-              >
-                <SearchIcon />
-                <span className="public-ask-label">
-                  Ask ISV
-                  <span className="public-ask-more"> a question</span>
-                </span>
-                <span className="public-ask-kbd">⌘K</span>
-              </button>
-            </span>
+            {/* Icon and two words at a fixed width. It does not grow on
+                hover — the click opens the full Ask ISV view, and a control
+                that changes shape under the cursor before doing anything
+                promises an inline search it never delivers. */}
+            <button
+              type="button"
+              onClick={() => setAskOpen(true)}
+              className="public-ask"
+            >
+              <SearchIcon />
+              <span>Ask ISV</span>
+            </button>
 
             <button
               type="button"
