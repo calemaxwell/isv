@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ISV Member Portal — Considered, developed</title>
+<style>
+/* ============================================================
+   CONSIDERED — developed
+   Editorial system. Colour used as field, not as decoration.
+   ============================================================ */
+:root {
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+
+  /* primitive — brand values enter here only */
+  --ink:        #201D19;
+  --ink-soft:   #4A443B;
+  --ink-faint:  #8C857A;
+  --paper:      #FBFAF7;
+  --paper-warm: #F5F1E8;
+  --sand:       #EAE3D4;
+  --sand-deep:  #DDD3BE;
+  --forest:     #1E4A42;
+  --forest-deep:#12312B;
+  --forest-mist:#DFE9E5;
+  --clay:       #9C4A2A;
+  --clay-mist:  #F6E9E2;
+  --line:       #E4DFD4;
+  --line-firm:  #CFC7B7;
+
+  /* semantic */
+  --bg-page: var(--paper);
+  --bg-surface: #FFFFFF;
+  --bg-sunken: var(--paper-warm);
+  --text-primary: var(--ink);
+  --text-secondary: var(--ink-soft);
+  --text-tertiary: var(--ink-faint);
+  --border-subtle: var(--line);
+  --border-strong: var(--line-firm);
+  --action-primary: var(--forest);
+  --action-hover: var(--forest-deep);
+  --status-success: #2C6249;
+  --status-error: #8E3620;
+
+  /* type */
+  --fs-mega: 60px;
+  --fs-display: 42px;
+  --fs-h2: 24px;
+  --fs-h3: 17px;
+  --fs-body: 16.5px;
+  --fs-small: 14px;
+  --fs-micro: 12px;
+
+  --measure: 62ch;
+  --gutter: 40px;
+  --rule: 1px solid var(--line);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: #0E0E10; color: #E6E6EA;
+  font-family: var(--sans); -webkit-font-smoothing: antialiased;
+}
+
+/* harness */
+.harness {
+  position: sticky; top: 0; z-index: 60;
+  background: rgba(14,14,16,.93); backdrop-filter: blur(12px);
+  border-bottom: 1px solid #26262C; padding: 12px 24px;
+  display: flex; gap: 18px; align-items: center; flex-wrap: wrap;
+}
+.harness h1 { font-size: 13px; margin: 0; font-weight: 600; }
+.harness nav { display: flex; gap: 2px; flex-wrap: wrap; }
+.harness nav a {
+  font-size: 12px; color: #8E8E98; text-decoration: none;
+  padding: 6px 10px; border-radius: 5px;
+}
+.harness nav a:hover { color: #FFF; background: #24242C; }
+.block { max-width: 1200px; margin: 0 auto; padding: 44px 24px 0; }
+.block > .lbl { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: #6E6E78; font-weight: 600; margin: 0 0 4px; }
+.block > .dsc { font-size: 12.5px; color: #8A8A94; margin: 0 0 16px; line-height: 1.55; max-width: 760px; }
+.frame { border-radius: 12px; overflow: hidden; border: 1px solid #26262C; }
+
+/* ============================================================
+   THE DESIGN
+   ============================================================ */
+.app {
+  background: var(--bg-page); color: var(--text-primary);
+  font-family: var(--sans); font-size: var(--fs-body); line-height: 1.6;
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 var(--gutter); }
+
+/* --- type primitives --- */
+.eyebrow {
+  font-size: var(--fs-micro); letter-spacing: .13em; text-transform: uppercase;
+  font-weight: 600; color: var(--text-tertiary); margin: 0 0 14px;
+}
+.eyebrow.on-dark { color: rgba(255,255,255,.62); }
+.mega  { font-family: var(--serif); font-size: var(--fs-mega); line-height: 1.05; font-weight: 400; letter-spacing: -.022em; margin: 0; }
+.disp  { font-family: var(--serif); font-size: var(--fs-display); line-height: 1.12; font-weight: 400; letter-spacing: -.018em; margin: 0; }
+.h2    { font-family: var(--serif); font-size: var(--fs-h2); line-height: 1.25; font-weight: 400; letter-spacing: -.012em; margin: 0; }
+.h3    { font-size: var(--fs-h3); line-height: 1.38; font-weight: 600; letter-spacing: -.004em; margin: 0; }
+.lede  { font-size: 18px; line-height: 1.6; color: var(--text-secondary); max-width: var(--measure); margin: 14px 0 0; }
+.body  { font-size: var(--fs-body); line-height: 1.7; max-width: var(--measure); }
+.small { font-size: var(--fs-small); line-height: 1.55; color: var(--text-secondary); }
+.micro { font-size: var(--fs-micro); color: var(--text-tertiary); }
+
+/* --- app bar --- */
+.appbar {
+  display: flex; align-items: center; gap: 18px;
+  padding: 0 var(--gutter); height: 68px;
+  background: var(--bg-page); border-bottom: var(--rule);
+  position: relative; z-index: 5;
+}
+.logo { font-family: var(--serif); font-size: 17px; letter-spacing: -.02em; white-space: nowrap; }
+.logo em { font-style: normal; color: var(--forest); }
+.ask {
+  flex: 1; max-width: 460px; height: 42px; display: flex; align-items: center; gap: 10px;
+  padding: 0 14px; border: 1px solid var(--line-firm); border-radius: 3px;
+  color: var(--text-tertiary); font-size: var(--fs-small); cursor: text; background: transparent;
+  transition: border-color .2s, background .2s;
+}
+.ask:hover { border-color: var(--forest); background: #fff; }
+.ask .kbd { margin-left: auto; font-family: var(--mono); font-size: 10.5px; color: var(--text-tertiary); }
+.appbar .sp { flex: 1; }
+.role {
+  display: flex; align-items: center; gap: 9px; height: 42px; padding: 0 14px;
+  border: 1px solid var(--line-firm); border-radius: 3px; font-size: var(--fs-small);
+  font-weight: 500; cursor: pointer; white-space: nowrap; background: transparent;
+}
+.role:hover { border-color: var(--forest); }
+.role .car { color: var(--text-tertiary); font-size: 9px; }
+.who { display: flex; align-items: center; gap: 10px; }
+.who .nm { font-size: var(--fs-small); font-weight: 500; }
+.mono-sm { font-family: var(--mono); font-size: var(--fs-micro); }
+.av {
+  width: 34px; height: 34px; border-radius: 50%; background: var(--forest);
+  color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 600;
+}
+
+/* --- colour fields --- */
+.field { padding: 72px 0; }
+.field-paper  { background: var(--paper); }
+.field-warm   { background: var(--paper-warm); }
+.field-sand   { background: var(--sand); }
+.field-forest { background: var(--forest-deep); color: #fff; }
+.field-forest .lede, .field-forest .small { color: rgba(255,255,255,.74); }
+.field-ink    { background: var(--ink); color: var(--paper); }
+.field-ink .lede { color: rgba(251,250,247,.72); }
+.field-mist   { background: var(--forest-mist); }
+.field-clay   { background: var(--clay-mist); }
+.field-tight  { padding: 44px 0; }
+
+/* --- rules & index --- */
+.rule-top { border-top: 1px solid var(--line); }
+.sec {
+  display: flex; align-items: baseline; gap: 16px;
+  padding-bottom: 14px; border-bottom: 1px solid var(--line); margin-bottom: 28px;
+}
+.field-forest .sec, .field-ink .sec { border-color: rgba(255,255,255,.18); }
+.sec .cue {
+  font-size: var(--fs-micro); letter-spacing: .06em; text-transform: uppercase;
+  font-weight: 600; color: var(--forest); border: 1px solid var(--forest-mist);
+  background: var(--forest-mist); padding: 4px 9px; border-radius: 2px;
+}
+.sec .more { margin-left: auto; font-size: var(--fs-small); color: var(--text-secondary); text-decoration: none; border-bottom: 1px solid var(--line-firm); padding-bottom: 1px; }
+.sec .more:hover { color: var(--forest); border-color: var(--forest); }
+
+/* editorial index list */
+.index { border-top: 1px solid var(--line); }
+.index a {
+  display: grid; grid-template-columns: 44px 1fr auto; gap: 20px; align-items: baseline;
+  padding: 22px 0; border-bottom: 1px solid var(--line);
+  text-decoration: none; color: inherit; transition: padding-left .2s, background .2s;
+}
+.index a:hover { padding-left: 10px; background: rgba(30,74,66,.035); }
+.index .n { font-family: var(--mono); font-size: var(--fs-micro); color: var(--text-tertiary); }
+.index .t { font-family: var(--serif); font-size: 21px; line-height: 1.3; letter-spacing: -.012em; }
+.index .sub { font-size: var(--fs-small); color: var(--text-secondary); margin-top: 5px; max-width: 58ch; }
+.index .meta { font-size: var(--fs-micro); color: var(--text-tertiary); white-space: nowrap; }
+
+/* cards, editorial */
+.grid { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.cell { background: var(--bg-page); padding: 30px 28px; transition: background .2s; }
+.cell.link { cursor: pointer; }
+.cell.link:hover { background: #fff; }
+.cell .kick { font-size: var(--fs-micro); letter-spacing: .1em; text-transform: uppercase; font-weight: 600; color: var(--text-tertiary); margin: 0 0 12px; }
+.cell .h3 { margin-bottom: 9px; }
+.cell p { margin: 0; font-size: var(--fs-small); line-height: 1.55; color: var(--text-secondary); }
+.cell .ft { margin-top: 22px; font-size: var(--fs-micro); color: var(--text-tertiary); display: flex; align-items: center; gap: 7px; }
+.inc { color: var(--status-success); font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+.inc .d { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+/* feature card, colour blocked */
+.feature {
+  display: grid; grid-template-columns: 1.15fr 1fr; align-items: stretch;
+  border: 1px solid var(--line);
+}
+.feature .txt { padding: 44px 40px; }
+.feature .blk { background: var(--forest); color: #fff; padding: 44px 40px; display: flex; flex-direction: column; justify-content: space-between; }
+.feature .blk .q { font-family: var(--serif); font-size: 25px; line-height: 1.3; letter-spacing: -.014em; }
+.feature .blk .attr { font-size: var(--fs-micro); letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.6); margin-top: 28px; }
+.feature .blk.clay { background: var(--clay); }
+.feature .blk.sand { background: var(--sand-deep); color: var(--ink); }
+.feature .blk.sand .attr { color: rgba(32,29,25,.55); }
+
+/* buttons */
+.btn {
+  font: inherit; font-size: var(--fs-small); font-weight: 600; letter-spacing: .005em;
+  height: 46px; padding: 0 22px; border-radius: 3px; border: 1px solid transparent;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 9px;
+  transition: background .18s, border-color .18s, color .18s;
+}
+.btn-p { background: var(--forest); color: #fff; }
+.btn-p:hover { background: var(--forest-deep); }
+.btn-s { background: transparent; color: var(--ink); border-color: var(--line-firm); }
+.btn-s:hover { border-color: var(--ink); }
+.btn-onink { background: var(--paper); color: var(--ink); }
+.btn-onink:hover { background: #fff; }
+.btn-ghostink { background: transparent; color: rgba(255,255,255,.85); border-color: rgba(255,255,255,.3); }
+.btn-ghostink:hover { border-color: #fff; color: #fff; }
+.btn-q { background: none; color: var(--forest); padding: 0; height: auto; border-bottom: 1px solid var(--line-firm); border-radius: 0; }
+.btn-q:hover { border-color: var(--forest); }
+
+/* ask isv overlay on ink */
+.ovl-q {
+  font-family: var(--serif); font-size: 30px; line-height: 1.28; letter-spacing: -.016em;
+  max-width: 22ch; margin: 0;
+}
+.answer-lead {
+  font-size: 19px; line-height: 1.68; max-width: 60ch; margin: 0;
+}
+.srcs { display: grid; gap: 0; border-top: 1px solid rgba(255,255,255,.18); }
+.srcs a {
+  display: grid; grid-template-columns: 28px 1fr auto; gap: 16px; align-items: center;
+  padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,.14);
+  text-decoration: none; color: inherit;
+}
+.srcs a:hover .st { border-color: rgba(255,255,255,.8); }
+.srcs .sn { font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,.5); }
+.srcs .st { font-size: var(--fs-small); font-weight: 500; border-bottom: 1px solid transparent; padding-bottom: 1px; }
+.srcs .sm { font-size: var(--fs-micro); color: rgba(255,255,255,.5); white-space: nowrap; }
+.fups { display: flex; flex-wrap: wrap; gap: 9px; }
+.fup {
+  font: inherit; font-size: var(--fs-small); padding: 10px 16px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.28); border-radius: 999px;
+  background: transparent; color: rgba(255,255,255,.9);
+}
+.fup:hover { border-color: #fff; background: rgba(255,255,255,.07); }
+
+/* status */
+.status { border: 1px solid var(--line); background: #fff; }
+.status .top { display: flex; align-items: flex-start; gap: 18px; padding: 26px 28px; border-bottom: 1px solid var(--line); }
+.badge { font-size: var(--fs-micro); font-weight: 600; letter-spacing: .05em; text-transform: uppercase; padding: 6px 11px; background: var(--forest-mist); color: var(--forest); border-radius: 2px; white-space: nowrap; }
+.tl { display: flex; padding: 26px 28px; }
+.step { flex: 1; position: relative; padding-top: 22px; }
+.step::before { content:""; position:absolute; top:4px; left:0; width:10px; height:10px; border-radius:50%; background:#fff; border:2px solid var(--line-firm); }
+.step.done::before { background: var(--forest); border-color: var(--forest); }
+.step::after { content:""; position:absolute; top:9px; left:10px; right:0; height:1px; background: var(--line-firm); }
+.step:last-child::after { display:none; }
+.step.done::after { background: var(--forest); }
+.step .s { font-size: var(--fs-micro); font-weight: 600; display: block; }
+.step .d { font-size: var(--fs-micro); color: var(--text-tertiary); }
+.step:not(.done) .s { color: var(--text-tertiary); font-weight: 500; }
+
+/* form */
+.form { display: grid; gap: 28px; max-width: 620px; }
+.fld label { display: block; font-size: var(--fs-small); font-weight: 600; margin-bottom: 8px; }
+.fld .hint { font-weight: 400; color: var(--text-tertiary); margin-left: 6px; font-size: var(--fs-micro); }
+.inp, .sel, .txa {
+  width: 100%; font: inherit; font-size: var(--fs-small); height: 46px; padding: 0 14px;
+  background: #fff; border: 1px solid var(--line-firm); border-radius: 3px; color: var(--ink);
+}
+.txa { height: auto; min-height: 96px; padding: 13px 14px; line-height: 1.6; resize: vertical; }
+.inp:focus, .sel:focus, .txa:focus { outline: 2px solid var(--forest); outline-offset: 1px; border-color: var(--forest); }
+.inp.pre { background: var(--paper-warm); }
+.pnote { font-size: var(--fs-micro); color: var(--text-tertiary); margin-top: 7px; display: flex; align-items: center; gap: 6px; }
+.err .inp, .err .txa { border-color: var(--status-error); }
+.emsg { font-size: var(--fs-micro); color: var(--status-error); margin-top: 8px; background: var(--clay-mist); padding: 9px 12px; border-radius: 2px; display: flex; align-items: center; gap: 7px; }
+.rads { display: grid; gap: 0; border: 1px solid var(--line-firm); border-radius: 3px; overflow: hidden; }
+.rad { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; font-size: var(--fs-small); background: #fff; border-bottom: 1px solid var(--line); }
+.rad:last-child { border-bottom: 0; }
+.rad:hover { background: var(--paper-warm); }
+.rad.on { background: var(--forest-mist); }
+.rad .ring { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--line-firm); flex: none; display: grid; place-items: center; }
+.rad.on .ring { border-color: var(--forest); }
+.rad.on .ring::after { content:""; width:8px; height:8px; border-radius:50%; background: var(--forest); }
+.dis {
+  display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px;
+  font-size: var(--fs-micro); border: 1px dashed var(--line-firm); border-radius: 2px;
+  color: var(--text-tertiary); background: var(--paper-warm); cursor: not-allowed;
+}
+
+/* stat block */
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,.18); }
+.stat { background: var(--forest-deep); padding: 30px 28px; }
+.stat .v { font-family: var(--serif); font-size: 40px; line-height: 1; letter-spacing: -.02em; }
+.stat .k { font-size: var(--fs-micro); letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.6); margin-top: 12px; }
+
+/* swatch */
+.sws { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap: 0; border: 1px solid var(--line); }
+.sw { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.sw .c { height: 76px; }
+.sw .n { padding: 10px 12px; font-family: var(--mono); font-size: 10.5px; color: var(--text-secondary); background: #fff; }
+
+@media (max-width: 900px) {
+  .grid-3, .grid-2, .feature, .stats { grid-template-columns: 1fr; }
+  :root { --fs-mega: 40px; --fs-display: 30px; --gutter: 22px; }
+  .tl { flex-direction: column; gap: 16px; }
+  .step::after { display: none; }
+  .index a { grid-template-columns: 30px 1fr; }
+  .index .meta { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="harness">
+  <h1>Considered — developed</h1>
+  <nav>
+    <a href="#landing">Landing</a>
+    <a href="#fields">Colour fields</a>
+    <a href="#ask">Ask ISV</a>
+    <a href="#index">Resource index</a>
+    <a href="#service">Service detail</a>
+    <a href="#form">Request</a>
+    <a href="#confirm">Confirmation</a>
+    <a href="#tokens">Tokens</a>
+  </nav>
+</div>
+
+<!-- ============ LANDING ============ -->
+<section class="block" id="landing">
+  <p class="lbl">Principal landing — full composition</p>
+  <p class="dsc">Editorial masthead, then alternating colour fields to separate modules instead of a wall of cards. Only two cued modules, per the cue budget. The greeting does work: it names what changed, not just who you are.</p>
+  <div class="frame"><div class="app">
+
+    <div class="appbar">
+      <div class="logo">Independent Schools <em>Victoria</em></div>
+      <div class="ask">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.6"/><path d="M10.4 10.4 14 14"/></svg>
+        Ask ISV a question <span class="kbd">⌘K</span>
+      </div>
+      <div class="sp"></div>
+      <div class="role">Principal <span class="car">▾</span></div>
+      <div class="who"><span class="nm">Margaret Ellery</span><div class="av">ME</div></div>
+    </div>
+
+    <!-- masthead -->
+    <div class="field field-paper" style="padding-bottom:56px">
+      <div class="wrap">
+        <p class="eyebrow">Ashwood Grange School · Camberwell</p>
+        <h1 class="mega">Good morning,<br>Margaret</h1>
+        <p class="lede">Your compliance request moved forward on Tuesday. Two policy resources were updated this week, and registration briefings open next month.</p>
+      </div>
+    </div>
+
+    <!-- request status, sand field -->
+    <div class="field field-sand field-tight">
+      <div class="wrap">
+        <div class="sec"><h2 class="h2">Your requests</h2><a class="more" href="#">All requests</a></div>
+        <div class="status">
+          <div class="top">
+            <div style="flex:1">
+              <p class="eyebrow" style="margin-bottom:8px">Employment relations support</p>
+              <p class="h3" style="margin-bottom:6px">Advice on flexible working arrangements</p>
+              <span class="mono-sm" style="color:var(--text-tertiary)">ISV-2026-04817</span>
+            </div>
+            <span class="badge">With ISV</span>
+          </div>
+          <div class="tl">
+            <div class="step done"><span class="s">Submitted</span><span class="d">6 August</span></div>
+            <div class="step done"><span class="s">Received by ISV</span><span class="d">7 August</span></div>
+            <div class="step done"><span class="s">Adviser assigned</span><span class="d">9 August</span></div>
+            <div class="step"><span class="s">Response provided</span><span class="d">—</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- news, feature block -->
+    <div class="field field-paper">
+      <div class="wrap">
+        <div class="sec"><h2 class="h2">News and insights</h2><a class="more" href="#">All news</a></div>
+        <div class="feature">
+          <div class="txt">
+            <p class="eyebrow">Perspectives</p>
+            <h3 class="disp" style="font-size:30px">Strengthening school improvement through evidence, voice and contemporary research</h3>
+            <p class="body small" style="margin-top:16px">How Independent schools are using evidence and student voice to shape improvement priorities.</p>
+            <p style="margin-top:26px"><button class="btn btn-q">Read the article</button></p>
+          </div>
+          <div class="blk">
+            <p class="q">"Helping children navigate a complex world"</p>
+            <p class="attr">Also this week · Perspectives</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- services, mist field -->
+    <div class="field field-mist">
+      <div class="wrap">
+        <div class="sec"><h2 class="h2">ISV services</h2><span class="cue">Based on your role</span><a class="more" href="#">All services</a></div>
+        <div class="grid grid-3">
+          <div class="cell link">
+            <p class="kick">Governance, compliance and risk</p>
+            <h3 class="h3">Compliance support from ISV</h3>
+            <p>Request guidance on compliance obligations, governance practice and regulatory requirements.</p>
+            <p class="ft"><span class="inc"><span class="d"></span> Included in your membership</span></p>
+          </div>
+          <div class="cell link">
+            <p class="kick">Vision and strategy</p>
+            <h3 class="h3">isAnalyse</h3>
+            <p>Benchmark your school against other Independent schools and generate reports.</p>
+            <p class="ft">Opens in isAnalyse</p>
+          </div>
+          <div class="cell link">
+            <p class="kick">Vision and strategy</p>
+            <h3 class="h3">isLEAD School Effectiveness Surveys</h3>
+            <p>A measure of school effectiveness, developed by and for Independent schools.</p>
+            <p class="ft">Opens in isLEAD</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- resources, index -->
+    <div class="field field-paper">
+      <div class="wrap">
+        <div class="sec"><h2 class="h2">Resources</h2><a class="more" href="#">Resource library</a></div>
+        <div class="index" style="border-top:0">
+          <a href="#"><span class="n">01</span><span><span class="t">Vision and strategy planning resources</span><span class="sub">Planning templates and guidance across the vision and strategy area of isConnect.</span></span><span class="meta">isConnect</span></a>
+          <a href="#"><span class="n">02</span><span><span class="t">Governance, compliance and risk resources</span><span class="sub">Policies, procedures and operational templates schools can adapt.</span></span><span class="meta">isConnect</span></a>
+          <a href="#"><span class="n">03</span><span><span class="t">Compliance policies for Member Schools</span><span class="sub">Maintained in partnership with Russell Kennedy.</span></span><span class="meta">ISV website</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- learning, forest field -->
+    <div class="field field-forest">
+      <div class="wrap">
+        <div class="sec"><h2 class="h2" style="color:#fff">Professional learning</h2><span class="cue" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22);color:#fff">Based on your interests</span><a class="more" href="#" style="color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.3)">All learning</a></div>
+        <div class="stats" style="margin-bottom:32px">
+          <div class="stat"><div class="v">Term 3</div><div class="k">Programme open now</div></div>
+          <div class="stat"><div class="v">Online</div><div class="k">Blended delivery</div></div>
+          <div class="stat"><div class="v">isLearn</div><div class="k">Track your pathway</div></div>
+        </div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+          <button class="btn btn-onink">Browse the programme</button>
+          <button class="btn btn-ghostink">Governance essentials for school leaders</button>
+          <span class="micro" style="color:rgba(255,255,255,.5)">Opens in ISV professional learning</span>
+        </div>
+      </div>
+    </div>
+
+  </div></div>
+</section>
+
+<!-- ============ COLOUR FIELDS ============ -->
+<section class="block" id="fields">
+  <p class="lbl">Colour field system</p>
+  <p class="dsc">Six fields. Colour separates sections and sets pace, replacing the card wall the brief warns against. The rule: a field carries a whole module, never a single card. Ink and forest are used once each per page at most.</p>
+  <div class="frame"><div class="app">
+    <div class="field field-paper field-tight"><div class="wrap"><p class="eyebrow">Paper · default</p><p class="h2">Primary reading surface. Most modules sit here.</p></div></div>
+    <div class="field field-warm field-tight"><div class="wrap"><p class="eyebrow">Warm · secondary</p><p class="h2">Quiet separation without changing hierarchy.</p></div></div>
+    <div class="field field-sand field-tight"><div class="wrap"><p class="eyebrow">Sand · attention</p><p class="h2">Reserved for the member's own items. Requests, saved things.</p></div></div>
+    <div class="field field-mist field-tight"><div class="wrap"><p class="eyebrow">Mist · service</p><p class="h2">Marks anything that leads to an ISV service or action.</p></div></div>
+    <div class="field field-clay field-tight"><div class="wrap"><p class="eyebrow">Clay · editorial accent</p><p class="h2">Used sparingly for feature content and pull quotes.</p></div></div>
+    <div class="field field-forest field-tight"><div class="wrap"><p class="eyebrow on-dark">Forest · moment</p><p class="h2" style="color:#fff">One per page. Reserved for the thing you most want seen.</p></div></div>
+    <div class="field field-ink field-tight"><div class="wrap"><p class="eyebrow on-dark">Ink · Ask ISV</p><p class="h2" style="color:var(--paper)">The search surface only. Nothing else uses it.</p></div></div>
+  </div></div>
+</section>
+
+<!-- ============ ASK ISV ============ -->
+<section class="block" id="ask">
+  <p class="lbl">Ask ISV — answer state on ink</p>
+  <p class="dsc">The overlay takes the ink field so the shift out of the portal reads instantly. Answer at 19px on a 60ch measure, sources as a ruled list beneath it, escalation always present. Copy verbatim from entry A1.</p>
+  <div class="frame"><div class="app">
+    <div class="field field-ink" style="padding:56px 0">
+      <div class="wrap">
+        <div style="display:flex;align-items:flex-start;gap:56px;flex-wrap:wrap">
+          <div style="flex:1;min-width:280px">
+            <p class="eyebrow on-dark">Ask ISV</p>
+            <p class="ovl-q">What do we need to have in place for the Child Safe Standards this year?</p>
+          </div>
+          <div style="flex:1.6;min-width:340px">
+            <p class="answer-lead">ISV's compliance resources cover the Child Safe Standards alongside the VRQA minimum standards for the care, safety and welfare of students. isComply holds model policies, guidance materials and templates that schools can adapt, and the compliance policies for Member Schools are maintained in partnership with Russell Kennedy. What applies to your school depends on your registration status and current policy set, which ISV can review with you directly.</p>
+
+            <p class="eyebrow on-dark" style="margin:40px 0 0">Sources</p>
+            <div class="srcs">
+              <a href="#"><span class="sn">01</span><span class="st">Child safety policy templates and guidance</span><span class="sm">isComply</span></a>
+              <a href="#"><span class="sn">02</span><span class="st">School registration and VRQA minimum standards</span><span class="sm">isComply</span></a>
+              <a href="#"><span class="sn">03</span><span class="st">Compliance policies for Member Schools</span><span class="sm">ISV website</span></a>
+            </div>
+
+            <p class="eyebrow on-dark" style="margin:36px 0 0">Related services</p>
+            <div style="display:flex;gap:14px;flex-wrap:wrap">
+              <button class="btn btn-onink">Compliance support from ISV</button>
+              <button class="btn btn-ghostink">isComply</button>
+            </div>
+
+            <p class="eyebrow on-dark" style="margin:36px 0 0">Follow up</p>
+            <div class="fups">
+              <button class="fup">Where do I find ISV's model policies and templates?</button>
+              <button class="fup">What are our school registration obligations?</button>
+              <button class="fup">Who do I contact about employment relations?</button>
+            </div>
+
+            <div style="margin-top:40px;padding-top:24px;border-top:1px solid rgba(255,255,255,.18);display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+              <span class="small">Need something specific to your school?</span>
+              <button class="btn btn-ghostink">Contact ISV</button>
+              <span class="mono-sm" style="color:rgba(255,255,255,.5)">03 9825 7200</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ============ NO MATCH ============ -->
+<section class="block">
+  <p class="lbl">Ask ISV — no match</p>
+  <p class="dsc">Calm, not an error. No warning colour, no icon. This is the guardrail demonstration and the reason an unexpected question from the room cannot break the demo.</p>
+  <div class="frame"><div class="app">
+    <div class="field field-ink" style="padding:56px 0">
+      <div class="wrap">
+        <p class="eyebrow on-dark">Ask ISV</p>
+        <p class="ovl-q" style="max-width:30ch">I can't answer that from ISV's current knowledge base.</p>
+        <p class="lede" style="margin-top:18px">Try one of the questions below, or contact ISV directly and someone will help.</p>
+        <div class="fups" style="margin-top:32px">
+          <button class="fup">What do we need for the Child Safe Standards?</button>
+          <button class="fup">What professional learning is available this term?</button>
+          <button class="fup">How can we benchmark our school's performance?</button>
+          <button class="fup">What are our school registration obligations?</button>
+        </div>
+        <div style="margin-top:40px;padding-top:24px;border-top:1px solid rgba(255,255,255,.18);display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+          <button class="btn btn-onink">Contact ISV</button>
+          <span class="mono-sm" style="color:rgba(255,255,255,.6)">03 9825 7200 · enquiries@is.vic.edu.au</span>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ============ RESOURCE INDEX ============ -->
+<section class="block" id="index">
+  <p class="lbl">Resource index and filter</p>
+  <p class="dsc">Editorial index rather than a card grid. Numbered, ruled, hover shifts right. The filter carries the Discovery-status treatment: visibly disabled, honestly labelled.</p>
+  <div class="frame"><div class="app">
+    <div class="field field-paper" style="padding:52px 0">
+      <div class="wrap">
+        <p class="eyebrow">Knowledge and resources</p>
+        <h2 class="disp">Governance, compliance and risk</h2>
+        <div style="display:flex;gap:10px;margin:30px 0 8px;flex-wrap:wrap">
+          <span class="dis">Topic · confirmed during Discovery</span>
+          <span class="dis">Format · confirmed during Discovery</span>
+          <span class="dis">Source · confirmed during Discovery</span>
+        </div>
+        <div class="index">
+          <a href="#"><span class="n">01</span><span><span class="t">Child safety policy templates and guidance</span><span class="sub">Model policies and guidance materials covering the care, safety and welfare of students.</span></span><span class="meta">isComply</span></a>
+          <a href="#"><span class="n">02</span><span><span class="t">School registration and VRQA minimum standards</span><span class="sub">Guidance materials structured around the standards that govern registration.</span></span><span class="meta">isComply</span></a>
+          <a href="#"><span class="n">03</span><span><span class="t">Governance, compliance and risk resources</span><span class="sub">Policies, procedures and operational templates from isConnect.</span></span><span class="meta">isConnect</span></a>
+          <a href="#"><span class="n">04</span><span><span class="t">Compliance policies for Member Schools</span><span class="sub">Maintained in partnership with Russell Kennedy.</span></span><span class="meta">ISV website</span></a>
+          <a href="#"><span class="n">05</span><span><span class="t">People and culture policies and templates</span><span class="sub">Employment and workplace practice resources from isConnect.</span></span><span class="meta">isConnect</span></a>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ============ SERVICE DETAIL ============ -->
+<section class="block" id="service">
+  <p class="lbl">Service detail</p>
+  <p class="dsc">Asymmetric editorial layout. The action sits in a sand block against the description so it holds its own without a coloured button competing with body copy. Membership inclusion answers the first question a member asks.</p>
+  <div class="frame"><div class="app">
+    <div class="field field-paper" style="padding:52px 0 0">
+      <div class="wrap">
+        <p class="eyebrow">Governance, compliance and risk</p>
+        <h2 class="disp" style="max-width:20ch">Compliance support from ISV</h2>
+        <p class="lede">Request guidance from ISV on compliance obligations, governance practice and regulatory requirements affecting your school.</p>
+      </div>
+    </div>
+    <div class="field field-paper" style="padding:44px 0">
+      <div class="wrap">
+        <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:48px;align-items:start">
+          <div>
+            <p class="body">ISV maintains model policies, guidance materials and templates that Member Schools can adapt, structured around the VRQA minimum standards. Where a question is specific to your school's registration status or current policy set, an ISV adviser can work through it with you directly.</p>
+            <p class="body" style="margin-top:18px">Requests are logged against your school and visible in the portal, so you can see where things sit without chasing an email thread.</p>
+            <div style="margin-top:36px;padding-top:24px;border-top:1px solid var(--line);display:flex;gap:32px;flex-wrap:wrap">
+              <div><p class="eyebrow" style="margin-bottom:6px">Delivered by</p><p class="small" style="color:var(--ink)">An ISV adviser</p></div>
+              <div><p class="eyebrow" style="margin-bottom:6px">Contact</p><p class="small" style="color:var(--ink)">03 9825 7200</p></div>
+              <div><p class="eyebrow" style="margin-bottom:6px">Email</p><p class="small" style="color:var(--ink)">enquiries@is.vic.edu.au</p></div>
+            </div>
+          </div>
+          <div style="background:var(--sand);padding:32px 28px">
+            <p class="inc" style="font-size:var(--fs-small)"><span class="d"></span> Included in your membership</p>
+            <p class="h3" style="margin:16px 0 10px">Ashwood Grange School</p>
+            <p class="small">Your school's membership includes compliance support at no additional cost.</p>
+            <p style="margin:26px 0 0"><button class="btn btn-p" style="width:100%;justify-content:center">Request compliance support</button></p>
+            <p style="margin:12px 0 0"><button class="btn btn-s" style="width:100%;justify-content:center">Contact ISV instead</button></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ============ FORM ============ -->
+<section class="block" id="form">
+  <p class="lbl">Request form</p>
+  <p class="dsc">Warm fill marks pre-filled fields, with the provenance note visible rather than silent. Radios grouped in a single ruled block instead of floating pills. Error uses clay, not red.</p>
+  <div class="frame"><div class="app">
+    <div class="field field-paper" style="padding:52px 0">
+      <div class="wrap">
+        <p class="eyebrow">Compliance support from ISV</p>
+        <h2 class="disp" style="margin-bottom:36px">Tell us what you need</h2>
+        <div class="form">
+          <div class="fld">
+            <label>Your name</label>
+            <input class="inp pre" value="Margaret Ellery">
+            <div class="pnote">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="6" cy="6" r="5"/><path d="M6 3.4v3.2M6 8.4v.2"/></svg>
+              From your ISV member profile
+            </div>
+          </div>
+          <div class="fld">
+            <label>School</label>
+            <input class="inp pre" value="Ashwood Grange School">
+          </div>
+          <div class="fld">
+            <label>What area does this relate to</label>
+            <select class="sel">
+              <option>Child safety</option><option>School registration</option>
+              <option>Governance and board practice</option><option>Student wellbeing</option>
+              <option>Staff employment</option><option>Other</option>
+            </select>
+          </div>
+          <div class="fld err">
+            <label>Describe what you need help with <span class="hint">Include any relevant dates or deadlines</span></label>
+            <textarea class="txa"></textarea>
+            <div class="emsg">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1.5 11 10.5H1z"/><path d="M6 5v2.2M6 8.8v.2"/></svg>
+              Tell us what you need help with so we can route your request
+            </div>
+          </div>
+          <div class="fld">
+            <label>How urgent is this</label>
+            <div class="rads">
+              <label class="rad on"><span class="ring"></span> Within a week</label>
+              <label class="rad"><span class="ring"></span> Within a month</label>
+              <label class="rad"><span class="ring"></span> No fixed deadline</label>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px">
+            <button class="btn btn-p">Submit request</button>
+            <button class="btn btn-s">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ============ CONFIRMATION ============ -->
+<section class="block" id="confirm">
+  <p class="lbl">Confirmation</p>
+  <p class="dsc">The forest field, used once. Large, quiet, and specific about what happens next. No celebration graphic, no tick animation. The reference is monospaced so it reads as a thing you can quote back.</p>
+  <div class="frame"><div class="app">
+    <div class="field field-forest" style="padding:72px 0">
+      <div class="wrap">
+        <p class="eyebrow on-dark">Request submitted</p>
+        <h2 class="mega" style="color:#fff;max-width:16ch">We have your request</h2>
+        <p class="lede" style="margin-top:22px">An ISV adviser will be in touch. You can follow this request from your portal at any time.</p>
+        <div style="display:flex;gap:48px;margin-top:44px;flex-wrap:wrap">
+          <div><p class="eyebrow on-dark" style="margin-bottom:8px">Reference</p><p class="mono-sm" style="font-size:15px">ISV-2026-04818</p></div>
+          <div><p class="eyebrow on-dark" style="margin-bottom:8px">Status</p><p style="font-size:15px">Received by ISV</p></div>
+          <div><p class="eyebrow on-dark" style="margin-bottom:8px">Service</p><p style="font-size:15px">Compliance support</p></div>
+        </div>
+        <div style="display:flex;gap:14px;margin-top:44px;flex-wrap:wrap">
+          <button class="btn btn-onink">Back to portal</button>
+          <button class="btn btn-ghostink">View request</button>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ============ TOKENS ============ -->
+<section class="block" id="tokens">
+  <p class="lbl">Palette and type</p>
+  <p class="dsc">These are strategy values, not ISV's brand. They get replaced by sampled values at the primitive layer once brand is confirmed, and nothing above changes.</p>
+  <div class="frame"><div class="app"><div class="field field-paper" style="padding:44px 0">
+    <div class="wrap">
+      <div class="sws">
+        <div class="sw"><div class="c" style="background:var(--ink)"></div><div class="n">ink</div></div>
+        <div class="sw"><div class="c" style="background:var(--ink-soft)"></div><div class="n">ink-soft</div></div>
+        <div class="sw"><div class="c" style="background:var(--paper)"></div><div class="n">paper</div></div>
+        <div class="sw"><div class="c" style="background:var(--paper-warm)"></div><div class="n">paper-warm</div></div>
+        <div class="sw"><div class="c" style="background:var(--sand)"></div><div class="n">sand</div></div>
+        <div class="sw"><div class="c" style="background:var(--sand-deep)"></div><div class="n">sand-deep</div></div>
+        <div class="sw"><div class="c" style="background:var(--forest)"></div><div class="n">forest</div></div>
+        <div class="sw"><div class="c" style="background:var(--forest-deep)"></div><div class="n">forest-deep</div></div>
+        <div class="sw"><div class="c" style="background:var(--forest-mist)"></div><div class="n">forest-mist</div></div>
+        <div class="sw"><div class="c" style="background:var(--clay)"></div><div class="n">clay</div></div>
+        <div class="sw"><div class="c" style="background:var(--clay-mist)"></div><div class="n">clay-mist</div></div>
+        <div class="sw"><div class="c" style="background:var(--line)"></div><div class="n">line</div></div>
+      </div>
+
+      <div style="margin-top:44px">
+        <div class="sec"><h2 class="h2">Type ramp</h2></div>
+        <div style="display:grid;gap:22px">
+          <div style="display:flex;gap:24px;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:16px"><span class="mono-sm" style="width:130px;flex:none">mega / 60</span><span class="mega">Good morning</span></div>
+          <div style="display:flex;gap:24px;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:16px"><span class="mono-sm" style="width:130px;flex:none">display / 42</span><span class="disp">Compliance support</span></div>
+          <div style="display:flex;gap:24px;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:16px"><span class="mono-sm" style="width:130px;flex:none">heading-2 / 24</span><span class="h2">ISV services</span></div>
+          <div style="display:flex;gap:24px;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:16px"><span class="mono-sm" style="width:130px;flex:none">heading-3 / 17</span><span class="h3">Child safety policy templates</span></div>
+          <div style="display:flex;gap:24px;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:16px"><span class="mono-sm" style="width:130px;flex:none">body / 16.5</span><span>ISV's compliance resources cover the Child Safe Standards.</span></div>
+          <div style="display:flex;gap:24px;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:16px"><span class="mono-sm" style="width:130px;flex:none">micro caps / 12</span><span class="eyebrow" style="margin:0">Governance, compliance and risk</span></div>
+        </div>
+      </div>
+    </div>
+  </div></div></div>
+</section>
+
+<div style="height:80px"></div>
+</body>
+</html>

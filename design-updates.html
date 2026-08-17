@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ISV — "What's changed" treatments</title>
+<style>
+:root{
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+
+  --ink:#201D19; --ink-soft:#4A443B; --ink-faint:#6B6459;
+  --paper:#FBFAF7; --warm:#F5F1E8; --sand:#EAE3D4; --sand-deep:#DDD3BE;
+  --forest:#1E4A42; --forest-deep:#12312B; --mist:#DFE9E5;
+  --clay:#9C4A2A; --clay-mist:#F6E9E2; --ochre:#B98A2E; --ochre-mist:#F7EFDC;
+  --slate:#3C5A6E; --slate-mist:#E4EBF0;
+  --line:#E4DFD4; --line-firm:#CFC7B7;
+  --gutter:48px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#0E0E10;color:#E6E6EA;font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.harness{position:sticky;top:0;z-index:60;background:rgba(14,14,16,.94);backdrop-filter:blur(12px);
+  border-bottom:1px solid #26262C;padding:12px 24px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.harness h1{font-size:13px;margin:0;font-weight:600}
+.harness nav{display:flex;gap:2px;flex-wrap:wrap}
+.harness nav a{font-size:12px;color:#8E8E98;text-decoration:none;padding:6px 10px;border-radius:5px}
+.harness nav a:hover{color:#FFF;background:#24242C}
+.block{max-width:1240px;margin:0 auto;padding:44px 24px 0}
+.block>.lbl{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#6E6E78;font-weight:600;margin:0 0 4px}
+.block>.dsc{font-size:12.5px;color:#8A8A94;margin:0 0 16px;line-height:1.55;max-width:820px}
+.frame{border-radius:12px;overflow:hidden;border:1px solid #26262C}
+.verdict{font-size:12.5px;line-height:1.6;margin:14px 0 0;padding:12px 16px;border-left:2px solid #3A3A44;color:#A6A6B0;background:#17171B;border-radius:0 6px 6px 0}
+.verdict b{color:#E6E6EA;font-weight:600}
+.diag{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#26262C;border:1px solid #26262C;border-radius:10px;overflow:hidden;margin-bottom:8px}
+.diag div{background:#141418;padding:18px 20px}
+.diag h4{margin:0 0 8px;font-size:12.5px;color:#E6E6EA}
+.diag p{margin:0;font-size:12px;line-height:1.6;color:#8A8A94}
+
+/* ---------- app ---------- */
+.app{background:var(--warm);color:var(--ink);font-size:16.5px;line-height:1.6;padding:56px 0}
+.app.on-paper{background:var(--paper)}
+.wrap{max-width:1140px;margin:0 auto;padding:0 var(--gutter)}
+.eyebrow{font-size:12px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;color:var(--ink-faint);margin:0}
+.h2{font-family:var(--serif);font-size:23px;line-height:1.25;font-weight:400;letter-spacing:-.012em;margin:0}
+.sec{display:flex;align-items:baseline;gap:16px;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:28px}
+.sec .more{margin-left:auto;font-size:14px;color:var(--ink-soft);text-decoration:none;border-bottom:1px solid var(--line-firm);padding-bottom:1px}
+.count{font-family:var(--mono);font-size:12px;color:var(--ink-faint);border:1px solid var(--line-firm);border-radius:999px;padding:3px 10px}
+.mono{font-family:var(--mono);font-size:12px;color:var(--ink-faint)}
+.sm{font-size:14px;line-height:1.55;color:var(--ink-soft)}
+.micro{font-size:12px;color:var(--ink-faint)}
+
+/* category accents */
+.c-gov{--accent:var(--forest);--accent-mist:var(--mist)}
+.c-people{--accent:var(--clay);--accent-mist:var(--clay-mist)}
+.c-finance{--accent:var(--ochre);--accent-mist:var(--ochre-mist)}
+.c-strategy{--accent:var(--slate);--accent-mist:var(--slate-mist)}
+.tag{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--accent)}
+.tag::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent)}
+
+/* =========================================================
+   A · LEAD AND STACK
+   ========================================================= */
+.lead{display:grid;grid-template-columns:1.55fr 1fr;gap:56px;align-items:start;
+  padding-bottom:32px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.lead .big{font-family:var(--serif);font-size:36px;line-height:1.15;letter-spacing:-.018em;margin:14px 0 12px}
+.lead .body{font-size:16.5px;line-height:1.65;color:var(--ink-soft);max-width:46ch}
+.lead .act{margin-top:22px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.btn{font:inherit;font-size:14px;font-weight:600;height:44px;padding:0 20px;border-radius:3px;border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn-p{background:var(--forest);color:#fff}
+.btn-s{background:transparent;color:var(--ink);border-color:var(--line-firm)}
+.lead aside{background:var(--paper);border:1px solid var(--line);padding:24px}
+.lead aside .n{font-family:var(--serif);font-size:44px;line-height:1;letter-spacing:-.02em}
+.stack a{display:grid;grid-template-columns:96px 1fr auto;gap:22px;align-items:baseline;
+  padding:16px 0;border-bottom:1px solid var(--line);text-decoration:none;color:inherit;transition:padding-left .2s}
+.stack a:hover{padding-left:8px;background:rgba(30,74,66,.03)}
+.stack .t{font-size:16.5px;font-weight:600}
+
+/* =========================================================
+   B · SPINE
+   ========================================================= */
+.spine{position:relative;padding-left:132px}
+.spine::before{content:"";position:absolute;left:96px;top:6px;bottom:6px;width:1px;background:var(--line-firm)}
+.spine .row{position:relative;padding:0 0 30px}
+.spine .row::before{content:"";position:absolute;left:-40px;top:7px;width:9px;height:9px;border-radius:50%;
+  background:var(--accent);outline:4px solid var(--warm)}
+.spine .when{position:absolute;left:-132px;width:80px;text-align:right;font-family:var(--mono);font-size:12px;color:var(--ink-faint);top:3px}
+.spine .t{font-size:19px;font-weight:600;margin:6px 0 5px;letter-spacing:-.005em}
+.marker{position:relative;margin:6px 0 30px;padding-left:0}
+.marker span{position:relative;z-index:1;background:var(--warm);padding-right:14px;font-size:12px;
+  letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--ink-faint)}
+.marker::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--line-firm);z-index:0}
+
+/* =========================================================
+   C · LEDGER
+   ========================================================= */
+.ledger{display:grid;grid-template-columns:1fr 1fr;gap:0 40px}
+.ledger a{display:grid;grid-template-columns:82px 1fr auto;gap:16px;align-items:center;
+  padding:13px 14px 13px 12px;border-bottom:1px solid var(--line);border-left:3px solid var(--accent);
+  text-decoration:none;color:inherit;transition:background .15s}
+.ledger a:hover{background:var(--paper)}
+.ledger .t{font-size:15px;font-weight:600;letter-spacing:-.004em}
+.ledger .sys{font-family:var(--mono);font-size:11px;color:var(--ink-faint)}
+
+/* =========================================================
+   D · MOSAIC
+   ========================================================= */
+.mosaic{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.mosaic .tile{background:var(--paper);padding:26px 24px;display:flex;flex-direction:column;min-height:200px}
+.mosaic .tile.wide{grid-column:span 2;background:var(--accent-mist)}
+.mosaic .tile .t{font-size:17px;font-weight:600;line-height:1.35;margin:12px 0 8px}
+.mosaic .tile.wide .t{font-family:var(--serif);font-size:27px;font-weight:400;line-height:1.2;letter-spacing:-.015em}
+.mosaic .tile .foot{margin-top:auto;padding-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-faint)}
+
+/* =========================================================
+   E · DIGEST
+   ========================================================= */
+.digest{display:grid;grid-template-columns:300px 1fr;gap:64px;align-items:start}
+.digest .num{font-family:var(--serif);font-size:88px;line-height:.9;letter-spacing:-.03em}
+.digest .say{font-size:16.5px;line-height:1.6;color:var(--ink-soft);margin-top:16px}
+.digest ol{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+.digest li{border-bottom:1px solid var(--line);padding:18px 0}
+.digest li a{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:baseline;text-decoration:none;color:inherit}
+.digest .idx{font-family:var(--mono);font-size:12px;color:var(--ink-faint);width:22px}
+.digest .t{font-size:20px;font-weight:600;letter-spacing:-.008em}
+.digest .meta{white-space:nowrap}
+
+@media(max-width:980px){
+  .lead,.digest,.ledger,.mosaic{grid-template-columns:1fr}
+  .mosaic .tile.wide{grid-column:span 1}
+  .spine{padding-left:26px}
+  .spine::before{left:0}
+  .spine .row::before{left:-30px}
+  .spine .when{position:static;width:auto;text-align:left;display:block;margin-bottom:4px}
+  :root{--gutter:22px}
+}
+</style>
+</head>
+<body>
+
+<div class="harness">
+  <h1>"What's changed" — five treatments</h1>
+  <nav>
+    <a href="#why">Why it's flat</a>
+    <a href="#a">A · Lead and stack</a>
+    <a href="#b">B · Spine</a>
+    <a href="#c">C · Ledger</a>
+    <a href="#d">D · Mosaic</a>
+    <a href="#e">E · Digest</a>
+  </nav>
+</div>
+
+<!-- ============ DIAGNOSIS ============ -->
+<section class="block" id="why">
+  <p class="lbl">Before the options</p>
+  <p class="dsc">The current module is a table wearing editorial clothes. Six things are wrong with it, and two of them are data problems rather than design problems.</p>
+  <div class="diag">
+    <div><h4>Everything weighs the same</h4><p>Four rows at identical size. Nothing tells you which one matters, so you read all of it or none of it. Most people choose none.</p></div>
+    <div><h4>The chip is noise</h4><p>"Governance, compliance and risk" four times. A label that never varies carries no information and costs a line of vertical space each time.</p></div>
+    <div><h4>Forty percent of the canvas is empty</h4><p>Everything is jammed into the left two thirds. The width is doing nothing.</p></div>
+    <div><h4>Summaries flatten the rhythm</h4><p>Every row is title plus two lines of body. Uniform blocks read as a wall, not a list.</p></div>
+    <div><h4>Nothing to land on</h4><p>No numeral, no colour, no scale change, no imagery. The eye has no entry point.</p></div>
+    <div><h4>It tells and never asks</h4><p>Four facts and not one action. A member reads it and moves on, which is the opposite of what the module is for.</p></div>
+  </div>
+  <p class="verdict"><b>Two of these are data fixes, and they matter more than the visual treatment.</b> First, the Principal's four updates are all one category. Give each persona a genuine spread across compliance, people, finance and strategy and the colour system below starts doing real work. Second, an update with nowhere to go is a dead end. Every item needs a destination, even if it is only the resource it changed.</p>
+</section>
+
+<!-- ============ A ============ -->
+<section class="block" id="a">
+  <p class="lbl">A · Lead and stack</p>
+  <p class="dsc">One item gets the weight, the rest compress to single lines. The counter panel uses the empty right third and gives the module a reason to exist at a glance.</p>
+  <div class="frame"><div class="app">
+    <div class="wrap">
+      <div class="sec"><h2 class="h2">What's changed</h2><span class="count">4 since 2 August</span><a class="more" href="#">All updates</a></div>
+
+      <div class="lead c-gov">
+        <div>
+          <span class="tag">Governance, compliance and risk</span>
+          <h3 class="big">Compliance resources reviewed for the new school year</h3>
+          <p class="body">ISV has completed its annual review of the compliance library, including model policies and guidance materials.</p>
+          <div class="act">
+            <button class="btn btn-p">Open in isComply</button>
+            <span class="micro">2 days ago · isComply</span>
+          </div>
+        </div>
+        <aside>
+          <p class="eyebrow" style="margin-bottom:10px">Since your last visit</p>
+          <p class="n">4</p>
+          <p class="sm" style="margin:10px 0 0">updates across compliance, governance and people. Three touch resources your school uses.</p>
+        </aside>
+      </div>
+
+      <div class="stack">
+        <a href="#" class="c-gov"><span class="mono">3 days ago</span><span class="t">Term 4 registration briefing dates confirmed</span><span class="mono">ISV website</span></a>
+        <a href="#" class="c-gov"><span class="mono">5 days ago</span><span class="t">Child safety policy templates updated</span><span class="mono">isComply</span></a>
+        <a href="#" class="c-strategy"><span class="mono">Last week</span><span class="t">New guidance on school board governance practice</span><span class="mono">isConnect</span></a>
+      </div>
+    </div>
+  </div></div>
+  <p class="verdict"><b>Strongest for the demo.</b> It reads in about four seconds and it answers "what should I look at" rather than "what happened". The counter panel is the bit that makes the personalisation claim land: it is a number about you.</p>
+</section>
+
+<!-- ============ B ============ -->
+<section class="block" id="b">
+  <p class="lbl">B · Spine</p>
+  <p class="dsc">A dated spine down the left with a marker for the member's last visit. Colour on the node rather than in a chip, so category reads without a repeated label.</p>
+  <div class="frame"><div class="app">
+    <div class="wrap">
+      <div class="sec"><h2 class="h2">What's changed</h2><a class="more" href="#">All updates</a></div>
+
+      <div class="spine">
+        <div class="row c-gov">
+          <span class="when">2 days ago</span>
+          <span class="tag">Compliance</span>
+          <p class="t">Compliance resources reviewed for the new school year</p>
+          <p class="sm">ISV has completed its annual review of the compliance library, including model policies and guidance materials.</p>
+        </div>
+        <div class="row c-gov">
+          <span class="when">3 days ago</span>
+          <span class="tag">Compliance</span>
+          <p class="t">Term 4 registration briefing dates confirmed</p>
+          <p class="sm">ISV has confirmed the dates for its Term 4 briefings on school registration and the VRQA minimum standards.</p>
+        </div>
+
+        <div class="marker"><span>You last visited here</span></div>
+
+        <div class="row c-people">
+          <span class="when">5 days ago</span>
+          <span class="tag">People</span>
+          <p class="t">Child safety policy templates updated</p>
+          <p class="sm">ISV has refreshed its child safety model policies and supporting templates in isComply.</p>
+        </div>
+        <div class="row c-strategy">
+          <span class="when">Last week</span>
+          <span class="tag">Governance</span>
+          <p class="t">New guidance on school board governance practice</p>
+          <p class="sm">ISV has published new material on board composition, meeting practice and delegation.</p>
+        </div>
+      </div>
+    </div>
+  </div></div>
+  <p class="verdict"><b>The "you last visited here" line is the idea.</b> It converts a list of updates into an answer to the question the member actually has, and it costs one rule and four words. Worth stealing into whichever treatment wins.</p>
+</section>
+
+<!-- ============ C ============ -->
+<section class="block" id="c">
+  <p class="lbl">C · Ledger</p>
+  <p class="dsc">Two columns, no summaries, category as a coloured left edge. Eight items in less height than four take now.</p>
+  <div class="frame"><div class="app on-paper">
+    <div class="wrap">
+      <div class="sec"><h2 class="h2">What's changed</h2><span class="count">8 this fortnight</span><a class="more" href="#">All updates</a></div>
+      <div class="ledger">
+        <a href="#" class="c-gov"><span class="mono">2 days ago</span><span class="t">Compliance resources reviewed for the new school year</span><span class="sys">isComply</span></a>
+        <a href="#" class="c-people"><span class="mono">6 days ago</span><span class="t">People and culture policy templates updated</span><span class="sys">isConnect</span></a>
+        <a href="#" class="c-gov"><span class="mono">3 days ago</span><span class="t">Term 4 registration briefing dates confirmed</span><span class="sys">ISV</span></a>
+        <a href="#" class="c-finance"><span class="mono">2 weeks ago</span><span class="t">Financial reporting templates updated</span><span class="sys">isConnect</span></a>
+        <a href="#" class="c-gov"><span class="mono">5 days ago</span><span class="t">Child safety policy templates updated</span><span class="sys">isComply</span></a>
+        <a href="#" class="c-people"><span class="mono">10 days ago</span><span class="t">New guidance on staff employment record keeping</span><span class="sys">isConnect</span></a>
+        <a href="#" class="c-strategy"><span class="mono">Last week</span><span class="t">New guidance on school board governance practice</span><span class="sys">isConnect</span></a>
+        <a href="#" class="c-strategy"><span class="mono">2 weeks ago</span><span class="t">School improvement resources refreshed</span><span class="sys">isConnect</span></a>
+      </div>
+    </div>
+  </div></div>
+  <p class="verdict"><b>Most information per centimetre, and the least warmth.</b> This is what the module should become on a dedicated updates page. On the landing page it fights the calm the rest of the design is holding.</p>
+</section>
+
+<!-- ============ D ============ -->
+<section class="block" id="d">
+  <p class="lbl">D · Mosaic</p>
+  <p class="dsc">Asymmetric tiles. The lead item takes two columns and a tinted ground drawn from its own category colour.</p>
+  <div class="frame"><div class="app">
+    <div class="wrap">
+      <div class="sec"><h2 class="h2">What's changed</h2><a class="more" href="#">All updates</a></div>
+      <div class="mosaic">
+        <div class="tile wide c-gov">
+          <span class="tag">Governance, compliance and risk</span>
+          <p class="t">Compliance resources reviewed for the new school year</p>
+          <p class="sm">ISV has completed its annual review of the compliance library, including model policies and guidance materials.</p>
+          <p class="foot">2 days ago · isComply</p>
+        </div>
+        <div class="tile c-gov">
+          <span class="tag">Compliance</span>
+          <p class="t">Term 4 registration briefing dates confirmed</p>
+          <p class="foot">3 days ago · ISV website</p>
+        </div>
+        <div class="tile c-people">
+          <span class="tag">People</span>
+          <p class="t">Child safety policy templates updated</p>
+          <p class="foot">5 days ago · isComply</p>
+        </div>
+        <div class="tile c-strategy" style="grid-column:span 2">
+          <span class="tag">Governance</span>
+          <p class="t">New guidance on school board governance practice</p>
+          <p class="sm">ISV has published new material on board composition, meeting practice and delegation.</p>
+          <p class="foot">Last week · isConnect</p>
+        </div>
+        <div class="tile c-finance">
+          <span class="tag">Finance</span>
+          <p class="t">Financial reporting templates updated</p>
+          <p class="foot">2 weeks ago · isConnect</p>
+        </div>
+        <div class="tile" style="background:var(--forest-deep);color:#fff">
+          <p class="tag" style="--accent:#fff">Your school</p>
+          <p class="t" style="color:#fff">Three of these touch resources Ashwood Grange uses</p>
+          <p class="foot" style="color:rgba(255,255,255,.6)">Based on your recent activity</p>
+        </div>
+      </div>
+    </div>
+  </div></div>
+  <p class="verdict"><b>Most visually alive, and the riskiest.</b> A grid of unequal tiles is exactly the "wall of modules" the brief warns against, and it costs the most height. The dark personalisation tile is the good idea inside it.</p>
+</section>
+
+<!-- ============ E ============ -->
+<section class="block" id="e">
+  <p class="lbl">E · Digest</p>
+  <p class="dsc">A single number carries the module, then a tight numbered list with no summaries. Most editorial of the five and the shortest to read.</p>
+  <div class="frame"><div class="app">
+    <div class="wrap">
+      <div class="digest">
+        <div>
+          <p class="eyebrow">What's changed</p>
+          <p class="num">4</p>
+          <p class="say">updates since you last visited, across compliance, governance and people. Three touch resources your school uses.</p>
+          <p style="margin-top:24px"><button class="btn btn-s">All updates</button></p>
+        </div>
+        <ol>
+          <li><a href="#" class="c-gov">
+            <span class="idx">01</span>
+            <span><span class="t">Compliance resources reviewed for the new school year</span><br><span class="sm">Annual review of the compliance library, including model policies and guidance.</span></span>
+            <span class="meta"><span class="tag">Compliance</span><br><span class="mono" style="display:block;margin-top:6px;text-align:right">2 days ago</span></span>
+          </a></li>
+          <li><a href="#" class="c-gov">
+            <span class="idx">02</span>
+            <span><span class="t">Term 4 registration briefing dates confirmed</span></span>
+            <span class="meta"><span class="tag">Compliance</span><br><span class="mono" style="display:block;margin-top:6px;text-align:right">3 days ago</span></span>
+          </a></li>
+          <li><a href="#" class="c-people">
+            <span class="idx">03</span>
+            <span><span class="t">Child safety policy templates updated</span></span>
+            <span class="meta"><span class="tag">People</span><br><span class="mono" style="display:block;margin-top:6px;text-align:right">5 days ago</span></span>
+          </a></li>
+          <li><a href="#" class="c-strategy">
+            <span class="idx">04</span>
+            <span><span class="t">New guidance on school board governance practice</span></span>
+            <span class="meta"><span class="tag">Governance</span><br><span class="mono" style="display:block;margin-top:6px;text-align:right">Last week</span></span>
+          </a></li>
+        </ol>
+      </div>
+    </div>
+  </div></div>
+  <p class="verdict"><b>Closest to the editorial direction we signed off.</b> Only the first item carries a summary, which is what creates the rhythm. The large numeral does the work the empty right third was wasting.</p>
+</section>
+
+<!-- ============ RECOMMENDATION ============ -->
+<section class="block">
+  <p class="lbl">Recommendation</p>
+  <p class="dsc">A over the others, with two things borrowed.</p>
+  <p class="verdict"><b>Build A, take the "you last visited here" marker from B, and take the category colour system across all of them.</b> A gives you hierarchy, an action and a use for the empty width. B's marker is what turns a list into an answer. The colour system only pays off once each persona has a genuine spread of categories, which is a data change worth making regardless: right now the Principal's four updates are all governance, and no amount of design fixes that.</p>
+</section>
+
+<div style="height:80px"></div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+# Dependencies — reinstalled per platform
+node_modules/
+
+# Next.js build output
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# Lockfile is regenerated per platform on purpose. A lockfile written on
+# Linux breaks npm's optional platform binaries (lightningcss, @next/swc)
+# when the project is then installed on macOS. See portal/README.md.
+package-lock.json
+
+# Local scratch
+tmp/
+.env*.local
+
+# macOS
+.DS_Store

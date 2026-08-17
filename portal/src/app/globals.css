@@ -1,0 +1,2035 @@
+@import "tailwindcss";
+
+/* ============================================================
+   LAYER 1 — PRIMITIVE TOKENS
+   The only place brand values live. Replacing the ISV brand
+   means editing this block and nothing else.
+   ============================================================ */
+:root {
+  /* ---- ISV brand ----
+     VERIFY BEFORE THE PITCH: these two are the whole identity and they are
+     my reading of ISV's red and navy, not sampled from a brand guide.
+     Confirm both hex values and replace here. Nothing else needs to change,
+     which is the point of keeping brand at the primitive layer. */
+  --isv-red: #c8102e;
+  --isv-navy: #16294a;
+
+  /* brand extensions, derived from the two above */
+  --isv-red-deep: #9c0c24;
+  --isv-red-tint: #fae9ec;
+  --isv-navy-deep: #0e1b33;
+  --isv-navy-tint: #e3e8f1;
+
+  /* supporting palette
+     A red and navy pairing goes cold and corporate very quickly, so the
+     neutrals stay slightly warm and gold carries the third accent. */
+  /* Darkened from #A8792A, which failed badly as a block: body copy measured
+     2.27:1 and white 3.71:1. Gold is now a dark tone like navy and red, so
+     all three colour blocks use inverse text and behave the same way. */
+  --isv-gold: #7d591c;
+  --isv-gold-tint: #f6efdf;
+  --isv-teal: #1a6a63;
+
+  /* ink and paper */
+  --isv-ink: #161a22;
+  --isv-ink-soft: #444b58;
+  /* Carries most of the small type in the product, so it has to clear 4.5:1
+     on every ground it lands on. Solved against all six: 5.80 on paper,
+     4.77 on stone, 4.92 on navy tint, 5.16 on red tint. */
+  --isv-ink-faint: #5c6370;
+  --isv-paper: #fbfaf8;
+  --isv-paper-warm: #f4f2ee;
+  --isv-stone: #e8e4dd;
+  --isv-stone-deep: #d8d2c8;
+
+  /* lines */
+  --isv-line: #e4e0d9;
+  --isv-line-firm: #cbc6bd;
+  /* Control boundaries need 3:1 under WCAG 1.4.11. line-firm is a hairline
+     rule colour and is fine for decoration, wrong for the edge of an input. */
+  --isv-line-control: #878172;
+  --isv-white: #ffffff;
+
+  /* raw motion */
+  --isv-duration-fast: 150ms;
+  --isv-duration-base: 220ms;
+  --isv-duration-slow: 420ms;
+  --isv-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ============================================================
+   LAYER 2 — SEMANTIC TOKENS
+   Mapped into the Tailwind theme, so every utility in the app
+   resolves through a named role rather than a raw value.
+   ============================================================ */
+@theme {
+  /* surface and field roles
+     Named by job, not by colour, so a brand change never leaves a token
+     called "forest" pointing at navy. */
+  --color-page: var(--isv-paper);
+  --color-surface: var(--isv-white);
+  --color-sunken: var(--isv-paper-warm);
+  --color-field-warm: var(--isv-paper-warm);
+  --color-field-sand: var(--isv-stone);
+  --color-field-sand-deep: var(--isv-stone-deep);
+  --color-field-mist: var(--isv-navy-tint);
+  --color-field-clay: var(--isv-red-tint);
+  --color-field-forest: var(--isv-navy-deep);
+  --color-field-ink: var(--isv-ink);
+
+  /* text roles */
+  --color-primary: var(--isv-ink);
+  --color-secondary: var(--isv-ink-soft);
+  --color-tertiary: var(--isv-ink-faint);
+  --color-inverse: var(--isv-paper);
+  /* Alphas solved against the lightest dark ground we use, which is red.
+     At 72% body copy measured 3.42:1 on red and failed. 87% clears 4.5:1 on
+     red, navy and gold. The faint tone is for non-essential meta only and
+     clears the 3:1 large-text threshold on all three. */
+  --color-inverse-soft: rgb(251 250 247 / 0.87);
+  --color-inverse-faint: rgb(251 250 247 / 0.66);
+
+  /* line roles */
+  --color-line: var(--isv-line);
+  --color-line-firm: var(--isv-line-firm);
+  --color-line-control: var(--isv-line-control);
+  --color-line-inverse: rgb(255 255 255 / 0.18);
+  --color-line-inverse-firm: rgb(255 255 255 / 0.32);
+
+  /* action and status roles
+     Navy is the action colour, not red. Red as the primary button in a
+     portal reads as danger and collides with the error state, so it stays
+     the editorial accent where it can carry weight without instructing. */
+  --color-action: var(--isv-navy);
+  --color-action-hover: var(--isv-navy-deep);
+  --color-action-quiet: var(--isv-navy-tint);
+  --color-success: var(--isv-teal);
+  /* Deliberately browner than the brand red so an error never reads as an
+     accent block, and an accent block never reads as an error. */
+  --color-error: #a3231f;
+  --color-error-quiet: #f9ece9;
+  --color-accent-clay: var(--isv-red);
+  --color-accent-ochre: var(--isv-gold);
+
+  /* typography */
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+    Georgia, "Times New Roman", serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+
+  --text-mega: 3.625rem;
+  --text-mega--line-height: 1.05;
+  --text-mega--letter-spacing: -0.022em;
+  --text-display: 2.5rem;
+  --text-display--line-height: 1.12;
+  --text-display--letter-spacing: -0.018em;
+  --text-h2: 1.4375rem;
+  --text-h2--line-height: 1.25;
+  --text-h2--letter-spacing: -0.012em;
+  --text-h3: 1.0625rem;
+  --text-h3--line-height: 1.38;
+  --text-h3--letter-spacing: -0.004em;
+  --text-lede: 1.125rem;
+  --text-lede--line-height: 1.6;
+  --text-body: 1.03125rem;
+  --text-body--line-height: 1.7;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.55;
+  --text-micro: 0.75rem;
+  --text-micro--line-height: 1.5;
+  /* Pills read as labels, not as buttons, so they sit below micro. */
+  --text-pill: 0.625rem;
+  --text-pill--line-height: 1.4;
+
+  /* letter spacing */
+  --tracking-eyebrow: 0.13em;
+  --tracking-badge: 0.05em;
+  --tracking-kbd: 0.02em;
+
+  /* radius
+     The editorial system is square. Tiles carry the mosaic structure and
+     the colour blocks, but not bento softness: 4px, hairlines, no lift.
+     Rounded cards read as a different product to the one we signed off. */
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  --radius-tile: 4px;
+  --radius-chip: 4px;
+  --radius-pill: 999px;
+
+  /* layout */
+  --container-measure: 62ch;
+  --container-reading: 66ch;
+  --container-page: 1080px;
+  --container-wide: 1240px;
+
+  /* elevation */
+  --shadow-raised:
+    0 1px 2px rgb(32 29 25 / 0.05), 0 12px 32px rgb(32 29 25 / 0.10);
+  --shadow-panel: -8px 0 32px rgb(32 29 25 / 0.10);
+
+  /* motion */
+  --ease-isv: var(--isv-ease);
+}
+
+/* ============================================================
+   LAYER 3 — COMPONENT TOKENS
+   ============================================================ */
+:root {
+  --control-height: 2.875rem;
+  --control-height-sm: 2.125rem;
+  --appbar-height: 4.25rem;
+  --field-padding-block: 4rem;
+  --field-padding-block-tight: 2.5rem;
+  --cell-padding: 1.75rem;
+  --card-padding: 1.625rem;
+  --gutter: 2.5rem;
+  --index-row-padding: 1.375rem;
+  --stagger-step: 30ms;
+  --tile-padding: 1.875rem;
+  --tile-gap: 1rem;
+  --tile-min-height: 5.25rem;
+  /* Gap between a section rule and the content under it. Tokenised so it
+     is consistent across every module rather than set per component. */
+  --section-header-gap: 1.25rem;
+  --section-header-pad: 0.75rem;
+  /* Horizontal breathing room inside a hoverable row. The row pulls itself
+     back out with a negative margin so text still aligns to the page grid
+     while the hover band has padding around it. */
+  --row-pad: 0.875rem;
+}
+
+@media (max-width: 48rem) {
+  :root {
+    --gutter: 1.375rem;
+    --field-padding-block: 2.75rem;
+    --field-padding-block-tight: 2rem;
+    --cell-padding: 1.25rem;
+    /* PRD R3: 44px minimum touch target on mobile */
+    --control-height-sm: 2.75rem;
+  }
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-page);
+    color: var(--color-primary);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-action);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Inside inverse fields the focus ring needs to invert too */
+  [data-field="forest"] :focus-visible,
+  [data-field="ink"] :focus-visible {
+    outline-color: var(--color-inverse);
+  }
+
+  ::selection {
+    background-color: var(--color-action-quiet);
+    color: var(--color-primary);
+  }
+}
+
+/* ============================================================
+   COMPONENT CLASSES
+   Reserved for patterns Tailwind cannot express cleanly:
+   connector lines, hover shifts, generated artwork, streaming.
+   Every value here still resolves through a token.
+   ============================================================ */
+@layer components {
+  /* --- control sizing, so JSX never needs an arbitrary value --- */
+  .h-control {
+    height: var(--control-height);
+  }
+  .h-control-sm {
+    height: var(--control-height-sm);
+  }
+  .h-appbar {
+    height: var(--appbar-height);
+  }
+  .min-h-textarea {
+    min-height: 6rem;
+  }
+  .px-gutter {
+    padding-inline: var(--gutter);
+  }
+  .py-field {
+    padding-block: var(--field-padding-block);
+  }
+  .py-field-tight {
+    padding-block: var(--field-padding-block-tight);
+  }
+  .p-cell {
+    padding: var(--cell-padding);
+  }
+  .p-card {
+    padding: var(--card-padding);
+  }
+  .py-index-row {
+    padding-block: var(--index-row-padding);
+  }
+
+  /* --- hoverable row ---
+     One behaviour for every ruled row in the product: index rows, update
+     stack rows, navigation rows. The hover band is inset by --row-pad and
+     the row is pulled back out, so the band never runs edge to edge and
+     nothing shifts position on hover. --- */
+  .row-hover {
+    padding-inline: var(--row-pad);
+    margin-inline: calc(var(--row-pad) * -1);
+    border-radius: var(--radius-md);
+    transition: background-color var(--isv-duration-base) var(--isv-ease);
+  }
+  .row-hover:hover {
+    background-color: color-mix(in srgb, var(--color-action) 5%, transparent);
+  }
+  [data-field="forest"] .row-hover:hover,
+  [data-field="ink"] .row-hover:hover {
+    background-color: rgb(255 255 255 / 0.06);
+  }
+
+  /* --- request timeline connectors --- */
+  .timeline-step::before {
+    content: "";
+    position: absolute;
+    top: 0.25rem;
+    left: 0;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-surface);
+    border: 2px solid var(--color-line-firm);
+  }
+  .timeline-step::after {
+    content: "";
+    position: absolute;
+    top: 0.5625rem;
+    left: 0.625rem;
+    right: 0;
+    height: 1px;
+    background-color: var(--color-line-firm);
+  }
+  .timeline-step:last-child::after {
+    display: none;
+  }
+  .timeline-step[data-complete="true"]::before {
+    background-color: var(--color-action);
+    border-color: var(--color-action);
+  }
+  .timeline-step[data-complete="true"]::after {
+    background-color: var(--color-action);
+  }
+
+  /* --- baseline rule texture, empty states only --- */
+  .texture-rules {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0 1.6875rem,
+      var(--color-line) 1.6875rem 1.75rem
+    );
+  }
+
+  /* --- masthead wash --- */
+  .wash-masthead {
+    background-image: linear-gradient(
+      to bottom,
+      var(--color-field-mist) 0%,
+      var(--color-page) 60%
+    );
+  }
+
+  /* --- Radix menu item highlight, kept out of JSX so the
+     arbitrary-value check stays a clean grep --- */
+  .menu-item {
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    padding: 0.625rem 0.75rem;
+    font-size: var(--text-small);
+    outline: none;
+  }
+  .menu-item[data-highlighted] {
+    background-color: var(--color-action-quiet);
+  }
+
+  /* --- form controls ---
+     Defined once so border, focus, invalid and prefill states are not
+     duplicated per field. --- */
+  .control {
+    width: 100%;
+    font: inherit;
+    font-size: var(--text-small);
+    border: 1px solid var(--color-line-control);
+    border-radius: var(--radius-md);
+    color: var(--color-primary);
+    background-color: var(--color-surface);
+  }
+  .control[aria-invalid="true"] {
+    border-color: var(--color-error);
+    border-width: 2px;
+  }
+  .control-input {
+    height: var(--control-height);
+    padding-inline: 0.875rem;
+  }
+  .control-textarea {
+    min-height: 6rem;
+    padding: 0.75rem 0.875rem;
+    line-height: 1.6;
+    resize: vertical;
+  }
+  /* Pre-filled fields are visibly pre-filled and still editable. */
+  .control[data-prefilled="true"] {
+    background-color: var(--color-sunken);
+  }
+
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    z-index: 60;
+  }
+  .skip-link:focus {
+    left: var(--gutter);
+    top: 0.75rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-action);
+    border-radius: var(--radius-md);
+    font-size: var(--text-small);
+  }
+
+  /* --- hairline cell grid ---
+     The obvious implementation is `gap: 1px` over a line-coloured
+     background, but then an incomplete final row shows the background as a
+     filled block. Borders on the cells themselves leave empty space empty. */
+  .cell-grid {
+    display: grid;
+    border-top: 1px solid var(--color-line);
+    border-left: 1px solid var(--color-line);
+  }
+  .cell-grid > * {
+    border-right: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  /* --- portal navigation: two ruled columns, no orphan cells --- */
+  .nav-columns {
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: 4rem;
+  }
+  @media (min-width: 48rem) {
+    .nav-columns {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* --- suggestion and filter pills ---
+     Auto height with real padding. A fixed control height made short
+     questions look like buttons with the text floating in them. */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6875rem 1.125rem;
+    border-radius: var(--radius-pill);
+    font-size: var(--text-small);
+    line-height: 1.4;
+    text-align: left;
+  }
+  @media (max-width: 48rem) {
+    .pill {
+      min-height: 2.75rem;
+    }
+  }
+
+  /* --- asymmetric editorial split, used on service detail --- */
+  .split-editorial {
+    display: grid;
+    gap: 3rem;
+  }
+  @media (min-width: 64rem) {
+    .split-editorial {
+      grid-template-columns: 1.5fr 1fr;
+    }
+  }
+
+  /* --- editorial index grid --- */
+  .index-grid {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    column-gap: 1.25rem;
+  }
+  @media (min-width: 40rem) {
+    .index-grid {
+      grid-template-columns: 2.5rem 1fr auto;
+    }
+  }
+
+  /* ==========================================================
+     TILE SYSTEM
+     Mosaic tiles used as an in-page element for browse modules.
+     Colour moves out of the page field and into the tile, which is
+     what stops the two systems fighting each other.
+     ========================================================== */
+  .tile-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--tile-gap);
+  }
+  @media (min-width: 40rem) {
+    .tile-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 64rem) {
+    .tile-grid {
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: minmax(var(--tile-min-height), auto);
+    }
+  }
+
+  .rounded-tile {
+    border-radius: var(--radius-tile);
+  }
+
+  .tile {
+    display: flex;
+    flex-direction: column;
+    padding: var(--tile-padding);
+    border: 1px solid transparent;
+    border-radius: var(--radius-tile);
+    overflow: hidden;
+    position: relative;
+    text-align: left;
+    transition:
+      background-color var(--isv-duration-base) var(--isv-ease),
+      border-color var(--isv-duration-base) var(--isv-ease);
+  }
+  .tile[data-interactive="true"] {
+    cursor: pointer;
+  }
+  /* Editorial hover: a shift in ground, not a lift. Same behaviour as the
+     index rows, so the two systems feel like one product. */
+  .tile[data-interactive="true"]:hover {
+    background-color: color-mix(in srgb, var(--color-action) 5%, var(--color-surface));
+    border-color: var(--color-line-firm);
+  }
+
+  /* The date block on an event tile */
+  .date-chip {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 3.875rem;
+    height: 3.875rem;
+    border-radius: var(--radius-chip);
+    background-color: color-mix(in srgb, currentColor 10%, transparent);
+  }
+
+  .section-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 1rem;
+    padding-bottom: var(--section-header-pad);
+    margin-bottom: var(--section-header-gap);
+    border-bottom: 1px solid var(--color-line);
+  }
+  .section-header[data-inverse="true"] {
+    border-bottom-color: var(--color-line-inverse);
+  }
+  /* Where the block below draws its own keyline — the clay rules on the
+     highlight cards, for instance — the header must not draw a second one
+     a gap above it. */
+  .section-header[data-rule="none"] {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  /* The close button was sitting hard against the last row of the panel
+     and hard against the panel edge. */
+  .panel-close {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .alert-dot {
+    position: absolute;
+    top: 0.125rem;
+    right: 0.0625rem;
+    min-width: 0.9375rem;
+    height: 0.9375rem;
+    padding-inline: 0.1875rem;
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-accent-clay);
+    color: var(--color-inverse);
+    font-size: 0.5625rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  /* --- support: three equal colour blocks --- */
+  .support-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--tile-gap);
+  }
+  @media (min-width: 48rem) {
+    .support-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* --- schedule list under the learning lead block ---
+     Two columns, so the term programme uses the width the single column
+     was leaving empty on the right. --- */
+  .schedule-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: 3.5rem;
+  }
+  @media (min-width: 64rem) {
+    .schedule-list[data-columns="2"] {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* --- schedule row --- */
+  .schedule-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  @media (min-width: 40rem) {
+    .schedule-row {
+      grid-template-columns: 3.5rem 1fr auto;
+      gap: 1.25rem;
+    }
+  }
+
+  /* --- compact request row ---
+     Replaces the full status card on the landing page. The timeline
+     stays on the request detail screen where it belongs. --- */
+  /* Tinted, not white. A white panel on a warm page reads as a component
+     dropped on top of the design rather than part of it. */
+  .request-panel {
+    background-color: var(--color-sunken);
+  }
+  /* The last row's border would sit on top of the panel border */
+  .request-row:last-child {
+    border-bottom: 0;
+  }
+  .request-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 1.25rem var(--cell-padding);
+    border-bottom: 1px solid var(--color-line);
+    text-decoration: none;
+    color: inherit;
+    transition: background-color var(--isv-duration-base) var(--isv-ease);
+  }
+  .request-row:last-child {
+    border-bottom: 0;
+  }
+  .request-row:hover {
+    background-color: color-mix(in srgb, var(--color-action) 5%, transparent);
+  }
+  @media (min-width: 48rem) {
+    .request-row {
+      grid-template-columns: 1fr auto auto;
+      gap: 2.5rem;
+    }
+  }
+  .progress-segment {
+    width: 1.5rem;
+    height: 3px;
+    border-radius: 2px;
+    background-color: var(--color-line-firm);
+  }
+  .progress-segment[data-complete="true"] {
+    background-color: var(--color-action);
+  }
+
+  /* --- updates lead panel --- */
+  .update-lead {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: start;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+  @media (min-width: 64rem) {
+    .update-lead {
+      grid-template-columns: 1.55fr 1fr;
+      gap: 3.5rem;
+    }
+  }
+  .row-rule {
+    border-bottom: 1px solid var(--color-line);
+  }
+  [data-field="forest"] .row-rule,
+  [data-field="ink"] .row-rule {
+    border-bottom-color: var(--color-line-inverse);
+  }
+
+  .update-stack-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.25rem 1.375rem;
+  }
+  @media (min-width: 40rem) {
+    .update-stack-row {
+      grid-template-columns: 6rem 1fr auto;
+      gap: 1.375rem;
+      align-items: baseline;
+    }
+  }
+
+  /* --- updates grid: date-led rather than numbered --- */
+  .update-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 0.5rem;
+  }
+  @media (min-width: 40rem) {
+    .update-grid {
+      grid-template-columns: 7rem 1fr;
+      column-gap: 1.5rem;
+      row-gap: 0;
+    }
+  }
+
+  /* --- generated student artwork stand-in ---
+     Placeholder for the isArtworks collection. Percentage-positioned
+     composition is the kind of thing Tailwind is not suited to, so it
+     lives here rather than as arbitrary values in JSX. --- */
+  /* The panel ground has to differ from whatever field it lands on.
+     It previously used --color-sunken (#F5F1E8) and the news module sits
+     on the clay field (#F6E9E2), so the panel disappeared into the page.
+     sand-deep is clearly separated from every light field in the system. */
+  .artwork {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-field-sand-deep);
+    min-height: 14rem;
+  }
+  .artwork-canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    aspect-ratio: 4 / 3;
+    margin-inline: auto;
+    max-width: 100%;
+    max-height: 100%;
+  }
+  .artwork-canvas > i {
+    position: absolute;
+    display: block;
+  }
+  .artwork-caption {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1rem 1.25rem;
+    font-size: var(--text-micro);
+    letter-spacing: var(--tracking-badge);
+    text-transform: uppercase;
+    color: var(--color-tertiary);
+    text-align: right;
+    z-index: 2;
+  }
+
+  .artwork-a .artwork-canvas > i:nth-child(1) {
+    left: 8%;
+    top: 14%;
+    width: 38%;
+    height: 52%;
+    background-color: var(--color-accent-clay);
+    border-radius: 50% 50% 46% 54% / 56% 44% 56% 44%;
+    transform: rotate(-8deg);
+  }
+  .artwork-a .artwork-canvas > i:nth-child(2) {
+    right: 12%;
+    top: 24%;
+    width: 30%;
+    height: 30%;
+    background-color: var(--color-accent-ochre);
+    border-radius: var(--radius-pill);
+  }
+  .artwork-a .artwork-canvas > i:nth-child(3) {
+    left: 26%;
+    bottom: 10%;
+    width: 52%;
+    height: 16%;
+    background-color: var(--color-action);
+    border-radius: var(--radius-pill);
+  }
+  .artwork-a .artwork-canvas > i:nth-child(4) {
+    right: 20%;
+    bottom: 26%;
+    width: 16%;
+    height: 34%;
+    background-color: var(--color-field-mist);
+    transform: rotate(14deg);
+  }
+  .artwork-a .artwork-canvas > i:nth-child(5) {
+    left: 14%;
+    top: 8%;
+    width: 14%;
+    height: 14%;
+    background-color: var(--isv-ink);
+    border-radius: var(--radius-pill);
+  }
+
+  .artwork-b .artwork-canvas > i:nth-child(1) {
+    left: 14%;
+    top: 16%;
+    width: 34%;
+    height: 44%;
+    background-color: var(--color-action);
+    border-radius: 46% 54% 60% 40% / 52% 48% 52% 48%;
+  }
+  .artwork-b .artwork-canvas > i:nth-child(2) {
+    right: 16%;
+    top: 16%;
+    width: 26%;
+    height: 26%;
+    background-color: var(--color-accent-clay);
+  }
+  .artwork-b .artwork-canvas > i:nth-child(3) {
+    left: 26%;
+    bottom: 16%;
+    width: 52%;
+    height: 12%;
+    background-color: var(--color-accent-ochre);
+    border-radius: var(--radius-pill);
+  }
+  .artwork-b .artwork-canvas > i:nth-child(4) {
+    right: 22%;
+    bottom: 26%;
+    width: 14%;
+    height: 32%;
+    background-color: var(--isv-ink);
+    transform: rotate(12deg);
+  }
+  .artwork-b .artwork-canvas > i:nth-child(5) {
+    left: 18%;
+    top: 9%;
+    width: 12%;
+    height: 12%;
+    background-color: var(--color-field-mist);
+    border-radius: var(--radius-pill);
+  }
+
+  /* --- module reveal on role switch ---
+     Staggered by position rather than by an inline custom property, so no
+     component needs an inline style. PRD QA B1. --- */
+  .module-enter {
+    animation: module-in var(--isv-duration-base) var(--isv-ease) both;
+  }
+  .module-enter:nth-child(1) { animation-delay: 0ms; }
+  .module-enter:nth-child(2) { animation-delay: 30ms; }
+  .module-enter:nth-child(3) { animation-delay: 60ms; }
+  .module-enter:nth-child(4) { animation-delay: 90ms; }
+  .module-enter:nth-child(5) { animation-delay: 120ms; }
+  .module-enter:nth-child(6) { animation-delay: 150ms; }
+  .module-enter:nth-child(7) { animation-delay: 180ms; }
+  .module-enter:nth-child(8) { animation-delay: 210ms; }
+  .module-enter:nth-child(n + 9) { animation-delay: 240ms; }
+  @keyframes module-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* --- answer stream --- */
+  .answer-stream {
+    animation: answer-in var(--isv-duration-base) var(--isv-ease) both;
+  }
+  @keyframes answer-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .thinking-dot {
+    animation: thinking 1.1s var(--isv-ease) infinite;
+  }
+  .thinking-dot:nth-child(2) {
+    animation-delay: 0.16s;
+  }
+  .thinking-dot:nth-child(3) {
+    animation-delay: 0.32s;
+  }
+  @keyframes thinking {
+    0%,
+    100% {
+      opacity: 0.28;
+    }
+    40% {
+      opacity: 1;
+    }
+  }
+
+  /* ------------------------------------------------------------------
+     Header search field
+
+     1.2x its old width (28rem -> 33.6rem) and held on the page's centre
+     line by flexible spacers either side. It shrinks before it overlaps.
+     ------------------------------------------------------------------ */
+  .ask-field {
+    /* Capped, not greedy. Left to fill the centre span it crowded the logo
+       and wrapped the member's name onto two lines. 38rem keeps clear air
+       either side at every width the header is used at. */
+    flex: 0 1 38rem;
+    min-width: 0;
+  }
+
+  /* ------------------------------------------------------------------
+     Masthead
+
+     Greeting on the left, the single outstanding action on the right.
+     Stacks below lg, where the alert goes first — if something needs
+     doing, a member on a narrow screen should not scroll past a greeting
+     to find it.
+     ------------------------------------------------------------------ */
+  .masthead-row {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2rem;
+  }
+
+  /* The greeting absorbs the shrinkage. Without this the pill was the
+     flexible item and truncated its own title. */
+  .masthead-lead {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  @media (min-width: 64rem) {
+    .masthead-row {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2.5rem;
+    }
+
+    .masthead-alert {
+      flex: 0 0 auto;
+      max-width: 30rem;
+      /* Top edge lines up with the eyebrow above the greeting. */
+      margin-top: 0.125rem;
+    }
+  }
+
+  /* A horizontal pill, not a tile. An alert is one line of news and an
+     action, so it earns a bar rather than a box — and a box in clay at
+     this size competed with the three tiles directly below it. */
+  .masthead-alert {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    max-width: 100%;
+    padding: 0.5625rem 1rem 0.5625rem 1.125rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-accent-clay);
+    color: var(--color-inverse);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color var(--isv-duration-base) var(--isv-ease);
+  }
+
+  .masthead-alert:hover {
+    background-color: var(--isv-red-deep);
+  }
+
+  .masthead-alert-mark {
+    flex: none;
+    width: 0.4375rem;
+    height: 0.4375rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-inverse);
+  }
+
+  .masthead-alert-flag {
+    flex: none;
+    font-size: var(--text-pill);
+    font-weight: 700;
+    letter-spacing: var(--tracking-badge);
+    text-transform: uppercase;
+    color: var(--color-inverse-soft);
+  }
+
+  .masthead-alert-title {
+    min-width: 0;
+    font-size: var(--text-small);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* The arrow is the affordance, so it moves rather than the whole pill. */
+  .masthead-alert svg {
+    flex: none;
+    transition: transform var(--isv-duration-base) var(--isv-ease);
+  }
+  .masthead-alert:hover svg {
+    transform: translateX(2px);
+  }
+
+  /* A heading that is also a link. No underline at rest — the tile is
+     already the affordance — and the whole row is the hit area. */
+  .tile-title-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  .tile-title-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+  .tile-title-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  /* The overlay makes the whole tile clickable, so anything that has its
+     own destination has to sit above it. */
+  .tile a:not(.tile-title-link),
+  .tile button,
+  .schedule-row a:not(.tile-title-link),
+  .schedule-row button,
+  .index-grid a:not(.tile-title-link),
+  .index-grid button,
+  .listing-row a:not(.tile-title-link),
+  .listing-row button {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ------------------------------------------------------------------
+     Article page
+
+     Body left at a reading measure, rail right. The rail carries the byline
+     and the material — the two things a reader wants once they have decided
+     the article is for them.
+     ------------------------------------------------------------------ */
+  .article-hero {
+    /* Tight to the copy above and below. It is part of the article, not a
+       separate band with its own air. */
+    margin-block: 2rem;
+  }
+
+  .article-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  @media (min-width: 64rem) {
+    .article-layout {
+      grid-template-columns: minmax(0, 1fr) 19rem;
+      gap: 4.5rem;
+    }
+  }
+
+  .article-rail {
+    display: grid;
+    gap: 1.25rem;
+    position: sticky;
+    top: calc(var(--appbar-height, 4rem) + 1.5rem);
+  }
+
+  .rail-card {
+    padding: 1.5rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-tile);
+  }
+  .rail-card-sand {
+    border-color: transparent;
+    background-color: var(--color-field-sand);
+  }
+
+  .rail-list {
+    display: grid;
+  }
+  .rail-list > li {
+    border-bottom: 1px solid var(--color-line);
+  }
+  .rail-list > li:last-child {
+    border-bottom: 0;
+  }
+  .rail-link {
+    display: grid;
+    gap: 0.1875rem;
+    padding: 0.6875rem 0;
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--isv-duration-base) var(--isv-ease);
+  }
+  .rail-link:hover {
+    color: var(--color-action);
+  }
+
+  /* ------------------------------------------------------------------
+     Story cards — four across
+     ------------------------------------------------------------------ */
+  .story-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--tile-gap);
+  }
+  @media (min-width: 40rem) {
+    .story-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 64rem) {
+    .story-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .story-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-tile);
+    overflow: hidden;
+    transition: background-color var(--isv-duration-base) var(--isv-ease);
+  }
+
+  .story-image {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background-color: var(--color-field-sand-deep);
+  }
+  /* A quiet warm-up so photographs from different sources sit together
+     without fighting the palette. */
+  .story-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--isv-navy);
+    opacity: 0.06;
+  }
+
+  .story-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1.5rem;
+  }
+
+  .story-foot {
+    margin-top: auto;
+    padding-top: 1.5rem;
+  }
+
+  /* ==================================================================
+     PUBLIC SITE
+
+     Same type, same palette, same tile system as the portal. The one real
+     difference is structural: the public site shows its whole shape at
+     once, because a first-time visitor has no idea what is behind
+     anything. The portal hides its navigation because a member does.
+     ================================================================== */
+  .public-utility {
+    background-color: var(--color-field-forest);
+    color: var(--color-inverse-soft);
+    font-size: var(--text-micro);
+  }
+  .public-utility-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 2.5rem;
+  }
+  .utility-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4375rem;
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--isv-duration-base) var(--isv-ease);
+  }
+  .utility-link:hover {
+    color: var(--color-inverse);
+  }
+
+  .public-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background-color: var(--color-page);
+    border-bottom: 1px solid var(--color-line);
+  }
+  .public-header-row {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    min-height: 4.5rem;
+  }
+
+  .public-nav {
+    display: none;
+    margin-left: auto;
+    gap: 2rem;
+  }
+  @media (min-width: 64rem) {
+    .public-nav {
+      display: flex;
+    }
+  }
+  .public-nav > a {
+    position: relative;
+    padding: 0.25rem 0;
+    white-space: nowrap;
+    font-size: var(--text-small);
+    color: var(--color-secondary);
+    text-decoration: none;
+    transition: color var(--isv-duration-base) var(--isv-ease);
+  }
+  /* The rule grows from the middle. A whole underline appearing at once
+     reads as a state change; this reads as a response. */
+  .public-nav > a::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-accent-clay);
+    transform: translateX(-50%);
+    transition: width var(--isv-duration-base) var(--isv-ease);
+  }
+  .public-nav > a:hover {
+    color: var(--color-primary);
+  }
+  .public-nav > a:hover::after {
+    width: 100%;
+  }
+
+  .public-menu-toggle {
+    margin-left: auto;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-md);
+    color: var(--color-secondary);
+  }
+  @media (min-width: 64rem) {
+    .public-menu-toggle {
+      display: none;
+    }
+  }
+
+  .public-nav-mobile {
+    display: grid;
+    padding-bottom: 1rem;
+  }
+  .public-nav-mobile > a {
+    padding: 0.8125rem 0;
+    border-top: 1px solid var(--color-line);
+    font-size: var(--text-small);
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  /* --- hero --- */
+  .hero-split {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: center;
+    padding-block: 2rem 1rem;
+  }
+  @media (min-width: 64rem) {
+    .hero-split {
+      grid-template-columns: 1.15fr 1fr;
+      gap: 4.5rem;
+      padding-block: 3.5rem 2rem;
+    }
+  }
+  .hero-artwork {
+    border-radius: var(--radius-tile);
+    min-height: 20rem;
+  }
+
+  /* --- where to start --- */
+  .audience-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--tile-gap);
+  }
+  @media (min-width: 48rem) {
+    .audience-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .audience-card {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border-radius: var(--radius-tile);
+    background-color: var(--color-sunken);
+    text-decoration: none;
+    color: inherit;
+    transition: background-color var(--isv-duration-base) var(--isv-ease);
+  }
+  .audience-card:hover {
+    background-color: var(--color-field-mist);
+  }
+  .audience-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 2rem;
+    font-size: var(--text-small);
+    font-weight: 600;
+    color: var(--color-action);
+  }
+  .audience-action svg {
+    transition: transform var(--isv-duration-base) var(--isv-ease);
+  }
+  .audience-card:hover .audience-action svg,
+  .feature-story:hover .audience-action svg {
+    transform: translateX(3px);
+  }
+
+  /* --- purpose --- */
+  .purpose-band {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  @media (min-width: 64rem) {
+    .purpose-band {
+      grid-template-columns: 1fr 1fr;
+      gap: 4.5rem;
+      align-items: start;
+    }
+  }
+  .purpose-copy {
+    padding-top: 0.5rem;
+  }
+
+  /* --- what ISV does --- */
+  .highlight-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 48rem) {
+    .highlight-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+    }
+  }
+  .highlight-card {
+    display: block;
+    padding: 1.5rem 0.75rem;
+    margin-inline: -0.75rem;
+    border-bottom: 1px solid var(--color-line);
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--isv-duration-base) var(--isv-ease);
+  }
+  @media (min-width: 48rem) {
+    .highlight-card {
+      border-bottom: 0;
+      border-top: 2px solid var(--color-accent-clay);
+      padding-top: 1.25rem;
+    }
+  }
+  .highlight-card:hover {
+    color: var(--color-action);
+  }
+
+  /* --- public events --- */
+  .public-events {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 64rem) {
+    .public-events {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+    }
+  }
+  .public-event {
+    display: block;
+    padding: 1.5rem 0.75rem;
+    margin-inline: -0.75rem;
+    border-bottom: 1px solid var(--color-line);
+    text-decoration: none;
+    color: inherit;
+    transition: background-color var(--isv-duration-base) var(--isv-ease);
+  }
+  @media (min-width: 64rem) {
+    .public-event {
+      border-bottom: 0;
+      padding-top: 0.25rem;
+    }
+  }
+  .public-event:hover {
+    background-color: color-mix(in srgb, var(--color-action) 5%, transparent);
+  }
+
+  /* --- news --- */
+  .feature-story {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+  }
+  .feature-side {
+    display: grid;
+    align-content: start;
+    border-top: 1px solid var(--color-line);
+  }
+  .feature-row {
+    display: block;
+    padding: 1.25rem 0.75rem;
+    margin-inline: -0.75rem;
+    border-bottom: 1px solid var(--color-line);
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--isv-duration-base) var(--isv-ease);
+  }
+  .feature-row:hover {
+    color: var(--color-action);
+  }
+
+  /* --- subscribe --- */
+  .subscribe-band {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  @media (min-width: 64rem) {
+    .subscribe-band {
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+  }
+  .subscribe-form {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  /* --- footer --- */
+  .public-footer {
+    background-color: var(--color-field-forest);
+    padding-block: 4rem 2.5rem;
+  }
+  .public-footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  @media (min-width: 48rem) {
+    .public-footer-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 64rem) {
+    .public-footer-grid {
+      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+      gap: 3.5rem;
+    }
+  }
+  .public-footer-list {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .public-footer-list a {
+    font-size: var(--text-small);
+    color: var(--color-inverse-soft);
+    text-decoration: none;
+    transition: color var(--isv-duration-base) var(--isv-ease);
+  }
+  .public-footer-list a:hover {
+    color: var(--color-inverse);
+  }
+
+  .public-acknowledgement {
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-line-inverse);
+  }
+
+  /* ------------------------------------------------------------------
+     File format
+
+     Format is the first thing a member checks before downloading, so it
+     gets an icon rather than a line of text. Tinted square, not a coloured
+     badge — the format is information, not a status.
+     ------------------------------------------------------------------ */
+  .file-icon {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-field-mist);
+    color: var(--color-action);
+  }
+  .file-icon-lg {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-md);
+  }
+
+  .file-line {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+  }
+
+  /* A button carrying an icon. Gap sized so the icon reads as part of the
+     label rather than as a separate mark beside it. */
+  .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* Rows in the resource listing lead with the format mark, so the title
+     needs to sit on the icon's optical centre line. */
+  .listing-body .file-icon {
+    margin-top: 0.125rem;
+  }
+
+  /* ------------------------------------------------------------------
+     Featured band
+
+     Lead on the left in navy at display size, two beside it as ruled
+     entries. The asymmetry is the point — three equal cards would say the
+     three items rank the same, which is not what featuring means.
+     ------------------------------------------------------------------ */
+  .featured-band {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--tile-gap);
+  }
+  @media (min-width: 64rem) {
+    .featured-band {
+      grid-template-columns: 1.35fr 1fr;
+      gap: 3.5rem;
+    }
+  }
+
+  .featured-lead {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem;
+    border-radius: var(--radius-tile);
+    background-color: var(--color-field-forest);
+    min-height: 22rem;
+  }
+
+  .featured-side {
+    display: grid;
+    align-content: start;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .featured-item {
+    position: relative;
+    padding: 1.5rem 0.75rem;
+    margin-inline: -0.75rem;
+    border-bottom: 1px solid var(--color-line);
+    transition: background-color var(--isv-duration-base) var(--isv-ease);
+  }
+  .featured-item:hover {
+    background-color: color-mix(in srgb, var(--color-action) 5%, transparent);
+  }
+
+  /* ------------------------------------------------------------------
+     Listing screens
+
+     Filters sit on one line above a ruled index. Not a sidebar: a sidebar
+     costs a third of the width on the one screen where the width is the
+     content.
+     ------------------------------------------------------------------ */
+  .filter-bar {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  @media (min-width: 48rem) {
+    .filter-bar {
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(9rem, 12rem);
+      grid-template-columns: minmax(14rem, 1fr);
+      align-items: center;
+    }
+  }
+  .filter-search,
+  .filter-select {
+    display: block;
+    min-width: 0;
+  }
+  .filter-select select {
+    appearance: none;
+    padding-right: 2.25rem;
+    background-image: linear-gradient(
+        45deg,
+        transparent 50%,
+        var(--color-secondary) 50%
+      ),
+      linear-gradient(135deg, var(--color-secondary) 50%, transparent 50%);
+    background-position:
+      calc(100% - 1.0625rem) 55%,
+      calc(100% - 0.75rem) 55%;
+    background-size:
+      0.3125rem 0.3125rem,
+      0.3125rem 0.3125rem;
+    background-repeat: no-repeat;
+  }
+
+  .filter-count {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .listing {
+    display: grid;
+  }
+  .listing-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    align-items: start;
+    padding: 1.375rem 0.75rem;
+    margin-inline: -0.75rem;
+    border-bottom: 1px solid var(--color-line);
+    transition: background-color var(--isv-duration-base) var(--isv-ease);
+  }
+  .listing-row:hover {
+    background-color: color-mix(in srgb, var(--color-action) 5%, transparent);
+  }
+  @media (min-width: 48rem) {
+    .listing-row {
+      grid-template-columns: 9rem 1fr auto;
+      gap: 2rem;
+    }
+  }
+  .listing-lead {
+    display: grid;
+    gap: 0.125rem;
+    align-content: start;
+  }
+  .listing-body {
+    display: block;
+    min-width: 0;
+  }
+  .listing-action {
+    justify-self: start;
+  }
+  @media (min-width: 48rem) {
+    .listing-action {
+      justify-self: end;
+    }
+  }
+
+  /* ------------------------------------------------------------------
+     Event detail
+     ------------------------------------------------------------------ */
+  .event-covers {
+    display: grid;
+    gap: 0;
+  }
+  .event-covers > li {
+    position: relative;
+    padding: 0.6875rem 0 0.6875rem 1.375rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .event-covers > li:last-child {
+    border-bottom: 0;
+  }
+  .event-covers > li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1.25rem;
+    width: 0.3125rem;
+    height: 0.3125rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-accent-clay);
+  }
+
+  /* Session series. Modelled on how ISV publishes a recurring programme:
+     a date, a time, and the topic for that session. */
+  .session-list {
+    display: grid;
+    border-top: 1px solid var(--color-line);
+  }
+  .session-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .session-row:last-child {
+    border-bottom: 0;
+  }
+  @media (min-width: 40rem) {
+    .session-row {
+      grid-template-columns: 11rem 1fr;
+      gap: 1.5rem;
+      align-items: baseline;
+    }
+  }
+  .session-when {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  /* Initials, not headshots. Inventing photographs of ISV staff for a
+     prototype is a line worth not crossing. */
+  .presenter-list {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .presenter {
+    display: grid;
+    grid-template-columns: 2.75rem 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+  .presenter-mark {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-field-mist);
+    color: var(--color-action);
+    font-size: var(--text-micro);
+    font-weight: 700;
+    letter-spacing: var(--tracking-badge);
+  }
+
+  .fact-list {
+    display: grid;
+    gap: 0.875rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-line);
+  }
+  .fact-list > div {
+    display: grid;
+    gap: 0.1875rem;
+  }
+
+  .event-runsheet {
+    display: grid;
+  }
+  .event-runsheet-row:last-child {
+    border-bottom: 0;
+  }
+  .event-runsheet-row {
+    display: grid;
+    grid-template-columns: 5rem 1fr;
+    align-items: baseline;
+    gap: 1.25rem;
+    padding: 0.625rem 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  /* ------------------------------------------------------------------
+     Registration
+
+     The step rail is a ruled sequence, not a set of numbered circles.
+     Circles are a component from a different design system; a rule with
+     three labelled segments is the same language as the rest of the page.
+     ------------------------------------------------------------------ */
+  .step-rail {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+    max-width: 34rem;
+  }
+  .step-rail > li {
+    padding-top: 0.625rem;
+    border-top: 2px solid var(--color-line-firm);
+    font-size: var(--text-micro);
+    font-weight: 600;
+    letter-spacing: var(--tracking-badge);
+    text-transform: uppercase;
+    color: var(--color-tertiary);
+  }
+  .step-rail > li[data-state="current"] {
+    border-top-color: var(--color-accent-clay);
+    color: var(--color-primary);
+  }
+  .step-rail > li[data-state="done"] {
+    border-top-color: var(--color-action);
+    color: var(--color-secondary);
+  }
+
+  /* Ruled rows, one per person. A grid of cards would make choosing four
+     colleagues feel like a shopping page. */
+  .pick-list {
+    display: grid;
+  }
+
+  .pick-row:last-child,
+  .need-row:last-child {
+    border-bottom: 0;
+  }
+  .pick-row,
+  .need-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9375rem 0.75rem;
+    margin-inline: -0.75rem;
+    border-bottom: 1px solid var(--color-line);
+    transition: background-color var(--isv-duration-base) var(--isv-ease);
+  }
+  .pick-row {
+    cursor: pointer;
+  }
+  .pick-row:hover {
+    background-color: color-mix(in srgb, var(--color-action) 5%, transparent);
+  }
+  .pick-row[data-disabled="true"] {
+    cursor: not-allowed;
+    color: var(--color-tertiary);
+  }
+  .pick-row[data-disabled="true"]:hover {
+    background-color: transparent;
+  }
+
+  .need-row {
+    grid-template-columns: 1fr;
+    gap: 0.625rem;
+    align-items: start;
+  }
+  @media (min-width: 48rem) {
+    .need-row {
+      grid-template-columns: 14rem 1fr;
+      gap: 1.5rem;
+      align-items: center;
+    }
+  }
+
+  /* A school can have a hundred staff, so the list is a scroll region with
+     a filter above it rather than a page that grows without limit. */
+  .pick-scroll {
+    max-height: 24rem;
+    overflow-y: auto;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .pick-clear {
+    font-size: var(--text-micro);
+    font-weight: 600;
+    color: var(--color-action);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    white-space: nowrap;
+  }
+
+  .pick-count {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.625rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .pick-body {
+    display: grid;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  .pick-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    cursor: pointer;
+  }
+
+  /* One checkbox treatment for the whole product. Square, hairline, fills
+     with navy when checked — the same weight as every other control. */
+  .pick-row input[type="checkbox"],
+  .pick-inline input[type="checkbox"] {
+    appearance: none;
+    flex: none;
+    width: 1.125rem;
+    height: 1.125rem;
+    border: 1px solid var(--color-line-control);
+    border-radius: 3px;
+    background-color: var(--color-surface);
+    display: grid;
+    place-items: center;
+    transition:
+      background-color var(--isv-duration-base) var(--isv-ease),
+      border-color var(--isv-duration-base) var(--isv-ease);
+  }
+  .pick-row input[type="checkbox"]:checked,
+  .pick-inline input[type="checkbox"]:checked {
+    background-color: var(--color-action);
+    border-color: var(--color-action);
+  }
+  .pick-row input[type="checkbox"]:checked::after,
+  .pick-inline input[type="checkbox"]:checked::after {
+    content: "";
+    width: 0.5rem;
+    height: 0.28125rem;
+    border-left: 2px solid var(--color-inverse);
+    border-bottom: 2px solid var(--color-inverse);
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+  .pick-row input[type="checkbox"]:disabled {
+    background-color: var(--color-sunken);
+    border-color: var(--color-line);
+  }
+
+  /* A notice states a condition. It is not an alert component with an icon
+     and a coloured panel — it is a ruled note in the flow of the page. */
+  .notice {
+    border-left: 2px solid var(--color-line-firm);
+    padding-left: 0.875rem;
+  }
+  .notice-error {
+    border-left-color: var(--color-accent-clay);
+  }
+
+  .summary-list {
+    display: grid;
+  }
+  .summary-list > li {
+    display: grid;
+    gap: 0.125rem;
+    padding: 0.6875rem 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .summary-list > li:last-child {
+    border-bottom: 0;
+  }
+
+  /* ------------------------------------------------------------------
+     Navigation drawer
+
+     Opens from the left, because that is where the trigger is and a panel
+     that flies in from the opposite side to its button reads as a different
+     object. Areas are set as an editorial index, not as a list of links.
+     ------------------------------------------------------------------ */
+  .nav-area {
+    display: grid;
+    grid-template-columns: 1.75rem 1fr;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.9375rem 0;
+    border-bottom: 1px solid var(--color-line);
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    text-align: left;
+    transition: color var(--isv-duration-base) var(--isv-ease);
+  }
+
+  .nav-area:hover {
+    color: var(--color-action);
+  }
+
+  .nav-area-index {
+    font-size: var(--text-micro);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-tertiary);
+  }
+
+  .nav-quick {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .nav-quick-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6875rem 0;
+    border-bottom: 1px solid var(--color-line);
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--isv-duration-base) var(--isv-ease);
+  }
+
+  .nav-quick-row:hover {
+    color: var(--color-action);
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   PRD s13: motion is functional. With the preference set it is
+   removed entirely, and nothing becomes unreachable.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

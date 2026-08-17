@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ISV Member Portal — Design Directions</title>
+<style>
+/* ============================================================
+   TOKEN LAYER
+   Every direction is a token set. Nothing below the token
+   block changes between directions. This is the architecture
+   the PRD specifies, demonstrated rather than described.
+   ============================================================ */
+
+:root {
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+}
+
+/* ---------- DIRECTION 1 — CONSIDERED ---------- */
+[data-direction="considered"] {
+  --font-display: var(--serif);
+  --font-body: var(--sans);
+
+  --fs-display: 40px;   --lh-display: 1.15;  --fw-display: 400;  --ls-display: -0.015em;
+  --fs-h2: 22px;        --lh-h2: 1.3;        --fw-h2: 500;       --ls-h2: -0.005em;
+  --fs-h3: 17px;        --lh-h3: 1.4;        --fw-h3: 600;
+  --fs-body: 16px;      --lh-body: 1.65;
+  --fs-small: 14px;     --lh-small: 1.55;
+  --fs-micro: 12.5px;   --ls-micro: 0.02em;
+
+  --bg-page: #FBFAF8;
+  --bg-surface: #FFFFFF;
+  --bg-sunken: #F4F2EE;
+  --bg-inverse: #23201C;
+  --text-primary: #23201C;
+  --text-secondary: #6B655C;
+  --text-tertiary: #948D82;
+  --text-inverse: #FBFAF8;
+  --border-subtle: #E8E4DC;
+  --border-strong: #D3CDC2;
+  --action-primary: #1F4E46;
+  --action-primary-hover: #163932;
+  --action-text: #FFFFFF;
+  --accent-quiet: #EDF2F0;
+  --status-success: #2F6B4F;
+  --status-attention: #8A6420;
+  --status-error: #97341F;
+  --status-error-bg: #FBF1EE;
+
+  --space-unit: 8px;
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --radius-lg: 8px;
+  --radius-pill: 999px;
+
+  --card-pad: 28px;
+  --card-gap: 20px;
+  --section-gap: 56px;
+  --control-h: 46px;
+  --shadow-card: none;
+  --shadow-raised: 0 1px 2px rgba(35,32,28,.05), 0 8px 24px rgba(35,32,28,.06);
+  --card-border: 1px solid var(--border-subtle);
+  --card-bg: var(--bg-surface);
+  --density-label: "Low density · editorial calm";
+}
+
+/* ---------- DIRECTION 2 — ASSURED ---------- */
+[data-direction="assured"] {
+  --font-display: var(--sans);
+  --font-body: var(--sans);
+
+  --fs-display: 34px;   --lh-display: 1.2;   --fw-display: 700;  --ls-display: -0.022em;
+  --fs-h2: 20px;        --lh-h2: 1.3;        --fw-h2: 650;       --ls-h2: -0.012em;
+  --fs-h3: 16px;        --lh-h3: 1.4;        --fw-h3: 650;
+  --fs-body: 15.5px;    --lh-body: 1.6;
+  --fs-small: 13.5px;   --lh-small: 1.5;
+  --fs-micro: 12px;     --ls-micro: 0.03em;
+
+  --bg-page: #F5F7FA;
+  --bg-surface: #FFFFFF;
+  --bg-sunken: #EBEFF5;
+  --bg-inverse: #0F2942;
+  --text-primary: #0F2942;
+  --text-secondary: #4A5C71;
+  --text-tertiary: #7B8A9C;
+  --text-inverse: #FFFFFF;
+  --border-subtle: #DCE3EC;
+  --border-strong: #BCC7D6;
+  --action-primary: #0F2942;
+  --action-primary-hover: #1B3D5C;
+  --action-text: #FFFFFF;
+  --accent-quiet: #E3EBF5;
+  --status-success: #17694A;
+  --status-attention: #8A5B14;
+  --status-error: #A32B1C;
+  --status-error-bg: #FCEFEC;
+
+  --space-unit: 8px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+
+  --card-pad: 22px;
+  --card-gap: 16px;
+  --section-gap: 44px;
+  --control-h: 44px;
+  --shadow-card: 0 1px 2px rgba(15,41,66,.06);
+  --shadow-raised: 0 2px 4px rgba(15,41,66,.06), 0 12px 28px rgba(15,41,66,.10);
+  --card-border: 1px solid var(--border-subtle);
+  --card-bg: var(--bg-surface);
+  --density-label: "Medium density · institutional confidence";
+}
+
+/* ---------- DIRECTION 3 — IMMEDIATE ---------- */
+[data-direction="immediate"] {
+  --font-display: var(--sans);
+  --font-body: var(--sans);
+
+  --fs-display: 26px;   --lh-display: 1.25;  --fw-display: 600;  --ls-display: -0.02em;
+  --fs-h2: 16px;        --lh-h2: 1.35;       --fw-h2: 600;       --ls-h2: -0.01em;
+  --fs-h3: 14px;        --lh-h3: 1.4;        --fw-h3: 600;
+  --fs-body: 14px;      --lh-body: 1.55;
+  --fs-small: 13px;     --lh-small: 1.45;
+  --fs-micro: 11.5px;   --ls-micro: 0.04em;
+
+  --bg-page: #FCFCFD;
+  --bg-surface: #FFFFFF;
+  --bg-sunken: #F4F4F6;
+  --bg-inverse: #17171A;
+  --text-primary: #17171A;
+  --text-secondary: #62636B;
+  --text-tertiary: #96979F;
+  --text-inverse: #FCFCFD;
+  --border-subtle: #E7E7EA;
+  --border-strong: #D0D0D5;
+  --action-primary: #3B4BD8;
+  --action-primary-hover: #2E3BB0;
+  --action-text: #FFFFFF;
+  --accent-quiet: #EEF0FE;
+  --status-success: #12734E;
+  --status-attention: #8A6100;
+  --status-error: #C0341D;
+  --status-error-bg: #FDF0ED;
+
+  --space-unit: 8px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+
+  --card-pad: 16px;
+  --card-gap: 12px;
+  --section-gap: 36px;
+  --control-h: 36px;
+  --shadow-card: 0 1px 1px rgba(23,23,26,.04);
+  --shadow-raised: 0 1px 2px rgba(23,23,26,.06), 0 8px 20px rgba(23,23,26,.08);
+  --card-border: 1px solid var(--border-subtle);
+  --card-bg: var(--bg-surface);
+  --density-label: "High density · product-forward";
+}
+
+/* ============================================================
+   CHROME — the comparison harness, not part of the design
+   ============================================================ */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: var(--sans);
+  background: #101014;
+  color: #E8E8EC;
+  -webkit-font-smoothing: antialiased;
+}
+.harness {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(16,16,20,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #26262E;
+  padding: 14px 24px;
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+}
+.harness h1 { font-size: 13px; font-weight: 600; margin: 0; letter-spacing: .02em; }
+.harness .sub { font-size: 12px; color: #85858F; margin: 0; }
+.switch { display: flex; gap: 4px; background: #1C1C22; padding: 4px; border-radius: 8px; }
+.switch button {
+  font: inherit; font-size: 12.5px; font-weight: 500;
+  padding: 7px 14px; border: 0; border-radius: 5px;
+  background: transparent; color: #9A9AA4; cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.switch button:hover { color: #E8E8EC; }
+.switch button[aria-pressed="true"] { background: #33333D; color: #FFF; }
+.harness .spacer { flex: 1; }
+.harness .note { font-size: 11.5px; color: #6E6E78; max-width: 380px; line-height: 1.5; }
+
+.stage { padding: 0 0 80px; }
+.block { padding: 40px 24px 0; max-width: 1180px; margin: 0 auto; }
+.block > .label {
+  font-size: 11px; letter-spacing: .09em; text-transform: uppercase;
+  color: #6E6E78; font-weight: 600; margin: 0 0 4px;
+}
+.block > .desc { font-size: 12.5px; color: #85858F; margin: 0 0 16px; line-height: 1.55; max-width: 720px; }
+
+/* the canvas each mock sits on */
+.canvas {
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #26262E;
+}
+.canvas-pad { padding: calc(var(--space-unit) * 4); }
+
+/* ============================================================
+   COMPONENTS — identical markup across all three directions
+   ============================================================ */
+
+/* --- app shell header --- */
+.appbar {
+  display: flex; align-items: center; gap: 16px;
+  padding: 0 calc(var(--space-unit) * 3);
+  height: calc(var(--control-h) + var(--space-unit) * 2.5);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.logo {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 15px; letter-spacing: -.02em;
+  color: var(--text-primary); white-space: nowrap;
+}
+.logo span { color: var(--action-primary); }
+.askfield {
+  flex: 1; max-width: 520px; height: var(--control-h);
+  display: flex; align-items: center; gap: 9px;
+  padding: 0 12px;
+  background: var(--bg-sunken);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--text-tertiary);
+  font-size: var(--fs-small);
+  cursor: text;
+  transition: border-color .15s, background .15s;
+}
+.askfield:hover { border-color: var(--border-strong); background: var(--bg-surface); }
+.askfield .kbd {
+  margin-left: auto; font-family: var(--mono); font-size: 10.5px;
+  padding: 2px 6px; border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm); color: var(--text-tertiary);
+  background: var(--bg-surface);
+}
+.appbar .spacer { flex: 1; }
+.rolepill {
+  display: flex; align-items: center; gap: 8px;
+  height: var(--control-h); padding: 0 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  font-size: var(--fs-small); font-weight: 500;
+  cursor: pointer; white-space: nowrap;
+}
+.rolepill:hover { border-color: var(--border-strong); }
+.rolepill .caret { color: var(--text-tertiary); font-size: 10px; }
+.avatar {
+  width: 30px; height: 30px; border-radius: var(--radius-pill);
+  background: var(--action-primary); color: var(--action-text);
+  display: grid; place-items: center;
+  font-size: 11.5px; font-weight: 600; letter-spacing: .02em;
+}
+.iconbtn {
+  width: var(--control-h); height: var(--control-h);
+  display: grid; place-items: center;
+  border: 1px solid transparent; border-radius: var(--radius-md);
+  color: var(--text-secondary); cursor: pointer; background: none;
+}
+.iconbtn:hover { background: var(--bg-sunken); }
+
+/* --- personalised header --- */
+.greeting { padding: calc(var(--space-unit) * 5) 0 calc(var(--space-unit) * 3); }
+.eyebrow {
+  font-size: var(--fs-micro); letter-spacing: var(--ls-micro);
+  text-transform: uppercase; font-weight: 600;
+  color: var(--text-tertiary); margin: 0 0 10px;
+}
+.display {
+  font-family: var(--font-display);
+  font-size: var(--fs-display); line-height: var(--lh-display);
+  font-weight: var(--fw-display); letter-spacing: var(--ls-display);
+  margin: 0 0 10px; color: var(--text-primary);
+}
+.lede { font-size: var(--fs-body); color: var(--text-secondary); margin: 0; max-width: 56ch; }
+.contextrow {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  margin-top: calc(var(--space-unit) * 2.5);
+}
+.chip {
+  font-size: var(--fs-micro); font-weight: 500;
+  padding: 5px 11px; border-radius: var(--radius-pill);
+  background: var(--bg-sunken); color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+/* --- section header + cue --- */
+.sechead {
+  display: flex; align-items: baseline; gap: 12px;
+  margin: 0 0 calc(var(--space-unit) * 2);
+  padding-bottom: calc(var(--space-unit) * 1.25);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.sechead h2 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2); line-height: var(--lh-h2);
+  font-weight: var(--fw-h2); letter-spacing: var(--ls-h2);
+  margin: 0; color: var(--text-primary);
+}
+.cue {
+  font-size: var(--fs-micro); font-weight: 500;
+  color: var(--action-primary);
+  background: var(--accent-quiet);
+  padding: 3px 9px; border-radius: var(--radius-pill);
+}
+.sechead .more {
+  margin-left: auto; font-size: var(--fs-small);
+  color: var(--text-secondary); text-decoration: none;
+}
+.sechead .more:hover { color: var(--action-primary); text-decoration: underline; }
+
+/* --- cards --- */
+.cardgrid { display: grid; gap: var(--card-gap); }
+.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.card {
+  background: var(--card-bg);
+  border: var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--card-pad);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow .18s, border-color .18s, transform .18s;
+}
+.card.link { cursor: pointer; }
+.card.link:hover {
+  box-shadow: var(--shadow-raised);
+  border-color: var(--border-strong);
+}
+.card .kicker {
+  font-size: var(--fs-micro); letter-spacing: var(--ls-micro);
+  text-transform: uppercase; font-weight: 600;
+  color: var(--text-tertiary); margin: 0 0 8px;
+}
+.card h3 {
+  font-size: var(--fs-h3); line-height: var(--lh-h3); font-weight: var(--fw-h3);
+  margin: 0 0 8px; color: var(--text-primary);
+}
+.card p {
+  font-size: var(--fs-small); line-height: var(--lh-small);
+  color: var(--text-secondary); margin: 0;
+}
+.card .foot {
+  margin-top: calc(var(--space-unit) * 2);
+  padding-top: calc(var(--space-unit) * 1.5);
+  border-top: 1px solid var(--border-subtle);
+  display: flex; align-items: center; gap: 8px;
+  font-size: var(--fs-micro); color: var(--text-tertiary);
+}
+.included {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: var(--fs-micro); font-weight: 500;
+  color: var(--status-success);
+}
+.dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+/* --- buttons --- */
+.btn {
+  font: inherit; font-size: var(--fs-small); font-weight: 550;
+  height: var(--control-h); padding: 0 18px;
+  border-radius: var(--radius-md); border: 1px solid transparent;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+  transition: background .15s, border-color .15s;
+}
+.btn-primary { background: var(--action-primary); color: var(--action-text); }
+.btn-primary:hover { background: var(--action-primary-hover); }
+.btn-secondary {
+  background: var(--bg-surface); color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+.btn-secondary:hover { background: var(--bg-sunken); }
+.btn-quiet { background: none; color: var(--action-primary); padding: 0 4px; }
+.btn-quiet:hover { text-decoration: underline; }
+
+/* --- ask isv answer --- */
+.overlay {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-raised);
+  overflow: hidden;
+}
+.overlay-q {
+  display: flex; align-items: center; gap: 10px;
+  padding: calc(var(--space-unit) * 2.5) var(--card-pad);
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: var(--fs-h3); font-weight: 500; color: var(--text-primary);
+}
+.overlay-q .mark { color: var(--text-tertiary); }
+.overlay-body { padding: var(--card-pad); }
+.answer {
+  font-size: var(--fs-body); line-height: 1.7;
+  color: var(--text-primary); margin: 0 0 calc(var(--space-unit) * 3);
+  max-width: 66ch;
+}
+.band { margin-top: calc(var(--space-unit) * 3); }
+.bandlabel {
+  font-size: var(--fs-micro); letter-spacing: var(--ls-micro);
+  text-transform: uppercase; font-weight: 600;
+  color: var(--text-tertiary); margin: 0 0 10px;
+}
+.sources { display: grid; gap: 8px; }
+.source {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-page);
+  cursor: pointer; text-decoration: none; color: inherit;
+}
+.source:hover { border-color: var(--border-strong); background: var(--bg-surface); }
+.source .num {
+  width: 20px; height: 20px; flex: none;
+  display: grid; place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--accent-quiet); color: var(--action-primary);
+  font-size: 11px; font-weight: 600;
+}
+.source .t { font-size: var(--fs-small); font-weight: 500; }
+.source .m { margin-left: auto; font-size: var(--fs-micro); color: var(--text-tertiary); white-space: nowrap; }
+.followups { display: flex; flex-wrap: wrap; gap: 8px; }
+.followup {
+  font-size: var(--fs-small); padding: 8px 13px;
+  border: 1px solid var(--border-subtle); border-radius: var(--radius-pill);
+  background: var(--bg-surface); color: var(--text-primary); cursor: pointer;
+}
+.followup:hover { border-color: var(--action-primary); color: var(--action-primary); }
+.escalate {
+  margin-top: calc(var(--space-unit) * 3);
+  padding-top: calc(var(--space-unit) * 2.5);
+  border-top: 1px solid var(--border-subtle);
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  font-size: var(--fs-small); color: var(--text-secondary);
+}
+
+/* --- request status --- */
+.statuscard { background: var(--card-bg); border: var(--card-border); border-radius: var(--radius-lg); padding: var(--card-pad); box-shadow: var(--shadow-card); }
+.statustop { display: flex; align-items: flex-start; gap: 14px; }
+.statusbadge {
+  font-size: var(--fs-micro); font-weight: 600;
+  padding: 4px 10px; border-radius: var(--radius-pill);
+  background: var(--accent-quiet); color: var(--action-primary);
+  white-space: nowrap;
+}
+.ref { font-family: var(--mono); font-size: var(--fs-micro); color: var(--text-tertiary); }
+.timeline { display: flex; gap: 0; margin-top: calc(var(--space-unit) * 3); }
+.step { flex: 1; position: relative; padding-top: 20px; }
+.step::before {
+  content: ""; position: absolute; top: 5px; left: 0;
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--bg-surface); border: 2px solid var(--border-strong);
+}
+.step.done::before { background: var(--status-success); border-color: var(--status-success); }
+.step::after {
+  content: ""; position: absolute; top: 10px; left: 11px; right: 0;
+  height: 2px; background: var(--border-subtle);
+}
+.step:last-child::after { display: none; }
+.step.done::after { background: var(--status-success); }
+.step .s { font-size: var(--fs-micro); font-weight: 600; color: var(--text-primary); display: block; }
+.step .d { font-size: var(--fs-micro); color: var(--text-tertiary); }
+.step:not(.done) .s { color: var(--text-tertiary); font-weight: 500; }
+
+/* --- form --- */
+.form { display: grid; gap: calc(var(--space-unit) * 2.5); max-width: 620px; }
+.field label { display: block; font-size: var(--fs-small); font-weight: 600; margin-bottom: 7px; }
+.field .hint { font-size: var(--fs-micro); color: var(--text-tertiary); font-weight: 400; margin-left: 6px; }
+.input, .select, .textarea {
+  width: 100%; font: inherit; font-size: var(--fs-small);
+  height: var(--control-h); padding: 0 13px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+}
+.textarea { height: auto; min-height: 88px; padding: 11px 13px; line-height: 1.55; resize: vertical; }
+.input:focus, .select:focus, .textarea:focus {
+  outline: 2px solid var(--action-primary); outline-offset: 1px; border-color: var(--action-primary);
+}
+.input.prefilled { background: var(--bg-sunken); }
+.prefillnote {
+  font-size: var(--fs-micro); color: var(--text-tertiary);
+  margin-top: 6px; display: flex; align-items: center; gap: 6px;
+}
+.field.error .input, .field.error .textarea { border-color: var(--status-error); }
+.errmsg {
+  font-size: var(--fs-micro); color: var(--status-error);
+  margin-top: 6px; display: flex; align-items: center; gap: 6px;
+  background: var(--status-error-bg); padding: 7px 10px; border-radius: var(--radius-sm);
+}
+.radios { display: grid; gap: 9px; }
+.radio {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px; border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md); cursor: pointer; font-size: var(--fs-small);
+  background: var(--bg-surface);
+}
+.radio:hover { border-color: var(--border-strong); }
+.radio.on { border-color: var(--action-primary); background: var(--accent-quiet); }
+.radio .ring {
+  width: 16px; height: 16px; border-radius: 50%; flex: none;
+  border: 2px solid var(--border-strong); display: grid; place-items: center;
+}
+.radio.on .ring { border-color: var(--action-primary); }
+.radio.on .ring::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--action-primary); }
+.disabled-filter {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 32px; padding: 0 12px; font-size: var(--fs-micro);
+  border: 1px dashed var(--border-strong); border-radius: var(--radius-md);
+  color: var(--text-tertiary); background: var(--bg-sunken); cursor: not-allowed;
+}
+
+/* --- token display --- */
+.ramp { display: grid; gap: 14px; }
+.rampitem { display: flex; align-items: baseline; gap: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle); }
+.rampitem .meta { font-family: var(--mono); font-size: 11px; color: var(--text-tertiary); width: 150px; flex: none; }
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 10px; }
+.sw { border: 1px solid var(--border-subtle); border-radius: var(--radius-md); overflow: hidden; }
+.sw .chipc { height: 52px; }
+.sw .n { padding: 8px 10px; font-family: var(--mono); font-size: 10.5px; color: var(--text-secondary); background: var(--bg-surface); }
+.scale { display: flex; align-items: flex-end; gap: 8px; }
+.scale div { background: var(--action-primary); border-radius: 2px 2px 0 0; }
+.scale span { font-family: var(--mono); font-size: 10px; color: var(--text-tertiary); display: block; text-align: center; margin-top: 6px; }
+
+.rowsplit { display: grid; grid-template-columns: 1.35fr 1fr; gap: var(--card-gap); align-items: start; }
+@media (max-width: 900px) {
+  .cols-3, .cols-2, .rowsplit { grid-template-columns: 1fr; }
+  .timeline { flex-direction: column; gap: 14px; }
+  .step::after { display: none; }
+}
+</style>
+</head>
+<body data-direction="considered">
+
+<div class="harness">
+  <div>
+    <h1>ISV Member Portal — Design Directions</h1>
+    <p class="sub">Same components, same copy, three token sets</p>
+  </div>
+  <div class="switch" role="group" aria-label="Design direction">
+    <button data-set="considered" aria-pressed="true">1 · Considered</button>
+    <button data-set="assured" aria-pressed="false">2 · Assured</button>
+    <button data-set="immediate" aria-pressed="false">3 · Immediate</button>
+  </div>
+  <div class="spacer"></div>
+  <p class="note">Colour is a strategy here, not ISV's palette. Brand values get sampled from the live site once a direction is chosen, and they only enter at the primitive token layer.</p>
+</div>
+
+<div class="stage">
+
+  <!-- APP SHELL -->
+  <section class="block">
+    <p class="label">App shell and navigation</p>
+    <p class="desc">The frame everything sits inside. Ask ISV is a persistent header field rather than an icon, per the brief. Role switcher sits next to identity so the switch reads as a change of view, not a change of account.</p>
+    <div class="canvas">
+      <div class="appbar">
+        <div class="logo">Independent Schools <span>Victoria</span></div>
+        <div class="askfield">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.6"/><path d="M10.4 10.4 14 14"/></svg>
+          <span>Ask ISV a question</span>
+          <span class="kbd">⌘K</span>
+        </div>
+        <div class="spacer"></div>
+        <div class="rolepill">Principal <span class="caret">▾</span></div>
+        <button class="iconbtn" aria-label="Contact ISV">
+          <svg width="17" height="17" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 4.5h13v9h-13z"/><path d="m2.5 5 6.5 4.5L15.5 5"/></svg>
+        </button>
+        <div class="avatar">ME</div>
+      </div>
+      <div class="canvas-pad" style="padding-top:0">
+        <div class="greeting">
+          <p class="eyebrow">Ashwood Grange School</p>
+          <h1 class="display">Good morning, Margaret</h1>
+          <p class="lede">Three things need your attention, and your compliance request has moved forward since Tuesday.</p>
+          <div class="contextrow">
+            <span class="chip">Principal</span>
+            <span class="chip">ISV Member School</span>
+            <span class="chip">Camberwell, VIC</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES + STATUS -->
+  <section class="block">
+    <p class="label">Service cards and request status</p>
+    <p class="desc">Module-level personalisation cue, not per card. Membership inclusion is stated on the card because it answers the first question a member asks. The status card carries the seeded request from the data spec.</p>
+    <div class="canvas"><div class="canvas-pad">
+      <div class="rowsplit">
+        <div>
+          <div class="sechead">
+            <h2>ISV services</h2>
+            <span class="cue">Based on your role</span>
+            <a class="more" href="#">All services</a>
+          </div>
+          <div class="cardgrid cols-2">
+            <div class="card link">
+              <p class="kicker">Governance, compliance and risk</p>
+              <h3>Compliance support from ISV</h3>
+              <p>Request guidance on compliance obligations, governance practice and regulatory requirements affecting your school.</p>
+              <div class="foot"><span class="included"><span class="dot"></span> Included in your membership</span></div>
+            </div>
+            <div class="card link">
+              <p class="kicker">Vision and strategy</p>
+              <h3>isAnalyse</h3>
+              <p>Aggregate ISV data sets with public data to benchmark your school and generate reports.</p>
+              <div class="foot">Opens in isAnalyse</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="sechead"><h2>Your requests</h2></div>
+          <div class="statuscard">
+            <div class="statustop">
+              <div style="flex:1">
+                <p class="kicker" style="margin-bottom:6px">Employment relations support</p>
+                <span class="ref">ISV-2026-04817</span>
+              </div>
+              <span class="statusbadge">With ISV</span>
+            </div>
+            <div class="timeline">
+              <div class="step done"><span class="s">Submitted</span><span class="d">6 Aug</span></div>
+              <div class="step done"><span class="s">Received</span><span class="d">7 Aug</span></div>
+              <div class="step done"><span class="s">Assigned</span><span class="d">9 Aug</span></div>
+              <div class="step"><span class="s">Response</span><span class="d">—</span></div>
+            </div>
+            <div class="foot" style="margin-top:20px;padding-top:14px;border-top:1px solid var(--border-subtle)">
+              An ISV adviser will contact you to confirm details
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ASK ISV -->
+  <section class="block">
+    <p class="label">Ask ISV — answer state</p>
+    <p class="desc">Answer first, sources second, and sources only render after the answer completes. Copy is verbatim from entry A1 in the data spec. Note what it does not do: it never states what the regulation requires, only what ISV provides.</p>
+    <div class="canvas"><div class="canvas-pad">
+      <div class="overlay">
+        <div class="overlay-q">
+          <span class="mark">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.6"/><path d="M10.4 10.4 14 14"/></svg>
+          </span>
+          What do we need to have in place for the Child Safe Standards this year?
+        </div>
+        <div class="overlay-body">
+          <p class="answer">ISV's compliance resources cover the Child Safe Standards alongside the VRQA minimum standards for the care, safety and welfare of students. isComply holds model policies, guidance materials and templates that schools can adapt, and the compliance policies for Member Schools are maintained in partnership with Russell Kennedy. What applies to your school depends on your registration status and current policy set, which ISV can review with you directly.</p>
+
+          <div class="band">
+            <p class="bandlabel">Sources</p>
+            <div class="sources">
+              <a class="source" href="#"><span class="num">1</span><span class="t">Child safety policy templates and guidance</span><span class="m">isComply · Maintained by ISV</span></a>
+              <a class="source" href="#"><span class="num">2</span><span class="t">School registration and VRQA minimum standards</span><span class="m">isComply · Maintained by ISV</span></a>
+              <a class="source" href="#"><span class="num">3</span><span class="t">Compliance policies for Member Schools</span><span class="m">ISV website · Maintained by ISV</span></a>
+            </div>
+          </div>
+
+          <div class="band">
+            <p class="bandlabel">Related services</p>
+            <div class="cardgrid cols-2">
+              <div class="card link" style="padding:calc(var(--card-pad) * .72)">
+                <h3 style="margin-bottom:5px">Compliance support from ISV</h3>
+                <p>Request guidance from an ISV adviser</p>
+              </div>
+              <div class="card link" style="padding:calc(var(--card-pad) * .72)">
+                <h3 style="margin-bottom:5px">isComply</h3>
+                <p>Model policies and compliance guidance</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="band">
+            <p class="bandlabel">Follow up</p>
+            <div class="followups">
+              <button class="followup">Where do I find ISV's model policies and templates?</button>
+              <button class="followup">What are our school registration obligations?</button>
+              <button class="followup">Who do I contact at ISV about an employment relations question?</button>
+            </div>
+          </div>
+
+          <div class="escalate">
+            <span>Need something specific to your school?</span>
+            <button class="btn btn-secondary">Contact ISV</button>
+            <button class="btn btn-quiet">03 9825 7200</button>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- FORM -->
+  <section class="block">
+    <p class="label">Request form — prefilled, focus, validation, Discovery state</p>
+    <p class="desc">Pre-filled fields are visibly pre-filled and still editable. That note is the moment Act 3 proves connected member context, so it is deliberately visible rather than silent. The disabled filter shows the Discovery-status treatment.</p>
+    <div class="canvas"><div class="canvas-pad">
+      <div class="sechead"><h2>Request compliance support</h2></div>
+      <div class="form">
+        <div class="field">
+          <label>Your name</label>
+          <input class="input prefilled" value="Margaret Ellery">
+          <div class="prefillnote">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 3.4v3.2M6 8.4v.2"/></svg>
+            From your ISV member profile
+          </div>
+        </div>
+        <div class="field">
+          <label>School</label>
+          <input class="input prefilled" value="Ashwood Grange School">
+        </div>
+        <div class="field">
+          <label>What area does this relate to</label>
+          <select class="select">
+            <option>Child safety</option>
+            <option>School registration</option>
+            <option>Governance and board practice</option>
+            <option>Student wellbeing</option>
+            <option>Staff employment</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field error">
+          <label>Describe what you need help with <span class="hint">Include any relevant dates or deadlines</span></label>
+          <textarea class="textarea" placeholder="Tell us what you need"></textarea>
+          <div class="errmsg">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 1.5 11 10.5H1z"/><path d="M6 5v2.2M6 8.8v.2"/></svg>
+            Tell us what you need help with so we can route your request
+          </div>
+        </div>
+        <div class="field">
+          <label>How urgent is this</label>
+          <div class="radios">
+            <label class="radio on"><span class="ring"></span> Within a week</label>
+            <label class="radio"><span class="ring"></span> Within a month</label>
+            <label class="radio"><span class="ring"></span> No fixed deadline</label>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button class="btn btn-primary">Submit request</button>
+          <button class="btn btn-secondary">Cancel</button>
+          <span style="margin-left:auto"><span class="disabled-filter">Filter by topic · confirmed during Discovery</span></span>
+        </div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- TOKENS -->
+  <section class="block">
+    <p class="label">Typography, colour roles and spacing</p>
+    <p class="desc">The token layer that produces everything above. Choosing a direction is choosing this, and it is the only thing that changes between the three.</p>
+    <div class="canvas"><div class="canvas-pad">
+      <div class="sechead"><h2>Type ramp</h2></div>
+      <div class="ramp">
+        <div class="rampitem"><span class="meta">display</span><span class="display">Good morning, Margaret</span></div>
+        <div class="rampitem"><span class="meta">heading-2</span><span style="font-family:var(--font-display);font-size:var(--fs-h2);font-weight:var(--fw-h2);letter-spacing:var(--ls-h2)">ISV services</span></div>
+        <div class="rampitem"><span class="meta">heading-3</span><span style="font-size:var(--fs-h3);font-weight:var(--fw-h3)">Compliance support from ISV</span></div>
+        <div class="rampitem"><span class="meta">body</span><span style="font-size:var(--fs-body)">ISV's compliance resources cover the Child Safe Standards.</span></div>
+        <div class="rampitem"><span class="meta">small</span><span style="font-size:var(--fs-small);color:var(--text-secondary)">Included in your school's ISV membership</span></div>
+        <div class="rampitem"><span class="meta">micro / caps</span><span class="eyebrow" style="margin:0">Governance, compliance and risk</span></div>
+      </div>
+
+      <div class="sechead" style="margin-top:44px"><h2>Semantic colour roles</h2></div>
+      <div class="swatches">
+        <div class="sw"><div class="chipc" style="background:var(--bg-page)"></div><div class="n">background-page</div></div>
+        <div class="sw"><div class="chipc" style="background:var(--bg-sunken)"></div><div class="n">background-sunken</div></div>
+        <div class="sw"><div class="chipc" style="background:var(--text-primary)"></div><div class="n">text-primary</div></div>
+        <div class="sw"><div class="chipc" style="background:var(--text-secondary)"></div><div class="n">text-secondary</div></div>
+        <div class="sw"><div class="chipc" style="background:var(--border-subtle)"></div><div class="n">border-subtle</div></div>
+        <div class="sw"><div class="chipc" style="background:var(--action-primary)"></div><div class="n">action-primary</div></div>
+        <div class="sw"><div class="chipc" style="background:var(--accent-quiet)"></div><div class="n">accent-quiet</div></div>
+        <div class="sw"><div class="chipc" style="background:var(--status-success)"></div><div class="n">status-success</div></div>
+        <div class="sw"><div class="chipc" style="background:var(--status-error)"></div><div class="n">status-error</div></div>
+      </div>
+
+      <div class="sechead" style="margin-top:44px"><h2>Spacing and control height</h2></div>
+      <div class="scale">
+        <div style="width:44px;height:8px"></div>
+        <div style="width:44px;height:16px"></div>
+        <div style="width:44px;height:24px"></div>
+        <div style="width:44px;height:32px"></div>
+        <div style="width:44px;height:48px"></div>
+        <div style="width:44px;height:64px"></div>
+        <div style="margin-left:24px;width:100px;height:var(--control-h);border-radius:var(--radius-md)"></div>
+      </div>
+      <div class="scale" style="align-items:flex-start;margin-top:0">
+        <div style="width:44px;height:0"><span>8</span></div>
+        <div style="width:44px;height:0"><span>16</span></div>
+        <div style="width:44px;height:0"><span>24</span></div>
+        <div style="width:44px;height:0"><span>32</span></div>
+        <div style="width:44px;height:0"><span>48</span></div>
+        <div style="width:44px;height:0"><span>64</span></div>
+        <div style="margin-left:24px;width:100px;height:0"><span>control</span></div>
+      </div>
+    </div></div>
+  </section>
+
+</div>
+
+<script>
+  const body = document.body;
+  document.querySelectorAll('.switch button').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.switch button').forEach(x => x.setAttribute('aria-pressed', 'false'));
+      b.setAttribute('aria-pressed', 'true');
+      body.setAttribute('data-direction', b.dataset.set);
+    });
+  });
+  document.addEventListener('keydown', e => {
+    if (['1','2','3'].includes(e.key)) {
+      const btns = document.querySelectorAll('.switch button');
+      btns[+e.key - 1]?.click();
+    }
+  });
+</script>
+</body>
+</html>

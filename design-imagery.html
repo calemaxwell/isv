@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ISV Member Portal — Imagery and pattern</title>
+<style>
+:root{
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+
+  --ink:#201D19; --ink-soft:#4A443B; --ink-faint:#8C857A;
+  --paper:#FBFAF7; --paper-warm:#F5F1E8; --sand:#EAE3D4; --sand-deep:#DDD3BE;
+  --forest:#1E4A42; --forest-deep:#12312B; --forest-mist:#DFE9E5;
+  --clay:#9C4A2A; --clay-mist:#F6E9E2; --ochre:#B98A2E;
+  --line:#E4DFD4; --line-firm:#CFC7B7;
+
+  --fs-mega:58px; --fs-display:40px; --fs-h2:23px; --fs-h3:17px;
+  --fs-body:16.5px; --fs-small:14px; --fs-micro:12px;
+  --gutter:40px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#0E0E10;color:#E6E6EA;font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.harness{position:sticky;top:0;z-index:60;background:rgba(14,14,16,.93);backdrop-filter:blur(12px);
+  border-bottom:1px solid #26262C;padding:12px 24px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.harness h1{font-size:13px;margin:0;font-weight:600}
+.harness nav{display:flex;gap:2px;flex-wrap:wrap}
+.harness nav a{font-size:12px;color:#8E8E98;text-decoration:none;padding:6px 10px;border-radius:5px}
+.harness nav a:hover{color:#FFF;background:#24242C}
+.block{max-width:1200px;margin:0 auto;padding:44px 24px 0}
+.block>.lbl{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#6E6E78;font-weight:600;margin:0 0 4px}
+.block>.dsc{font-size:12.5px;color:#8A8A94;margin:0 0 16px;line-height:1.55;max-width:780px}
+.frame{border-radius:12px;overflow:hidden;border:1px solid #26262C}
+.verdict{font-size:12.5px;line-height:1.6;margin:14px 0 0;padding:12px 16px;border-left:2px solid #3A3A44;color:#A6A6B0;background:#17171B;border-radius:0 6px 6px 0}
+.verdict b{color:#E6E6EA;font-weight:600}
+
+/* ---------- app ---------- */
+.app{background:var(--paper);color:var(--ink);font-size:var(--fs-body);line-height:1.6}
+.wrap{max-width:1080px;margin:0 auto;padding:0 var(--gutter)}
+.eyebrow{font-size:var(--fs-micro);letter-spacing:.13em;text-transform:uppercase;font-weight:600;color:var(--ink-faint);margin:0 0 14px}
+.eyebrow.dk{color:rgba(255,255,255,.62)}
+.mega{font-family:var(--serif);font-size:var(--fs-mega);line-height:1.05;font-weight:400;letter-spacing:-.022em;margin:0}
+.disp{font-family:var(--serif);font-size:var(--fs-display);line-height:1.12;font-weight:400;letter-spacing:-.018em;margin:0}
+.h2{font-family:var(--serif);font-size:var(--fs-h2);line-height:1.25;font-weight:400;letter-spacing:-.012em;margin:0}
+.h3{font-size:var(--fs-h3);line-height:1.38;font-weight:600;margin:0}
+.lede{font-size:18px;line-height:1.6;color:var(--ink-soft);max-width:60ch;margin:14px 0 0}
+.lede.dk{color:rgba(251,250,247,.72)}
+.small{font-size:var(--fs-small);line-height:1.55;color:var(--ink-soft)}
+.micro{font-size:var(--fs-micro);color:var(--ink-faint)}
+.mono-sm{font-family:var(--mono);font-size:var(--fs-micro)}
+.field{padding:64px 0}
+.field-tight{padding:40px 0}
+.f-paper{background:var(--paper)} .f-warm{background:var(--paper-warm)} .f-sand{background:var(--sand)}
+.f-mist{background:var(--forest-mist)} .f-forest{background:var(--forest-deep);color:#fff}
+.f-ink{background:var(--ink);color:var(--paper)}
+.btn{font:inherit;font-size:var(--fs-small);font-weight:600;height:46px;padding:0 22px;border-radius:3px;
+  border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;gap:9px}
+.btn-p{background:var(--forest);color:#fff} .btn-p:hover{background:var(--forest-deep)}
+.btn-s{background:transparent;color:var(--ink);border-color:var(--line-firm)} .btn-s:hover{border-color:var(--ink)}
+.btn-onink{background:var(--paper);color:var(--ink)}
+.btn-ghost{background:transparent;color:rgba(255,255,255,.85);border-color:rgba(255,255,255,.32)}
+.sec{display:flex;align-items:baseline;gap:16px;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:26px}
+
+/* ============================================================
+   IMAGE STAND-INS
+   All CSS-generated. They represent treatment and placement,
+   not final assets.
+   ============================================================ */
+
+/* A. duotone documentary photograph */
+.photo{position:relative;overflow:hidden;background:var(--forest-deep)}
+.photo::before{content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 55% 70% at 22% 30%, rgba(223,233,229,.9), transparent 62%),
+    radial-gradient(ellipse 45% 60% at 72% 68%, rgba(185,138,46,.55), transparent 60%),
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(18,49,43,.95), transparent 70%),
+    linear-gradient(160deg,#2B5C52 0%,#12312B 55%,#0C221E 100%);
+}
+.photo::after{content:"";position:absolute;inset:0;opacity:.5;
+  background-image:radial-gradient(rgba(255,255,255,.10) .5px, transparent .5px);
+  background-size:3px 3px;}
+.photo .cap{position:absolute;left:0;bottom:0;padding:14px 18px;font-size:11px;letter-spacing:.06em;
+  text-transform:uppercase;color:rgba(255,255,255,.75);z-index:2}
+
+/* B. student artwork, isArtworks */
+.art{position:relative;overflow:hidden;background:var(--paper-warm)}
+.art i{position:absolute;display:block}
+.art .a1{left:8%;top:14%;width:38%;height:52%;background:var(--clay);border-radius:50% 50% 46% 54%/56% 44% 56% 44%;transform:rotate(-8deg)}
+.art .a2{right:12%;top:24%;width:30%;height:30%;background:var(--ochre);border-radius:50%}
+.art .a3{left:26%;bottom:10%;width:52%;height:16%;background:var(--forest);border-radius:40px}
+.art .a4{right:20%;bottom:26%;width:16%;height:34%;background:var(--forest-mist);transform:rotate(14deg)}
+.art .a5{left:14%;top:8%;width:14%;height:14%;background:var(--sand-deep);border-radius:50%}
+.art.alt .a1{background:var(--forest);border-radius:46% 54% 60% 40%/52% 48% 52% 48%;left:14%;width:34%;height:44%}
+.art.alt .a2{background:var(--clay);right:16%;top:16%;width:26%;height:26%}
+.art.alt .a3{background:var(--ochre);height:12%;bottom:16%}
+.art.alt .a4{background:var(--sand-deep)}
+.art .cap{position:absolute;left:0;bottom:0;padding:12px 16px;font-size:10.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-faint);z-index:2}
+
+/* C. patterns */
+.pat{position:relative;overflow:hidden}
+.pat-rule{background:
+  repeating-linear-gradient(to bottom, transparent 0 27px, var(--line) 27px 28px), var(--paper);}
+.pat-grid{background:
+  repeating-linear-gradient(to right, transparent 0 47px, var(--line) 47px 48px),
+  repeating-linear-gradient(to bottom, transparent 0 47px, var(--line) 47px 48px), var(--paper);}
+.pat-dot{background:radial-gradient(var(--line-firm) 1px, transparent 1px) 0 0/16px 16px, var(--paper);}
+.pat-arc{background:
+  radial-gradient(circle at 0% 100%, transparent 30px, var(--forest-mist) 30px 31px, transparent 31px) 0 0/48px 48px,
+  var(--paper);}
+.pat-weave{background:
+  repeating-linear-gradient(45deg, var(--paper-warm) 0 10px, var(--paper) 10px 20px);}
+.pat-tint{background:linear-gradient(180deg, var(--forest-mist), var(--paper));}
+
+.swatchrow{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.swatchrow .s{background:var(--paper);padding:0}
+.swatchrow .s .p{height:130px}
+.swatchrow .s .m{padding:14px 16px}
+.swatchrow .s .m b{display:block;font-size:var(--fs-small);font-weight:600;margin-bottom:4px}
+.swatchrow .s .m span{font-size:var(--fs-micro);color:var(--ink-faint);line-height:1.5;display:block}
+
+.compare{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.compare>div{background:var(--paper)}
+.compare .hd{padding:14px 18px;border-bottom:1px solid var(--line);font-size:var(--fs-micro);
+  letter-spacing:.09em;text-transform:uppercase;font-weight:600;color:var(--ink-faint)}
+.compare .bd{padding:0}
+
+.rulebox{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+.rulebox>div{background:var(--paper);padding:26px 28px}
+.rulebox h4{margin:0 0 12px;font-size:var(--fs-h3);font-weight:600}
+.rulebox ul{margin:0;padding-left:18px}
+.rulebox li{font-size:var(--fs-small);line-height:1.7;color:var(--ink-soft)}
+.yes h4{color:var(--forest)} .no h4{color:var(--clay)}
+
+.signin{display:grid;grid-template-columns:1fr 1fr;min-height:440px}
+.signin .l{padding:56px 48px;display:flex;flex-direction:column;justify-content:center}
+.logo{font-family:var(--serif);font-size:17px;letter-spacing:-.02em}
+.logo em{font-style:normal;color:var(--forest)}
+
+.feat{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line)}
+.feat .t{padding:38px 34px}
+
+@media(max-width:900px){
+  .compare,.swatchrow,.rulebox,.signin,.feat{grid-template-columns:1fr}
+  :root{--fs-mega:38px;--fs-display:29px;--gutter:22px}
+}
+</style>
+</head>
+<body>
+
+<div class="harness">
+  <h1>Imagery and pattern</h1>
+  <nav>
+    <a href="#rules">Where it belongs</a>
+    <a href="#three">Three strategies</a>
+    <a href="#signin">Sign-in</a>
+    <a href="#patterns">Patterns</a>
+    <a href="#applied">Recommended</a>
+  </nav>
+</div>
+
+<!-- ============ RULES ============ -->
+<section class="block" id="rules">
+  <p class="lbl">The argument before the options</p>
+  <p class="dsc">The brief says photography only where it adds meaning, and no decorative elements competing with member tasks. Read literally that is a constraint. Read properly it is a placement rule, and the placement rule is the whole decision.</p>
+  <div class="frame"><div class="app"><div class="field f-paper field-tight"><div class="wrap">
+    <div class="rulebox">
+      <div class="yes">
+        <h4>Imagery earns its place here</h4>
+        <ul>
+          <li><b>Sign-in.</b> Nobody is working yet. This is the only screen where atmosphere is the job.</li>
+          <li><b>Editorial features.</b> A news or insight article is content, and content carries images.</li>
+          <li><b>Empty states.</b> Nothing to compete with, and warmth does real work when a member has no requests.</li>
+          <li><b>The one forest moment per page.</b> Where you already want the eye to land.</li>
+        </ul>
+      </div>
+      <div class="no">
+        <h4>Imagery is a liability here</h4>
+        <ul>
+          <li><b>Service cards.</b> A member scanning for the right service does not need a photo per card.</li>
+          <li><b>Resource lists.</b> Thumbnails turn a scannable index into a slower grid.</li>
+          <li><b>Ask ISV answers.</b> Anything decorative here undermines the trust the source list is building.</li>
+          <li><b>Forms and status.</b> Transactional surfaces. Nothing decorative goes near them.</li>
+        </ul>
+      </div>
+    </div>
+  </div></div></div></div>
+  <p class="verdict"><b>The through-line.</b> Imagery belongs on surfaces where the member is arriving or reading. It comes off every surface where the member is working. That single rule settles most of the questions below.</p>
+</section>
+
+<!-- ============ THREE STRATEGIES ============ -->
+<section class="block" id="three">
+  <p class="lbl">Three imagery strategies, same moment</p>
+  <p class="dsc">The masthead of a news feature, treated three ways. Image blocks are CSS stand-ins for placement and treatment, not final assets.</p>
+  <div class="frame"><div class="app">
+    <div class="compare">
+      <div>
+        <div class="hd">A · None</div>
+        <div class="bd">
+          <div style="padding:32px 28px;min-height:300px">
+            <p class="eyebrow">Perspectives</p>
+            <p class="disp" style="font-size:25px">Strengthening school improvement through evidence and voice</p>
+            <p class="small" style="margin-top:14px">How Independent schools are using evidence and student voice to shape improvement priorities.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="hd">B · Documentary photography</div>
+        <div class="bd">
+          <div class="photo" style="height:150px"><span class="cap">Duotone, ink and forest</span></div>
+          <div style="padding:26px 28px">
+            <p class="eyebrow">Perspectives</p>
+            <p class="disp" style="font-size:25px">Strengthening school improvement through evidence and voice</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="hd">C · Student artwork</div>
+        <div class="bd">
+          <div class="art" style="height:150px"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i><i class="a5"></i><span class="cap">isArtworks collection</span></div>
+          <div style="padding:26px 28px">
+            <p class="eyebrow">Perspectives</p>
+            <p class="disp" style="font-size:25px">Strengthening school improvement through evidence and voice</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+  <p class="verdict"><b>C is the idea worth having.</b> ISV owns isArtworks: an archive of student artwork going back to 2005, roughly 3,000 pieces from Victorian Independent schools. No other association has that. It is warmer than documentary photography, it is unmistakably ISV, and it sidesteps a real problem: an organisation whose portal is partly about child safety putting photographs of identifiable children on its login screen. Artwork carries the same human warmth with none of the consent exposure.</p>
+</section>
+
+<!-- ============ SIGN-IN ============ -->
+<section class="block" id="signin">
+  <p class="lbl">Sign-in — the one screen that is purely atmosphere</p>
+  <p class="dsc">Two treatments of the same screen. This is where the strategy is most visible and where the cost of getting it wrong is lowest.</p>
+
+  <div class="frame" style="margin-bottom:20px"><div class="app">
+    <div class="signin">
+      <div class="l">
+        <div class="logo" style="margin-bottom:52px">Independent Schools <em>Victoria</em></div>
+        <h1 class="mega" style="font-size:44px">Your ISV,<br>in one place</h1>
+        <p class="lede" style="font-size:16.5px">Resources, services, learning and advice, brought together for your school.</p>
+        <div style="margin-top:36px;display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-p">Sign in with your school account</button>
+        </div>
+        <p class="micro" style="margin-top:26px">Trouble signing in? Contact ISV on 03 9825 7200</p>
+      </div>
+      <div class="art alt"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i><i class="a5"></i>
+        <span class="cap">Student artwork · Annual Student Art Exhibition</span></div>
+    </div>
+  </div></div>
+
+  <div class="frame"><div class="app">
+    <div class="signin">
+      <div class="l">
+        <div class="logo" style="margin-bottom:52px">Independent Schools <em>Victoria</em></div>
+        <h1 class="mega" style="font-size:44px">Your ISV,<br>in one place</h1>
+        <p class="lede" style="font-size:16.5px">Resources, services, learning and advice, brought together for your school.</p>
+        <div style="margin-top:36px"><button class="btn btn-p">Sign in with your school account</button></div>
+        <p class="micro" style="margin-top:26px">Trouble signing in? Contact ISV on 03 9825 7200</p>
+      </div>
+      <div class="photo"><span class="cap">Documentary · duotone treatment</span></div>
+    </div>
+  </div></div>
+  <p class="verdict"><b>Artwork wins on distinctiveness.</b> The duotone photograph is competent and could belong to any education body in the country. The artwork panel could only be ISV. It also gives you a rotating asset: a different work each session, credited to the school, which is a small thing that members notice.</p>
+</section>
+
+<!-- ============ PATTERNS ============ -->
+<section class="block" id="patterns">
+  <p class="lbl">Pattern and texture</p>
+  <p class="dsc">Six options, from structural to decorative. The test is whether a member would notice it competing with a task.</p>
+  <div class="frame"><div class="app"><div class="field f-paper field-tight"><div class="wrap">
+    <div class="swatchrow">
+      <div class="s"><div class="p pat pat-rule"></div><div class="m"><b>Baseline rules</b><span>Horizontal hairlines on the type baseline. Structural, not decorative. Works behind index lists and empty states.</span></div></div>
+      <div class="s"><div class="p pat pat-grid"></div><div class="m"><b>Grid</b><span>Exposes the 12-column system. Honest, but it reads as a design tool rather than a product.</span></div></div>
+      <div class="s"><div class="p pat pat-dot"></div><div class="m"><b>Dot field</b><span>Quiet texture. Safe, and slightly anonymous. Every SaaS product has used it.</span></div></div>
+      <div class="s"><div class="p pat pat-arc"></div><div class="m"><b>Arc</b><span>Derived from the logo mark once we have it. The only pattern here that could be ISV-specific.</span></div></div>
+      <div class="s"><div class="p pat pat-weave"></div><div class="m"><b>Weave</b><span>Diagonal tonal stripe. Warm, but it fights body copy and dates quickly.</span></div></div>
+      <div class="s"><div class="p pat pat-tint"></div><div class="m"><b>Gradient wash</b><span>Not a pattern. A field that fades. Useful under a masthead, invisible everywhere else.</span></div></div>
+    </div>
+  </div></div></div></div>
+  <p class="verdict"><b>My recommendation: almost none of it.</b> The colour field system is already doing the work pattern usually does, which is giving the page rhythm. Adding pattern on top competes with it. Keep <b>baseline rules</b> for empty states and index backgrounds, keep the <b>gradient wash</b> under the masthead, and hold the <b>arc</b> in reserve until we have the real ISV mark to derive it from. Everything else comes out.</p>
+</section>
+
+<!-- ============ APPLIED ============ -->
+<section class="block" id="applied">
+  <p class="lbl">Recommended combination, applied</p>
+  <p class="dsc">Landing page with artwork used exactly twice and no pattern on any working surface. Compare the pace against the version with no imagery at all.</p>
+  <div class="frame"><div class="app">
+
+    <div class="field f-paper" style="padding:52px 0 44px;background:linear-gradient(180deg,var(--forest-mist) 0%, var(--paper) 60%)">
+      <div class="wrap">
+        <p class="eyebrow">Ashwood Grange School · Camberwell</p>
+        <h1 class="mega">Good morning,<br>Margaret</h1>
+        <p class="lede">Your compliance request moved forward on Tuesday. Two policy resources were updated this week.</p>
+      </div>
+    </div>
+
+    <div class="field f-sand field-tight">
+      <div class="wrap">
+        <div class="sec"><h2 class="h2">Your requests</h2></div>
+        <div style="background:#fff;border:1px solid var(--line);padding:24px 26px;display:flex;gap:20px;align-items:flex-start">
+          <div style="flex:1">
+            <p class="eyebrow" style="margin-bottom:8px">Employment relations support</p>
+            <p class="h3">Advice on flexible working arrangements</p>
+            <p class="mono-sm" style="margin-top:8px;color:var(--ink-faint)">ISV-2026-04817</p>
+          </div>
+          <span style="font-size:var(--fs-micro);font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:6px 11px;background:var(--forest-mist);color:var(--forest)">With ISV</span>
+        </div>
+        <p class="micro" style="margin-top:14px">No imagery. This is a working surface.</p>
+      </div>
+    </div>
+
+    <div class="field f-paper">
+      <div class="wrap">
+        <div class="sec"><h2 class="h2">News and insights</h2></div>
+        <div class="feat">
+          <div class="t">
+            <p class="eyebrow">Perspectives</p>
+            <p class="disp" style="font-size:28px">Strengthening school improvement through evidence, voice and contemporary research</p>
+            <p class="small" style="margin-top:16px">How Independent schools are using evidence and student voice to shape improvement priorities.</p>
+            <p style="margin-top:24px"><button class="btn btn-s">Read the article</button></p>
+          </div>
+          <div class="art"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i><i class="a5"></i>
+            <span class="cap">Ruby N., Year 9 · isArtworks</span></div>
+        </div>
+        <p class="micro" style="margin-top:14px">Artwork use one of two. Editorial content, so it carries an image.</p>
+      </div>
+    </div>
+
+    <div class="field f-mist">
+      <div class="wrap">
+        <div class="sec"><h2 class="h2">ISV services</h2></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)">
+          <div style="background:var(--paper);padding:26px 24px">
+            <p class="eyebrow" style="margin-bottom:10px">Governance, compliance and risk</p>
+            <p class="h3">Compliance support from ISV</p>
+            <p class="small" style="margin-top:8px">Request guidance on compliance obligations and governance practice.</p>
+          </div>
+          <div style="background:var(--paper);padding:26px 24px">
+            <p class="eyebrow" style="margin-bottom:10px">Vision and strategy</p>
+            <p class="h3">isAnalyse</p>
+            <p class="small" style="margin-top:8px">Benchmark your school and generate reports.</p>
+          </div>
+          <div style="background:var(--paper);padding:26px 24px">
+            <p class="eyebrow" style="margin-bottom:10px">Vision and strategy</p>
+            <p class="h3">isLEAD Surveys</p>
+            <p class="small" style="margin-top:8px">A measure of school effectiveness for Independent schools.</p>
+          </div>
+        </div>
+        <p class="micro" style="margin-top:14px">No thumbnails. Members scan these, they do not browse them.</p>
+      </div>
+    </div>
+
+    <div class="field f-paper field-tight">
+      <div class="wrap">
+        <div class="sec"><h2 class="h2">Saved resources</h2></div>
+        <div class="pat pat-rule" style="border:1px solid var(--line);padding:44px 32px;text-align:center">
+          <p class="h3" style="margin-bottom:8px">Nothing saved yet</p>
+          <p class="small" style="max-width:44ch;margin:0 auto">Resources you save from the library will appear here so you can come back to them.</p>
+        </div>
+        <p class="micro" style="margin-top:14px">Baseline rules used here. Empty state, nothing to compete with.</p>
+      </div>
+    </div>
+
+  </div></div>
+  <p class="verdict"><b>Two images on a whole landing page.</b> One on the sign-in before it, one in the confirmation after it. That is the entire imagery budget for the demo, and it is enough, because the colour fields are carrying the visual interest that photography would otherwise have to.</p>
+</section>
+
+<div style="height:80px"></div>
+</body>
+</html>

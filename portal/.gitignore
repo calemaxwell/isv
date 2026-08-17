@@ -1,0 +1,10 @@
+node_modules/
+.next/
+tmp/
+next-env.d.ts
+*.tsbuildinfo
+.DS_Store
+
+# Regenerated per platform. A lockfile from another OS breaks
+# npm optional platform binaries (lightningcss, @next/swc).
+package-lock.json

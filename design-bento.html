@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ISV — Bento direction</title>
+<style>
+:root{
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+
+  --ink:#201D19; --ink-soft:#4A443B; --ink-faint:#6B6459;
+  --paper:#FBFAF7; --warm:#F5F1E8; --sand:#EAE3D4; --sand-deep:#DDD3BE;
+  --forest:#1E4A42; --forest-deep:#12312B; --mist:#DFE9E5;
+  --clay:#9C4A2A; --clay-mist:#F6E9E2; --ochre:#B98A2E; --ochre-mist:#F7EFDC;
+  --line:#E4DFD4; --line-firm:#CFC7B7;
+
+  --r:18px;            /* the single biggest change from the ruled system */
+  --pad:30px;
+  --gap:16px;
+  --gutter:48px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#0E0E10;color:#E6E6EA;font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.harness{position:sticky;top:0;z-index:60;background:rgba(14,14,16,.94);backdrop-filter:blur(12px);
+  border-bottom:1px solid #26262C;padding:12px 24px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.harness h1{font-size:13px;margin:0;font-weight:600}
+.harness nav{display:flex;gap:2px;flex-wrap:wrap}
+.harness nav a{font-size:12px;color:#8E8E98;text-decoration:none;padding:6px 10px;border-radius:5px}
+.harness nav a:hover{color:#FFF;background:#24242C}
+.block{max-width:1320px;margin:0 auto;padding:44px 24px 0}
+.block>.lbl{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#6E6E78;font-weight:600;margin:0 0 4px}
+.block>.dsc{font-size:12.5px;color:#8A8A94;margin:0 0 16px;line-height:1.55;max-width:840px}
+.frame{border-radius:12px;overflow:hidden;border:1px solid #26262C}
+.verdict{font-size:12.5px;line-height:1.6;margin:14px 0 0;padding:12px 16px;border-left:2px solid #3A3A44;color:#A6A6B0;background:#17171B;border-radius:0 6px 6px 0}
+.verdict b{color:#E6E6EA;font-weight:600}
+
+/* ---------- app ---------- */
+.app{background:var(--warm);color:var(--ink);font-size:16.5px;line-height:1.6;padding:52px 0 60px}
+.app.paper{background:var(--paper)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 var(--gutter)}
+.eyebrow{font-size:12px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;color:var(--ink-faint);margin:0}
+.h2{font-family:var(--serif);font-size:24px;line-height:1.25;font-weight:400;letter-spacing:-.012em;margin:0}
+.mega{font-family:var(--serif);font-size:58px;line-height:1.03;font-weight:400;letter-spacing:-.024em;margin:0}
+.lede{font-size:18px;line-height:1.6;color:var(--ink-soft);max-width:60ch;margin:14px 0 0}
+.sm{font-size:14.5px;line-height:1.55;color:var(--ink-soft)}
+.micro{font-size:12px;color:var(--ink-faint)}
+.mono{font-family:var(--mono);font-size:12px;color:var(--ink-faint)}
+.sechead{display:flex;align-items:baseline;gap:14px;margin:0 0 20px}
+.cue{font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--forest);
+  background:var(--mist);padding:5px 11px;border-radius:999px}
+.more{margin-left:auto;font-size:14px;color:var(--ink-soft);text-decoration:none;border-bottom:1px solid var(--line-firm);padding-bottom:1px}
+
+/* =========================================================
+   TILE SYSTEM
+   ========================================================= */
+.bento{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);grid-auto-rows:minmax(84px,auto)}
+.tile{border-radius:var(--r);padding:var(--pad);display:flex;flex-direction:column;overflow:hidden;
+  position:relative;transition:transform .22s cubic-bezier(.22,.61,.36,1),box-shadow .22s}
+.tile:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(32,29,25,.10)}
+.tile h3{margin:0;font-size:23px;line-height:1.2;letter-spacing:-.014em;font-weight:600}
+.tile h3.big{font-family:var(--serif);font-size:32px;font-weight:400;letter-spacing:-.018em;line-height:1.14}
+.tile p{margin:12px 0 0;font-size:14.5px;line-height:1.55}
+.tile .link{margin-top:auto;padding-top:22px;font-size:14px;font-weight:600;text-decoration:underline;text-underline-offset:4px}
+.tile .top{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.tile .pill{font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  padding:5px 10px;border-radius:999px}
+
+/* tones */
+.t-paper{background:var(--paper);color:var(--ink)}
+.t-paper .pill{background:var(--mist);color:var(--forest)}
+.t-sand{background:var(--sand);color:var(--ink)}
+.t-sand .pill{background:rgba(32,29,25,.08);color:var(--ink-soft)}
+.t-mist{background:var(--mist);color:var(--forest-deep)}
+.t-mist .pill{background:rgba(18,49,43,.10);color:var(--forest-deep)}
+.t-ochre{background:var(--ochre);color:var(--ink)}
+.t-ochre .pill{background:rgba(32,29,25,.14);color:var(--ink)}
+.t-clay{background:var(--clay);color:#fff}
+.t-clay .pill{background:rgba(255,255,255,.18);color:#fff}
+.t-clay p,.t-clay .micro{color:rgba(255,255,255,.82)}
+.t-forest{background:var(--forest-deep);color:#fff}
+.t-forest .pill{background:rgba(255,255,255,.16);color:#fff}
+.t-forest p,.t-forest .micro{color:rgba(255,255,255,.78)}
+.t-forest .link,.t-clay .link{color:#fff}
+
+/* spans */
+.s2{grid-column:span 2}.s3{grid-column:span 3}.s4{grid-column:span 4}
+.r2{grid-row:span 2}.r3{grid-row:span 3}
+
+/* artwork tile */
+.art{position:relative;overflow:hidden;background:var(--sand-deep);border-radius:var(--r)}
+.art i{position:absolute;display:block}
+.art .a1{left:9%;top:13%;width:40%;height:50%;background:var(--clay);border-radius:50% 50% 46% 54%/56% 44% 56% 44%;transform:rotate(-8deg)}
+.art .a2{right:11%;top:20%;width:30%;height:28%;background:var(--ochre);border-radius:50%}
+.art .a3{left:24%;bottom:11%;width:54%;height:14%;background:var(--forest);border-radius:40px}
+.art .a4{right:19%;bottom:25%;width:15%;height:32%;background:var(--mist);transform:rotate(14deg)}
+.art .a5{left:15%;top:8%;width:13%;height:13%;background:var(--ink);border-radius:50%}
+.art.alt .a1{background:var(--forest);left:16%;width:34%;height:44%}
+.art.alt .a2{background:var(--clay);border-radius:0}
+.art.alt .a3{background:var(--ochre)}
+.art .cap{position:absolute;left:0;bottom:0;padding:16px 20px;font-size:11px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-soft)}
+
+/* stat tile */
+.stat .n{font-family:var(--serif);font-size:62px;line-height:.95;letter-spacing:-.03em;margin:0}
+.date-chip{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  width:62px;height:62px;border-radius:14px;background:rgba(255,255,255,.14);flex:none}
+.date-chip .d{font-size:22px;font-weight:700;line-height:1}
+.date-chip .m{font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
+.t-paper .date-chip,.t-sand .date-chip,.t-mist .date-chip{background:rgba(32,29,25,.07)}
+
+/* ruled list, for the hybrid */
+.ruled{background:var(--paper);border-radius:var(--r);padding:8px var(--pad) 12px}
+.ruled a{display:grid;grid-template-columns:92px 1fr auto;gap:20px;align-items:center;
+  padding:16px 0;border-bottom:1px solid var(--line);text-decoration:none;color:inherit}
+.ruled a:last-child{border-bottom:0}
+.ruled .t{font-size:16px;font-weight:600}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+
+@media(max-width:1080px){
+  .bento{grid-template-columns:repeat(2,1fr)}
+  .s3,.s4{grid-column:span 2}
+}
+@media(max-width:640px){
+  .bento{grid-template-columns:1fr}
+  .s2,.s3,.s4{grid-column:span 1}
+  :root{--gutter:20px;--pad:22px}
+  .mega{font-size:38px}
+}
+</style>
+</head>
+<body>
+
+<div class="harness">
+  <h1>Bento direction</h1>
+  <nav>
+    <a href="#full">A · Full bento</a>
+    <a href="#hybrid">B · Hybrid</a>
+    <a href="#anatomy">Tile anatomy</a>
+    <a href="#call">The call</a>
+  </nav>
+</div>
+
+<!-- ============ A · FULL BENTO ============ -->
+<section class="block" id="full">
+  <p class="lbl">A · Full bento — the whole landing page as tiles</p>
+  <p class="dsc">Rounded cards, colour blocks from the ISV palette, artwork tiles, varied spans. Same content and same data as the current build, different physics.</p>
+  <div class="frame"><div class="app">
+    <div class="wrap">
+
+      <div style="margin-bottom:34px">
+        <p class="eyebrow" style="margin-bottom:12px">Ashwood Grange School · Camberwell</p>
+        <h1 class="mega">Good morning,<br>Margaret</h1>
+        <p class="lede">Four ISV updates since you last looked, your employment relations request has moved forward, and three sessions are running near your school.</p>
+      </div>
+
+      <div class="bento">
+
+        <!-- request status, wide -->
+        <div class="tile t-forest s2 r2">
+          <div class="top"><span class="pill">Your request</span><span class="micro" style="font-family:var(--mono)">ISV-2026-04817</span></div>
+          <h3>Advice on flexible working arrangements</h3>
+          <p>With ISV since 9 August. An adviser will contact you to confirm details.</p>
+          <div style="display:flex;gap:8px;margin-top:22px">
+            <span style="flex:1;height:4px;border-radius:2px;background:#fff"></span>
+            <span style="flex:1;height:4px;border-radius:2px;background:#fff"></span>
+            <span style="flex:1;height:4px;border-radius:2px;background:#fff"></span>
+            <span style="flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.28)"></span>
+          </div>
+          <p class="micro" style="margin-top:10px">Step 3 of 4 · Adviser assigned</p>
+          <span class="link">Track this request</span>
+        </div>
+
+        <!-- lead update -->
+        <div class="tile t-paper s2">
+          <div class="top"><span class="pill">Compliance</span><span class="micro">2 days ago</span></div>
+          <h3>Compliance resources reviewed for the new school year</h3>
+          <p>ISV has completed its annual review of the compliance library.</p>
+          <span class="link">Open in isComply</span>
+        </div>
+
+        <!-- counter -->
+        <div class="tile t-ochre stat">
+          <p class="n">4</p>
+          <p style="font-weight:600">updates since you last visited</p>
+          <span class="link">All updates</span>
+        </div>
+
+        <!-- update -->
+        <div class="tile t-paper">
+          <div class="top"><span class="pill">Governance</span></div>
+          <h3 style="font-size:19px">Term 4 registration briefing dates confirmed</h3>
+          <p class="micro" style="margin-top:auto;padding-top:18px">3 days ago · ISV website</p>
+        </div>
+
+        <!-- artwork -->
+        <div class="art s2 r2"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i><i class="a5"></i>
+          <span class="cap">Ruby N., Year 9 · isArtworks</span></div>
+
+        <!-- news feature -->
+        <div class="tile t-clay s2">
+          <div class="top"><span class="pill">Perspectives</span></div>
+          <h3 class="big">Strengthening school improvement through evidence and voice</h3>
+          <span class="link">Read the article</span>
+        </div>
+
+        <!-- service, primary -->
+        <div class="tile t-mist s2">
+          <div class="top"><span class="pill">Included in your membership</span></div>
+          <h3>Compliance support from ISV</h3>
+          <p>Request guidance on compliance obligations, governance practice and regulatory requirements.</p>
+          <span class="link">Request support</span>
+        </div>
+
+        <!-- event with date chip -->
+        <div class="tile t-sand s2">
+          <div class="top">
+            <span class="date-chip"><span class="d">4</span><span class="m">Sep</span></span>
+            <div>
+              <h3 style="font-size:20px">Principals' network breakfast</h3>
+              <p class="micro" style="margin-top:6px">In person · Hawthorn · Near your school</p>
+            </div>
+          </div>
+          <span class="link">Register</span>
+        </div>
+
+        <!-- learning -->
+        <div class="tile t-paper">
+          <div class="top"><span class="pill">In 3 weeks</span></div>
+          <h3 style="font-size:19px">Governance essentials for school leaders</h3>
+          <p class="micro" style="margin-top:auto;padding-top:18px">In person · Hawthorn</p>
+        </div>
+
+        <!-- learning -->
+        <div class="tile t-paper">
+          <div class="top"><span class="pill">In 4 weeks</span></div>
+          <h3 style="font-size:19px">Leading school improvement</h3>
+          <p class="micro" style="margin-top:auto;padding-top:18px">Blended · Camberwell</p>
+        </div>
+
+        <!-- services pair -->
+        <div class="tile t-paper">
+          <div class="top"><span class="pill">Vision and strategy</span></div>
+          <h3 style="font-size:19px">isAnalyse</h3>
+          <p>Benchmark your school and generate reports.</p>
+          <span class="link">Open</span>
+        </div>
+        <div class="tile t-paper">
+          <div class="top"><span class="pill">Vision and strategy</span></div>
+          <h3 style="font-size:19px">isLEAD Surveys</h3>
+          <p>A measure of school effectiveness.</p>
+          <span class="link">Open</span>
+        </div>
+
+        <!-- ask isv, full width -->
+        <div class="tile t-forest s4">
+          <div style="display:flex;align-items:center;gap:26px;flex-wrap:wrap">
+            <div style="flex:1;min-width:280px">
+              <h3 class="big" style="color:#fff">Ask ISV anything about your school</h3>
+              <p>Answers drawn from ISV's published resources, always with sources.</p>
+            </div>
+            <div style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:9px">
+              <span style="border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:11px 18px;font-size:14px">What do we need for the Child Safe Standards?</span>
+              <span style="border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:11px 18px;font-size:14px">What professional learning is available this term?</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div></div>
+  <p class="verdict"><b>It looks contemporary and it will photograph well.</b> The cost is that everything is now a card, which is the "grid of unrelated cards" the brief explicitly rules out. A Principal scanning for what changed has to read eleven tiles rather than four rows. It is a browse layout doing a scan job.</p>
+</section>
+
+<!-- ============ B · HYBRID ============ -->
+<section class="block" id="hybrid">
+  <p class="lbl">B · Hybrid — bento where you browse, ruled where you scan</p>
+  <p class="dsc">Updates and requests stay as ruled lists because those are scanned. Services, events, learning and news become tiles because those are browsed. Same visual language, applied by job rather than uniformly.</p>
+  <div class="frame"><div class="app paper">
+    <div class="wrap">
+
+      <div style="margin-bottom:34px">
+        <p class="eyebrow" style="margin-bottom:12px">Ashwood Grange School · Camberwell</p>
+        <h1 class="mega">Good morning,<br>Margaret</h1>
+        <p class="lede">Four ISV updates since you last looked, your employment relations request has moved forward, and three sessions are running near your school.</p>
+      </div>
+
+      <!-- scan zone -->
+      <div class="sechead"><h2 class="h2">What's changed</h2><span class="mono">4 since 2 August</span><a class="more" href="#">All updates</a></div>
+      <div class="ruled" style="background:var(--warm);margin-bottom:44px">
+        <a href="#"><span class="mono">2 days ago</span><span class="t"><span class="dot" style="background:var(--forest);display:inline-block;margin-right:10px"></span>Compliance resources reviewed for the new school year</span><span class="mono">isComply</span></a>
+        <a href="#"><span class="mono">3 days ago</span><span class="t"><span class="dot" style="background:var(--forest);display:inline-block;margin-right:10px"></span>Term 4 registration briefing dates confirmed</span><span class="mono">ISV</span></a>
+        <a href="#"><span class="mono">5 days ago</span><span class="t"><span class="dot" style="background:var(--clay);display:inline-block;margin-right:10px"></span>Child safety policy templates updated</span><span class="mono">isComply</span></a>
+        <a href="#"><span class="mono">Last week</span><span class="t"><span class="dot" style="background:var(--ochre);display:inline-block;margin-right:10px"></span>New guidance on school board governance practice</span><span class="mono">isConnect</span></a>
+      </div>
+
+      <!-- browse zone -->
+      <div class="sechead"><h2 class="h2">For you this term</h2><span class="cue">Based on your role</span><a class="more" href="#">Everything</a></div>
+      <div class="bento">
+        <div class="tile t-mist s2 r2">
+          <div class="top"><span class="pill">Included in your membership</span></div>
+          <h3 class="big">Compliance support from ISV</h3>
+          <p>Request guidance on compliance obligations, governance practice and regulatory requirements affecting your school.</p>
+          <span class="link">Request support</span>
+        </div>
+        <div class="art s2 r2"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i><i class="a5"></i>
+          <span class="cap">Ruby N., Year 9 · isArtworks</span></div>
+
+        <div class="tile t-sand s2">
+          <div class="top">
+            <span class="date-chip"><span class="d">4</span><span class="m">Sep</span></span>
+            <div>
+              <h3 style="font-size:20px">Principals' network breakfast</h3>
+              <p class="micro" style="margin-top:6px">In person · Hawthorn · Near your school</p>
+            </div>
+          </div>
+          <span class="link">Register</span>
+        </div>
+        <div class="tile t-clay s2">
+          <div class="top"><span class="pill">Perspectives</span></div>
+          <h3>Strengthening school improvement through evidence and voice</h3>
+          <span class="link">Read the article</span>
+        </div>
+
+        <div class="tile t-paper"><div class="top"><span class="pill">In 3 weeks</span></div><h3 style="font-size:19px">Governance essentials</h3><p class="micro" style="margin-top:auto;padding-top:16px">Hawthorn</p></div>
+        <div class="tile t-paper"><div class="top"><span class="pill">In 4 weeks</span></div><h3 style="font-size:19px">Leading school improvement</h3><p class="micro" style="margin-top:auto;padding-top:16px">Camberwell</p></div>
+        <div class="tile t-paper"><div class="top"><span class="pill">isAnalyse</span></div><h3 style="font-size:19px">Benchmark your school</h3><p class="micro" style="margin-top:auto;padding-top:16px">Vision and strategy</p></div>
+        <div class="tile t-ochre"><p class="n" style="font-family:var(--serif);font-size:44px;margin:0;line-height:1">3</p><p style="font-weight:600;font-size:15px">sessions near your school</p></div>
+      </div>
+
+    </div>
+  </div></div>
+  <p class="verdict"><b>This is the one I would build.</b> It gets the contemporary look where it helps and keeps a scannable list where a member is actually working. It also keeps the brief on side: the card wall is a browse surface with a heading that says so, not the whole page.</p>
+</section>
+
+<!-- ============ ANATOMY ============ -->
+<section class="block" id="anatomy">
+  <p class="lbl">Tile anatomy</p>
+  <p class="dsc">Six tile types cover everything on the page. Each has a fixed structure so the grid stays coherent as content changes.</p>
+  <div class="frame"><div class="app paper"><div class="wrap">
+    <div class="bento">
+      <div class="tile t-paper s2"><div class="top"><span class="pill">Label</span><span class="micro">Meta</span></div><h3>Standard tile</h3><p>Pill, heading, one or two lines, then an underlined action pinned to the bottom.</p><span class="link">Action</span></div>
+      <div class="tile t-forest s2"><div class="top"><span class="pill">Label</span></div><h3 class="big">Statement tile</h3><p>Serif heading on a dark ground. One per screen, for the thing that matters most.</p><span class="link">Action</span></div>
+      <div class="tile t-sand s2"><div class="top"><span class="date-chip"><span class="d">4</span><span class="m">Sep</span></span><div><h3 style="font-size:20px">Date tile</h3><p class="micro" style="margin-top:6px">Format · Location · Proximity</p></div></div><span class="link">Register</span></div>
+      <div class="tile t-ochre"><p class="n" style="font-family:var(--serif);font-size:52px;margin:0;line-height:1">4</p><p style="font-weight:600">Counter tile</p></div>
+      <div class="art"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i><i class="a5"></i><span class="cap">Artwork tile</span></div>
+      <div class="tile t-mist s2"><div class="top"><span class="pill">Included</span></div><h3>Service tile</h3><p>Membership inclusion sits in the pill so it is answered before the question is asked.</p><span class="link">Request</span></div>
+      <div class="tile t-clay s2"><div class="top"><span class="pill">Perspectives</span></div><h3>Editorial tile</h3><p>Clay ground, reserved for content. Never for anything transactional.</p><span class="link">Read</span></div>
+    </div>
+    <div style="margin-top:34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px">
+      <div><p class="eyebrow" style="margin-bottom:8px">Radius</p><p class="sm">18px on tiles, 14px on the date chip, pill on labels. The single change that shifts the whole feel.</p></div>
+      <div><p class="eyebrow" style="margin-bottom:8px">Gap</p><p class="sm">16px. Tighter than the ruled system's field spacing, so tiles read as a set.</p></div>
+      <div><p class="eyebrow" style="margin-bottom:8px">Padding</p><p class="sm">30px. Generous enough that colour blocks do not feel cramped.</p></div>
+      <div><p class="eyebrow" style="margin-bottom:8px">Motion</p><p class="sm">2px lift and a soft shadow on hover. Nothing else.</p></div>
+    </div>
+  </div></div></div>
+</section>
+
+<!-- ============ THE CALL ============ -->
+<section class="block" id="call">
+  <p class="lbl">What this costs and what it gains</p>
+  <div class="frame"><div class="app paper"><div class="wrap">
+    <div class="bento">
+      <div class="tile t-mist s2"><h3>What it gains</h3><p style="color:var(--forest-deep)">Reads as a current product rather than a document. Colour finally does work. The artwork has somewhere natural to live. It photographs well, which matters for a deck.</p></div>
+      <div class="tile t-sand s2"><h3>What it costs</h3><p>The brief rules out "a grid of unrelated cards" by name. Scanning is slower. And the ruled editorial system we signed off two days ago mostly goes in the bin: radius, borders, index lists, field system.</p></div>
+      <div class="tile t-forest s4"><h3 class="big" style="color:#fff">The honest position</h3><p>Direction B keeps both. Tiles where a member browses, rules where a member scans. It is roughly a day of rework rather than a rebuild, because the token layer already carries every colour these tiles use. Only radius, spacing and four components change.</p></div>
+    </div>
+  </div></div></div>
+</section>
+
+<div style="height:80px"></div>
+</body>
+</html>
