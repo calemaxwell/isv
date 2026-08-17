@@ -68,21 +68,24 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
               ))}
             </nav>
 
-            {/* Ask ISV, not a magnifying glass in a corner. It is the same
-                control as the portal's because it is the same promise, and
-                putting it in the header rather than behind an icon is the
-                whole argument about how people should find things. */}
-            <button
-              type="button"
-              onClick={() => setAskOpen(true)}
-              className="public-ask"
-            >
-              <SearchIcon />
-              <span>Ask ISV a question</span>
-              <span className="ml-auto font-mono text-micro tracking-kbd">
-                ⌘K
-              </span>
-            </button>
+            {/* Collapsed to icon and two words, expanding on hover and
+                focus. The slot holds the collapsed width and the control is
+                positioned inside it, so growing opens leftward over the nav
+                instead of pushing everything along. Nothing reflows. */}
+            <span className="public-ask-slot">
+              <button
+                type="button"
+                onClick={() => setAskOpen(true)}
+                className="public-ask"
+              >
+                <SearchIcon />
+                <span className="public-ask-label">
+                  Ask ISV
+                  <span className="public-ask-more"> a question</span>
+                </span>
+                <span className="public-ask-kbd">⌘K</span>
+              </button>
+            </span>
 
             <button
               type="button"
