@@ -4,11 +4,17 @@ import { ArrowRight } from "lucide-react";
 import { PublicShell } from "@/components/features/public-shell";
 import { Field, Wrap } from "@/components/layout";
 import { Artwork, StoryCard, StoryGrid } from "@/components/patterns";
-import { Eyebrow, LinkButton, Text } from "@/components/primitives";
+import {
+  Eyebrow,
+  LinkButton,
+  SearchIcon,
+  Text,
+} from "@/components/primitives";
 import { news } from "@/data/content";
 import { events, learning } from "@/data/content";
 import { parentStories } from "@/data/parents";
 import { audiences, highlights, isv } from "@/data/public-site";
+import { useMember } from "@/lib/member-context";
 import { formatDateWithYear, relativeUpcoming } from "@/lib/selectors";
 
 /**
@@ -26,6 +32,7 @@ import { formatDateWithYear, relativeUpcoming } from "@/lib/selectors";
  * organisation, not crossing into a different product.
  */
 export default function PublicHomePage() {
+  const { setAskOpen } = useMember();
   const featured = news[0];
   const upcoming = [...events, ...learning]
     .filter((item) => item.eventIso)
@@ -53,12 +60,31 @@ export default function PublicHomePage() {
                 {isv.purpose[1]}
               </Text>
 
-              <div className="mt-9 flex flex-wrap gap-3">
-                <LinkButton href="#audiences">
-                  <span className="btn-icon">
-                    Find what you need
-                    <ArrowRight className="size-4" strokeWidth={1.8} aria-hidden />
-                  </span>
+              {/* The primary way in. A visitor who can describe what they
+                  want in their own words should not have to work out which
+                  of seven menu items covers it. */}
+              <button
+                type="button"
+                onClick={() => setAskOpen(true)}
+                className="hero-ask"
+              >
+                <SearchIcon />
+                <span className="hero-ask-label">
+                  Ask ISV a question
+                </span>
+                <span className="hero-ask-go">
+                  <ArrowRight className="size-4" strokeWidth={1.8} aria-hidden />
+                </span>
+              </button>
+
+              <Text size="micro" tone="tertiary" className="mt-3">
+                Try &ldquo;what support is there for school
+                registration?&rdquo;
+              </Text>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <LinkButton variant="secondary" href="#audiences">
+                  Browse instead
                 </LinkButton>
                 <LinkButton variant="secondary" href="/sign-in">
                   Member sign in
