@@ -36,7 +36,19 @@ function chunk(text: string): string[] {
   return parts && parts.length > 1 ? parts.map((p) => p.trimEnd()) : [text];
 }
 
-export function AskIsv() {
+/**
+ * `variant` changes the framing only, never the machinery.
+ *
+ * On the public site the same question box answers from the same published
+ * material, but it cannot know the school, so it says so and offers sign-in
+ * as the thing that makes the answer better. That contrast is the pitch:
+ * one way of asking, two depths of answer.
+ */
+export function AskIsv({
+  variant = "member",
+}: {
+  variant?: "member" | "public";
+} = {}) {
   const router = useRouter();
   const {
     role,
@@ -227,7 +239,11 @@ export function AskIsv() {
                 whole interaction is silent to a screen reader. */}
             <div role="status" aria-live="polite">
               {phase === "empty" ? (
-                <IntroState suggestions={suggestions} onPick={run} />
+                <IntroState
+                  suggestions={suggestions}
+                  onPick={run}
+                  variant={variant}
+                />
               ) : null}
 
               {phase === "thinking" ? (
@@ -283,9 +299,11 @@ export function AskIsv() {
 function IntroState({
   suggestions,
   onPick,
+  variant = "member",
 }: {
   suggestions: AskIsvEntry[];
   onPick: (text: string) => void;
+  variant?: "member" | "public";
 }) {
   return (
     <div className="mt-12">
@@ -293,6 +311,16 @@ function IntroState({
         Ask a question in your own words. Answers are drawn from ISV&rsquo;s
         published resources and always show where they came from.
       </Text>
+
+      {variant === "public" ? (
+        <Text size="small" tone="inverseFaint" measure="reading" className="mt-4">
+          Signed in as a Member School, the same question is answered against
+          your school&rsquo;s own context.{" "}
+          <a href="/sign-in" className="underline underline-offset-4">
+            Member sign in
+          </a>
+        </Text>
+      ) : null}
       <Text
         as="h2"
         size="micro"

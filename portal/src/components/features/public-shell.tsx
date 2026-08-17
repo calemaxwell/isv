@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { Menu, Phone, Search, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Menu, Phone, X } from "lucide-react";
 import { Wrap } from "@/components/layout";
 import { Logo } from "@/components/features/app-shell";
-import { LinkButton, Text } from "@/components/primitives";
+import { LinkButton, SearchIcon, Text } from "@/components/primitives";
 import { isv, publicNav } from "@/data/public-site";
+import { useMember } from "@/lib/member-context";
+import { AskIsv } from "@/components/features/ask-isv";
 
 /**
  * Shell for the public site.
@@ -18,6 +20,19 @@ import { isv, publicNav } from "@/data/public-site";
  */
 export function PublicShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const { setAskOpen } = useMember();
+
+  // Same shortcut as the portal. A visitor who learns it here keeps it.
+  useEffect(() => {
+    function onKey(event: KeyboardEvent) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setAskOpen(true);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [setAskOpen]);
 
   return (
     <>
@@ -30,10 +45,6 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
             </a>
             <span className="hidden sm:inline">{isv.address}</span>
             <span className="ml-auto flex items-center gap-5">
-              <button type="button" className="utility-link">
-                <Search className="size-3.5" strokeWidth={1.8} aria-hidden />
-                Search
-              </button>
               <a href="/sign-in" className="utility-link font-semibold">
                 Member sign in
               </a>
@@ -56,6 +67,31 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
                 </a>
               ))}
             </nav>
+
+            {/* Ask ISV, not a magnifying glass in a corner. It is the same
+                control as the portal's because it is the same promise, and
+                putting it in the header rather than behind an icon is the
+                whole argument about how people should find things. */}
+            <button
+              type="button"
+              onClick={() => setAskOpen(true)}
+              className="public-ask"
+            >
+              <SearchIcon />
+              <span>Ask ISV a question</span>
+              <span className="ml-auto font-mono text-micro tracking-kbd">
+                ⌘K
+              </span>
+            </button>
+
+            <button
+              type="button"
+              className="public-ask-compact"
+              onClick={() => setAskOpen(true)}
+              aria-label="Ask ISV a question"
+            >
+              <SearchIcon />
+            </button>
 
             <button
               type="button"
@@ -88,6 +124,8 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
       </header>
 
       <main>{children}</main>
+
+      <AskIsv variant="public" />
 
       <footer className="public-footer">
         <Wrap>
