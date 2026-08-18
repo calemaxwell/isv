@@ -34,12 +34,7 @@ import {
   UpdateLead,
   categoryLabel,
 } from "@/components/patterns";
-import {
-  ArrowIcon,
-  Eyebrow,
-  LinkButton,
-  Text,
-} from "@/components/primitives";
+import { AppLink, ArrowIcon, Eyebrow, LinkButton, Text } from "@/components/primitives";
 import { useMember } from "@/lib/member-context";
 import {
   getService,
@@ -498,9 +493,9 @@ function NewsModule({ ids }: { ids: string[] }) {
           <TilePill tone="clay">{lead.recencyLabel}</TilePill>
         </span>
         <TileHeading serif>
-          <a href={`/news/${lead.id}`} className="tile-title-link">
+          <AppLink href={`/news/${lead.id}`} className="tile-title-link">
             {lead.title}
-          </a>
+          </AppLink>
         </TileHeading>
         <TileBody tone="clay">{lead.summary}</TileBody>
         <TileLink>Read the article</TileLink>
@@ -519,9 +514,9 @@ function NewsModule({ ids }: { ids: string[] }) {
             <TilePill>{areaLabel(item.isvSystem)}</TilePill>
           </span>
           <TileHeading className="text-h3">
-            <a href={`/news/${item.id}`} className="tile-title-link">
+            <AppLink href={`/news/${item.id}`} className="tile-title-link">
               {item.title}
-            </a>
+            </AppLink>
           </TileHeading>
           <TileBody>{item.summary}</TileBody>
         </Tile>
@@ -589,9 +584,9 @@ function PortalNavigation() {
                     {inner}
                   </button>
                 ) : (
-                  <a href={item.href} className={cls}>
+                  <AppLink href={item.href ?? "#"} className={cls}>
                     {inner}
-                  </a>
+                  </AppLink>
                 )}
               </li>
             );

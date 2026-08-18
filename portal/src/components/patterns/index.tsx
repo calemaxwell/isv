@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { Cell, CellGrid } from "@/components/layout";
-import { ArrowIcon, Badge, Button, Eyebrow, InclusionMark, InfoIcon, LinkButton, Text } from "@/components/primitives";
+import { AppLink, ArrowIcon, Badge, Button, Eyebrow, InclusionMark, InfoIcon, LinkButton, Text } from "@/components/primitives";
 import { areaLabel } from "@/data/areas";
 import { formatDate, relativeDate, relativeUpcoming } from "@/lib/selectors";
 import type { FileKind } from "@/data/files";
@@ -291,9 +291,9 @@ export function IndexList({
                 className="block"
               >
                 {hrefFor ? (
-                  <a href={hrefFor(item)} className="tile-title-link">
+                  <AppLink href={hrefFor(item)} className="tile-title-link">
                     {item.title}
-                  </a>
+                  </AppLink>
                 ) : (
                   item.title
                 )}
@@ -482,9 +482,9 @@ export function ScheduleList({
             )}
             <span className="min-w-0">
               <Text as="span" size="h3" className="block">
-                <a href={`/events/${item.id}`} className="tile-title-link">
+                <AppLink href={`/events/${item.id}`} className="tile-title-link">
                   {item.title}
-                </a>
+                </AppLink>
               </Text>
               <Text as="span" size="micro" tone="tertiary" className="mt-1 block">
                 {[item.format, item.location]

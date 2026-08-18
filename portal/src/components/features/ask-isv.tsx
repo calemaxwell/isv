@@ -5,12 +5,7 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { noMatchCopy } from "@/data/ask-isv";
-import {
-  Button,
-  Eyebrow,
-  SearchIcon,
-  Text,
-} from "@/components/primitives";
+import { AppLink, Button, Eyebrow, SearchIcon, Text } from "@/components/primitives";
 import { useMember } from "@/lib/member-context";
 import { followUpsFor, getEntry, matchQuery, suggestedForRole } from "@/lib/matching";
 import { areaLabel } from "@/data/areas";
@@ -316,9 +311,9 @@ function IntroState({
         <Text size="small" tone="inverseFaint" measure="reading" className="mt-4">
           Signed in as a Member School, the same question is answered against
           your school&rsquo;s own context.{" "}
-          <a href="/sign-in" className="underline underline-offset-4">
+          <AppLink href="/sign-in" className="underline underline-offset-4">
             Member sign in
-          </a>
+          </AppLink>
         </Text>
       ) : null}
       <Text

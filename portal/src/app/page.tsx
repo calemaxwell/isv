@@ -4,12 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { PublicShell } from "@/components/features/public-shell";
 import { Field, Wrap } from "@/components/layout";
 import { Artwork, StoryCard, StoryGrid } from "@/components/patterns";
-import {
-  Eyebrow,
-  LinkButton,
-  SearchIcon,
-  Text,
-} from "@/components/primitives";
+import { AppLink, Eyebrow, LinkButton, SearchIcon, Text } from "@/components/primitives";
 import { news } from "@/data/content";
 import { events, learning } from "@/data/content";
 import { parentStories } from "@/data/parents";
@@ -110,7 +105,7 @@ export default function PublicHomePage() {
 
           <div className="audience-grid">
             {audiences.map((item) => (
-              <a key={item.id} href={item.href} className="audience-card">
+              <AppLink key={item.id} href={item.href} className="audience-card">
                 <Text as="h3" size="h2" className="block">
                   {item.title}
                 </Text>
@@ -121,7 +116,7 @@ export default function PublicHomePage() {
                   {item.action}
                   <ArrowRight className="size-4" strokeWidth={1.8} aria-hidden />
                 </span>
-              </a>
+              </AppLink>
             ))}
           </div>
         </Wrap>
@@ -181,7 +176,7 @@ export default function PublicHomePage() {
 
           <div className="highlight-grid">
             {highlights.map((item) => (
-              <a key={item.id} href={item.href} className="highlight-card">
+              <AppLink key={item.id} href={item.href} className="highlight-card">
                 <Text
                   as="span"
                   size="micro"
@@ -196,7 +191,7 @@ export default function PublicHomePage() {
                 <Text size="small" tone="secondary" className="mt-2 block">
                   {item.body}
                 </Text>
-              </a>
+              </AppLink>
             ))}
           </div>
         </Wrap>
@@ -211,7 +206,11 @@ export default function PublicHomePage() {
 
           <div className="public-events">
             {upcoming.map((item) => (
-              <a key={item.id} href={`/events/${item.id}`} className="public-event">
+              <AppLink
+                key={item.id}
+                href={`/events/${item.id}`}
+                className="public-event"
+              >
                 <Text as="span" size="micro" tone="tertiary" className="block">
                   {formatDateWithYear(item.eventIso as string)} ·{" "}
                   {relativeUpcoming(item.eventIso as string)}
@@ -228,7 +227,7 @@ export default function PublicHomePage() {
                     .filter((v, i, a) => a.indexOf(v) === i)
                     .join(" · ")}
                 </Text>
-              </a>
+              </AppLink>
             ))}
           </div>
 
@@ -248,7 +247,7 @@ export default function PublicHomePage() {
           </Text>
 
           <div className="split-editorial">
-            <a href={`/news/${featured.id}`} className="feature-story">
+            <AppLink href={`/news/${featured.id}`} className="feature-story">
               <Text
                 as="span"
                 size="micro"
@@ -272,18 +271,22 @@ export default function PublicHomePage() {
                 Read the article
                 <ArrowRight className="size-4" strokeWidth={1.8} aria-hidden />
               </span>
-            </a>
+            </AppLink>
 
             <div className="feature-side">
               {stories.map((item) => (
-                <a key={item.id} href={`/news/${item.id}`} className="feature-row">
+                <AppLink
+                  key={item.id}
+                  href={`/news/${item.id}`}
+                  className="feature-row"
+                >
                   <Text as="span" size="micro" tone="tertiary" className="block">
                     {item.recencyLabel}
                   </Text>
                   <Text as="h3" size="h3" className="mt-1 block">
                     {item.title}
                   </Text>
-                </a>
+                </AppLink>
               ))}
             </div>
           </div>

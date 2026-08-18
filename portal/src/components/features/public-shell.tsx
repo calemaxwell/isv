@@ -4,7 +4,12 @@ import { useEffect, useState } from "react";
 import { Menu, Phone, X } from "lucide-react";
 import { Wrap } from "@/components/layout";
 import { Logo } from "@/components/features/app-shell";
-import { LinkButton, SearchIcon, Text } from "@/components/primitives";
+import {
+  AppLink,
+  LinkButton,
+  SearchIcon,
+  Text,
+} from "@/components/primitives";
 import { isv, publicNav } from "@/data/public-site";
 import { useMember } from "@/lib/member-context";
 import { AskIsv } from "@/components/features/ask-isv";
@@ -45,9 +50,9 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
             </a>
             <span className="hidden sm:inline">{isv.address}</span>
             <span className="ml-auto flex items-center gap-5">
-              <a href="/sign-in" className="utility-link font-semibold">
+              <AppLink href="/sign-in" className="utility-link font-semibold">
                 Member sign in
-              </a>
+              </AppLink>
             </span>
           </div>
         </Wrap>
@@ -56,15 +61,15 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
       <header className="public-header">
         <Wrap>
           <div className="public-header-row">
-            <a href="/" className="no-underline">
+            <AppLink href="/" className="no-underline">
               <Logo />
-            </a>
+            </AppLink>
 
             <nav className="public-nav" aria-label="Main">
               {publicNav.map((item) => (
-                <a key={item.label} href={item.href}>
+                <AppLink key={item.label} href={item.href}>
                   {item.label}
-                </a>
+                </AppLink>
               ))}
             </nav>
 
@@ -108,13 +113,13 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
           {open ? (
             <nav className="public-nav-mobile" aria-label="Main">
               {publicNav.map((item) => (
-                <a key={item.label} href={item.href}>
+                <AppLink key={item.label} href={item.href}>
                   {item.longLabel}
-                </a>
+                </AppLink>
               ))}
-              <a href="/sign-in" className="font-semibold">
+              <AppLink href="/sign-in" className="font-semibold">
                 Member sign in
-              </a>
+              </AppLink>
             </nav>
           ) : null}
         </Wrap>
@@ -156,7 +161,7 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
               <ul className="public-footer-list">
                 {publicNav.map((item) => (
                   <li key={item.label}>
-                    <a href={item.href}>{item.longLabel}</a>
+                    <AppLink href={item.href}>{item.longLabel}</AppLink>
                   </li>
                 ))}
               </ul>

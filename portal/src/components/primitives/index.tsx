@@ -1,4 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
+import Link from "next/link";
 import clsx from "clsx";
 import type {
   AnchorHTMLAttributes,
@@ -153,8 +154,43 @@ export function Button({
   );
 }
 
+/**
+ * Every link in the product goes through here.
+ *
+ * A route gets next/link, which navigates on the client: no white flash, no
+ * re-download, scroll position preserved, and the destination prefetched
+ * while the link is on screen. Everything else — an anchor, a tel:, a
+ * mailto:, another site — stays a plain <a>, because Link would do nothing
+ * useful for those and would warn.
+ *
+ * One decision in one place. Scattered through the components it was made
+ * inconsistently, which is how the whole prototype ended up doing full page
+ * loads between screens.
+ */
+export function AppLink({
+  href,
+  children,
+  ...rest
+}: AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) {
+  const internal = href.startsWith("/");
+
+  if (internal) {
+    return (
+      <Link href={href} {...rest}>
+        {children}
+      </Link>
+    );
+  }
+
+  return (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  );
+}
+
 type LinkButtonProps = VariantProps<typeof button> &
-  AnchorHTMLAttributes<HTMLAnchorElement>;
+  AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
 
 export function LinkButton({
   variant,
@@ -164,7 +200,7 @@ export function LinkButton({
   ...rest
 }: LinkButtonProps) {
   return (
-    <a
+    <AppLink
       className={clsx(button({ variant, size, block }), className)}
       {...rest}
     />

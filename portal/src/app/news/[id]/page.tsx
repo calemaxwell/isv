@@ -10,7 +10,7 @@ import {
   StoryGrid,
   categoryLabel,
 } from "@/components/patterns";
-import { Button, Eyebrow, Text } from "@/components/primitives";
+import { AppLink, Button, Eyebrow, Text } from "@/components/primitives";
 import { areaLabel } from "@/data/areas";
 import { news, resources } from "@/data/content";
 import {
@@ -162,14 +162,14 @@ export default function ArticlePage() {
                   <ul className="rail-list">
                     {related.map((item) => (
                       <li key={item.id}>
-                        <a href={`/resources/${item.id}`} className="rail-link">
+                        <AppLink href={`/resources/${item.id}`} className="rail-link">
                           <Text as="span" size="small" className="block font-medium">
                             {item.title}
                           </Text>
                           <Text as="span" size="micro" tone="tertiary" className="block">
                             {categoryLabel(item.category)}
                           </Text>
-                        </a>
+                        </AppLink>
                       </li>
                     ))}
                   </ul>

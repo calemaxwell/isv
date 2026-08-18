@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Artwork } from "@/components/patterns";
 import { Logo } from "@/components/features/app-shell";
-import { Button, Text } from "@/components/primitives";
+import { AppLink, Button, Text } from "@/components/primitives";
 
 /**
  * Sign-in.
@@ -32,9 +32,9 @@ export default function SignInPage() {
     <main className="grid min-h-screen md:grid-cols-2">
       <div className="flex flex-col justify-center px-gutter py-field">
         <div className="mx-auto w-full max-w-md">
-          <a href="/" className="no-underline">
+          <AppLink href="/" className="no-underline">
             <Logo />
-          </a>
+          </AppLink>
 
           <Text as="h1" size="mega" className="mt-14">
             Your ISV,

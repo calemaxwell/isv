@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import type { ReactNode } from "react";
-import { LinkButton, Text } from "@/components/primitives";
+import { AppLink, LinkButton, Text } from "@/components/primitives";
 import { formatDate, relativeUpcoming } from "@/lib/selectors";
 import type { ContentItem, Service } from "@/types";
 
@@ -70,7 +70,7 @@ export function Tile({
   tone = "paper",
   span = 1,
   rows = 1,
-  as: Tag = "div",
+  as: rawTag = "div",
   interactive = false,
   className,
   children,
@@ -84,6 +84,11 @@ export function Tile({
   className?: string;
   children: ReactNode;
 } & Record<string, unknown>) {
+  // An interactive tile that points at a route has to be a client-side
+  // link like everything else. Cast is safe: every `as="a"` call site
+  // supplies an href, which is spread through `rest`.
+  const Tag = (rawTag === "a" ? AppLink : rawTag) as React.ElementType;
+
   return (
     <Tag
       data-interactive={interactive || undefined}
@@ -287,9 +292,9 @@ export function LeadEventTile({
       </span>
 
       <TileHeading serif>
-        <a href={`/events/${item.id}`} className="tile-title-link">
+        <AppLink href={`/events/${item.id}`} className="tile-title-link">
           {item.title}
-        </a>
+        </AppLink>
       </TileHeading>
       <TileBody tone={tone}>{item.summary}</TileBody>
 
@@ -328,9 +333,9 @@ export function EventTile({
         <EventDate item={item} />
         <span className="min-w-0 flex-1">
           <TileHeading className="text-h3">
-            <a href={`/events/${item.id}`} className="tile-title-link">
+            <AppLink href={`/events/${item.id}`} className="tile-title-link">
               {item.title}
-            </a>
+            </AppLink>
           </TileHeading>
           <Text as="span" size="micro" tone="tertiary" className="mt-1.5 block">
             {meta(item)}

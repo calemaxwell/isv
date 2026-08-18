@@ -1,7 +1,7 @@
 import Image from "next/image";
 import clsx from "clsx";
 import type { ReactNode } from "react";
-import { Text } from "@/components/primitives";
+import { AppLink, Text } from "@/components/primitives";
 
 /**
  * Four-across story cards.
@@ -98,7 +98,7 @@ export function StoryCard({
           tone={inverse ? "inverse" : "primary"}
           className="mt-2.5 block"
         >
-          <a
+          <AppLink
             href={href}
             className="tile-title-link"
             {...(external
@@ -106,7 +106,7 @@ export function StoryCard({
               : {})}
           >
             {title}
-          </a>
+          </AppLink>
         </Text>
 
         <p className={clsx("mt-2 text-small leading-relaxed", BODY[tone])}>
@@ -183,9 +183,9 @@ export function FeaturedBand({
           measure="narrow"
           className="mt-4 block"
         >
-          <a href={lead.href} className="tile-title-link">
+          <AppLink href={lead.href} className="tile-title-link">
             {lead.title}
-          </a>
+          </AppLink>
         </Text>
         <p className="mt-4 max-w-reading text-lede text-inverse-soft">
           {lead.summary}
@@ -214,9 +214,9 @@ export function FeaturedBand({
               {item.eyebrow}
             </Text>
             <Text as="h3" size="h2" className="mt-2 block">
-              <a href={item.href} className="tile-title-link">
+              <AppLink href={item.href} className="tile-title-link">
                 {item.title}
-              </a>
+              </AppLink>
             </Text>
             <Text
               as="p"
