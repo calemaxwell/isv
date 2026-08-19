@@ -9,5 +9,6 @@ next-env.d.ts
 # npm optional platform binaries (lightningcss, @next/swc).
 package-lock.json
 
-# Storybook build output
+# Storybook build output. Generated at deploy time by vercel-build.
 storybook-static/
+public/storybook/

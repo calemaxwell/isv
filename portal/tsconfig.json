@@ -35,9 +35,10 @@
     "/tmp/isvbuild/types/**/*.ts",
     "/tmp/isvdev/types/**/*.ts",
     "/tmp/isvdev2/types/**/*.ts",
+    "/tmp/isvdev3/types/**/*.ts",
     "/tmp/isvverify/types/**/*.ts",
     "next-env.d.ts",
-    "/tmp/isvdev3/types/**/*.ts"
+    ".nextverify/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

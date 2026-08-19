@@ -121,6 +121,12 @@ npm run storybook          # dev server on :6006
 npm run build-storybook    # static build into storybook-static/
 ```
 
+On a deployed build it lives at **`/storybook`** on the same domain as the
+prototype. Vercel runs the `vercel-build` script, which builds Storybook
+into `public/storybook` and then builds the app — one deployment, one
+domain, one link to send. `public/storybook` is generated at deploy time
+and is not committed.
+
 Six sections, thirty-one stories:
 
 | Section | What is in it |

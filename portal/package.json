@@ -11,7 +11,8 @@
     "qa": "node --import ./scripts/alias-hook.mjs --no-warnings scripts/qa.mjs && node --import ./scripts/alias-hook.mjs --no-warnings scripts/match-test.ts",
     "verify": "npm run typecheck && npm run lint && npm run qa",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "vercel-build": "storybook build -o public/storybook --quiet && next build"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.23",
