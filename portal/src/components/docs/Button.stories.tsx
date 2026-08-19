@@ -13,7 +13,13 @@ const meta = {
   title: "Components/Primitives/Button",
   component: Button,
   parameters: { layout: "padded" },
-  decorators: [(Story) => <div className="px-gutter py-10"><Story /></div>],
+  decorators: [
+    (Story) => (
+      <div className="px-gutter py-12">
+        <Story />
+      </div>
+    ),
+  ],
   args: {
     variant: "primary",
     size: "base",

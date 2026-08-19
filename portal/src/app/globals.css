@@ -1170,6 +1170,12 @@
     min-height: 100vh;
   }
 
+  /* A single card at the width it renders at inside a three-across grid,
+     so a solo story is not a lie about the component's proportions. */
+  .story-single {
+    max-width: 22rem;
+  }
+
   /* --- content model tables --- */
   .schema-block {
     padding: 1.75rem 0;

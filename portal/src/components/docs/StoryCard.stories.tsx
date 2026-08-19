@@ -13,13 +13,14 @@ import { StoryCard, StoryGrid } from "@/components/patterns";
 const meta = {
   title: "Components/Content blocks/StoryCard",
   component: StoryCard,
-  parameters: { layout: "padded" },
+  parameters: { layout: "fullscreen" },
+  // Page padding only. A width constraint belongs on the stories that show
+  // one card — put it here and it also squeezes the grid, because story
+  // decorators compose with meta decorators rather than replacing them.
   decorators: [
     (Story) => (
-      <div className="px-gutter py-10">
-        <div className="max-w-sm">
-          <Story />
-        </div>
+      <div className="px-gutter py-12">
+        <Story />
       </div>
     ),
   ],
@@ -39,10 +40,20 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+/** One card at the width it actually renders at in a three-across grid. */
+const single: NonNullable<Story["decorators"]> = [
+  (Story) => (
+    <div className="story-single">
+      <Story />
+    </div>
+  ),
+];
+
+export const Default: Story = { decorators: single };
 
 export const WithImage: Story = {
   name: "With an image",
+  decorators: single,
   args: {
     tone: "image",
     imageUrl:
@@ -52,25 +63,43 @@ export const WithImage: Story = {
 
 export const Colour: Story = {
   name: "Flat colour",
+  decorators: single,
   args: { tone: "clay" },
 };
 
 export const External: Story = {
   name: "Linking off-site",
-  args: { tone: "navy", external: true, href: "https://theparentswebsite.com.au" },
+  decorators: single,
+  args: {
+    tone: "navy",
+    external: true,
+    href: "https://theparentswebsite.com.au",
+  },
 };
 
+/**
+ * All six tones in the grid they are designed for, so the comparison is
+ * like for like. Card heights equalise because the grid stretches them.
+ */
 export const EveryTone: Story = {
   name: "Every tone",
-  parameters: { layout: "fullscreen" },
-  decorators: [(Story) => <Story />],
   render: (args) => (
-    <div className="px-gutter py-10">
-      <StoryGrid>
-        {(["sand", "mist", "navy", "clay", "ochre"] as const).map((tone) => (
-          <StoryCard key={tone} {...args} tone={tone} title={tone} />
-        ))}
-      </StoryGrid>
-    </div>
+    <StoryGrid>
+      {(["sand", "mist", "image", "navy", "clay", "ochre"] as const).map(
+        (tone) => (
+          <StoryCard
+            key={tone}
+            {...args}
+            tone={tone}
+            eyebrow={tone}
+            imageUrl={
+              tone === "image"
+                ? "https://theparentswebsite.com.au/app/uploads/2025/03/Listening-1800a-1350x900.jpg"
+                : undefined
+            }
+          />
+        ),
+      )}
+    </StoryGrid>
   ),
 };

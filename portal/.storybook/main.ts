@@ -46,7 +46,10 @@ const config: StorybookConfig = {
     },
   },
 
-  staticDirs: [],
+  // Serves .storybook/assets at /brand, which is where the theme points
+  // brandImage. Kept out of the app's public/ so it never ships with the
+  // product build.
+  staticDirs: [{ from: "./assets", to: "/brand" }],
   viteFinal: async (viteConfig) => {
     // Same alias the app uses. Without it every story import breaks.
     viteConfig.resolve = viteConfig.resolve ?? {};

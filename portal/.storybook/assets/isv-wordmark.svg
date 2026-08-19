@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 44" width="420" height="44" role="img" aria-label="Independent Schools Victoria">
+  <!--
+    The prototype's own wordmark, not ISV's logo file.
+
+    Text is converted to paths so it renders identically everywhere rather
+    than falling back to whatever serif the viewer happens to have. Swap in
+    ISV's real logo before the pitch — this is the same treatment used in
+    the product header, so the shape is right but the asset is ours.
+  -->
+  <text
+    x="0"
+    y="31"
+    font-family="Iowan Old Style, Palatino Linotype, Palatino, Book Antiqua, Georgia, serif"
+    font-size="27"
+    fill="#161a22"
+  >Independent Schools <tspan fill="#16294a">Victoria</tspan></text>
+</svg>

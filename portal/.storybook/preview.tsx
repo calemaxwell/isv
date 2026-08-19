@@ -1,4 +1,5 @@
 import type { Decorator, Preview } from "@storybook/nextjs-vite";
+import { isvTheme } from "./theme";
 import { MemberProvider } from "../src/lib/member-context";
 import "../src/app/globals.css";
 
@@ -44,6 +45,7 @@ const preview: Preview = {
         ],
       },
     },
+    docs: { theme: isvTheme },
     a11y: {
       // Contrast was solved numerically rather than by eye, so it is worth
       // having the checker run on every story and say so out loud.

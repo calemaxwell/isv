@@ -14,7 +14,13 @@ const meta = {
   title: "Components/Primitives/Text",
   component: Text,
   parameters: { layout: "padded" },
-  decorators: [(Story) => <div className="px-gutter py-10"><Story /></div>],
+  decorators: [
+    (Story) => (
+      <div className="px-gutter py-12">
+        <Story />
+      </div>
+    ),
+  ],
   args: {
     size: "body",
     tone: "primary",
