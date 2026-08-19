@@ -110,6 +110,35 @@ scripts/
   match-test.ts           Ask ISV matching tests
 ```
 
+## Storybook
+
+Every component in the system, on its own, with every variant visible at
+once. This is the handover artefact: whoever builds this properly should
+start from the stories, not from the screens.
+
+```
+npm run storybook          # dev server on :6006
+npm run build-storybook    # static build into storybook-static/
+```
+
+Six sections, thirty-one stories:
+
+| Section | What is in it |
+|---|---|
+| Foundations | Colour with the job each token does, the type scale, shape |
+| Primitives | Buttons, text tones and measures, badges, avatars, icons |
+| Layout | Field tones and padding, section headers, cell grid |
+| Patterns / Tiles | Every tile tone, spans, service, event and learning tiles |
+| Patterns / Lists and cards | Index, schedule, requests, updates, story cards, file marks, artwork |
+| Features | Both shells, the role switcher, Ask ISV, all three listings |
+
+Every story renders inside `MemberProvider`, so they show the same fixture
+data the screens do. Change a fixture and it shows up here immediately.
+
+The a11y addon runs on every story. Contrast in this system was solved
+numerically against six grounds rather than by eye, and this is where that
+gets checked rather than asserted.
+
 ## Dependencies
 
 Node 20 or later. Everything else installs with `npm install`. No API keys, no environment variables, no services.

@@ -8,3 +8,6 @@ next-env.d.ts
 # Regenerated per platform. A lockfile from another OS breaks
 # npm optional platform binaries (lightningcss, @next/swc).
 package-lock.json
+
+# Storybook build output
+storybook-static/

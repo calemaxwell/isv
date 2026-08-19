@@ -17,7 +17,16 @@ import tseslint from "typescript-eslint";
  * reload. Rules that are not enforced are decoration.
  */
 export default tseslint.config(
-  { ignores: [".next/**", "node_modules/**", "scripts/**", "tmp/**", "next-env.d.ts"] },
+  {
+    ignores: [
+      ".next/**",
+      "node_modules/**",
+      "scripts/**",
+      "tmp/**",
+      "storybook-static/**",
+      "next-env.d.ts",
+    ],
+  },
   js.configs.recommended,
   {
     files: ["*.mjs"],

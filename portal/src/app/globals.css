@@ -1161,6 +1161,39 @@
     padding-top: 1.5rem;
   }
 
+  /* Storybook only. Components are built assuming they sit on the page
+     ground inside a field, so a story on a bare white canvas is a lie about
+     how they look. */
+  .sb-canvas {
+    background-color: var(--color-page);
+    color: var(--color-primary);
+    min-height: 100vh;
+  }
+
+  /* Swatches are driven by a data attribute rather than an inline style,
+     because inline styles are banned by the lint rules and a foundations
+     page that breaks the project's own rules is not much of a foundation. */
+  .story-swatches {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  @media (min-width: 48rem) {
+    .story-swatches {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  [data-swatch="--isv-navy"] { background-color: var(--isv-navy); }
+  [data-swatch="--isv-red"] { background-color: var(--isv-red); }
+  [data-swatch="--isv-gold"] { background-color: var(--isv-gold); }
+  [data-swatch="--isv-teal"] { background-color: var(--isv-teal); }
+  [data-swatch="--color-page"] { background-color: var(--color-page); }
+  [data-swatch="--color-field-warm"] { background-color: var(--color-field-warm); }
+  [data-swatch="--color-field-sand"] { background-color: var(--color-field-sand); }
+  [data-swatch="--color-field-mist"] { background-color: var(--color-field-mist); }
+  [data-swatch="--color-accent-clay"] { background-color: var(--color-accent-clay); }
+  [data-swatch="--color-field-forest"] { background-color: var(--color-field-forest); }
+
   /* ==================================================================
      PUBLIC SITE
 
