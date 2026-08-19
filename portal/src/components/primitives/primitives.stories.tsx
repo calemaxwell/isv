@@ -24,7 +24,8 @@ import {
  * size that collides with the one above it, a state nobody styled.
  */
 const meta: Meta = {
-  title: "Primitives/All",
+  title: "Gallery/Primitives",
+  tags: ["!autodocs"],
   parameters: { layout: "padded" },
 };
 export default meta;

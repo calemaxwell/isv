@@ -10,7 +10,8 @@ import { Text } from "@/components/primitives";
  * than by managing margins between sections.
  */
 const meta: Meta = {
-  title: "Layout/Field",
+  title: "Gallery/Layout",
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen" },
 };
 export default meta;

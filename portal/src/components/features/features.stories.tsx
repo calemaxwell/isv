@@ -19,7 +19,8 @@ import { useMember } from "@/lib/member-context";
  * looking at on their own rather than only inside a page.
  */
 const meta: Meta = {
-  title: "Features/Shells and screens",
+  title: "Gallery/Shells and screens",
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen" },
 };
 export default meta;

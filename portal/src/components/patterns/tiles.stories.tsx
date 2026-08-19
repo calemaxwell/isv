@@ -28,7 +28,8 @@ import { services } from "@/data/services";
  * a column is what made the middle of the landing page feel repetitive.
  */
 const meta: Meta = {
-  title: "Patterns/Tiles",
+  title: "Gallery/Tiles",
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen" },
 };
 export default meta;

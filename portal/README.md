@@ -127,16 +127,37 @@ into `public/storybook` and then builds the app — one deployment, one
 domain, one link to send. `public/storybook` is generated at deploy time
 and is not committed.
 
-Six sections, thirty-one stories:
+Three sections:
 
 | Section | What is in it |
 |---|---|
-| Foundations | Colour with the job each token does, the type scale, shape |
-| Primitives | Buttons, text tones and measures, badges, avatars, icons |
-| Layout | Field tones and padding, section headers, cell grid |
-| Patterns / Tiles | Every tile tone, spans, service, event and learning tiles |
-| Patterns / Lists and cards | Index, schedule, requests, updates, story cards, file marks, artwork |
-| Features | Both shells, the role switcher, Ask ISV, all three listings |
+| Foundations | Colour with the job each token does, the type scale, shape, and the content model |
+| Components | One page per component with a live props table and controls |
+| Gallery | Whole compositions — every variant of a family on one screen |
+
+Components comes before Gallery because the properties are the useful part.
+A gallery shows what a component looks like; a component page shows what it
+accepts, and only the second can be turned into a CMS model.
+
+### Content model
+
+`Foundations → Content model` lists every component's properties: name,
+type, required, default, the allowed values for a union, and the doc
+comment. It is generated from the TypeScript, not written by hand.
+
+```
+npm run schema     # regenerates src/generated/component-schema.json
+```
+
+A component's props are its content type — `StoryCard`'s props are exactly
+the fields an author fills in to publish a story card. Deriving the model
+from the code means the two cannot drift: add a prop and it appears in the
+model on the next build. Each property also carries a suggested `fieldKind`
+(`text`, `select`, `boolean`, `slot`, `reference-list`, `not-authored`) as a
+starting point for CMS mapping, not a decision.
+
+The JSON is the machine-readable version, for generating CMS field
+definitions directly.
 
 Every story renders inside `MemberProvider`, so they show the same fixture
 data the screens do. Change a fixture and it shows up here immediately.

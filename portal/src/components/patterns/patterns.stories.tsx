@@ -28,7 +28,8 @@ import { getService } from "@/lib/selectors";
  * that holds a long page together.
  */
 const meta: Meta = {
-  title: "Patterns/Lists and cards",
+  title: "Gallery/Lists and cards",
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen" },
 };
 export default meta;

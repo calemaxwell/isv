@@ -19,21 +19,28 @@ const withMember: Decorator = (Story) => (
 );
 
 const preview: Preview = {
+  // Autodocs on everything. A component without a props table is a picture.
+  tags: ["autodocs"],
   decorators: [withMember],
   parameters: {
     layout: "fullscreen",
     controls: { expanded: true },
     options: {
-      // Foundations first, then the system from the smallest piece up.
+      /**
+       * Foundations, then components with their properties, then galleries.
+       *
+       * Components come before Gallery because the properties are the
+       * useful thing — a gallery shows what a component looks like, the
+       * component page shows what it accepts, and only the second one can
+       * be turned into a CMS model.
+       */
       storySort: {
         order: [
           "Foundations",
-          ["Introduction", "Colour", "Typography", "Space and rhythm"],
-          "Primitives",
-          "Layout",
-          "Patterns",
-          "Features",
-          "Screens",
+          ["Overview", "Content model"],
+          "Components",
+          ["Content blocks", "Collections", "Page structure", "Screens", "Primitives"],
+          "Gallery",
         ],
       },
     },

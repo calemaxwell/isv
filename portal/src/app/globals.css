@@ -1170,6 +1170,83 @@
     min-height: 100vh;
   }
 
+  /* --- content model tables --- */
+  .schema-block {
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .schema-block:last-child {
+    border-bottom: 0;
+  }
+  .schema-scroll {
+    overflow-x: auto;
+  }
+  .schema-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  .schema-table th {
+    padding: 0 1.25rem 0.625rem 0;
+    border-bottom: 1px solid var(--color-line-firm);
+    font-size: var(--text-micro);
+    font-weight: 600;
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--color-tertiary);
+    white-space: nowrap;
+  }
+  .schema-row > td {
+    padding: 0.8125rem 1.25rem 0.8125rem 0;
+    border-bottom: 1px solid var(--color-line);
+    vertical-align: top;
+  }
+  .schema-req {
+    display: inline-block;
+    margin-left: 0.5rem;
+    font-size: var(--text-pill);
+    font-weight: 700;
+    letter-spacing: var(--tracking-badge);
+    text-transform: uppercase;
+    color: var(--color-accent-clay);
+  }
+  .schema-kind {
+    display: inline-block;
+    padding: 0.1875rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-field-mist);
+    color: var(--color-action);
+    font-size: var(--text-pill);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  /* Anything an author never touches is greyed, so a modeller can skip it. */
+  .schema-kind[data-kind="not-authored"],
+  .schema-kind[data-kind="unknown"] {
+    background-color: var(--color-sunken);
+    color: var(--color-tertiary);
+  }
+  .schema-kind[data-kind="slot"],
+  .schema-kind[data-kind="reference-list"] {
+    background-color: var(--color-field-sand);
+    color: var(--color-primary);
+  }
+  .schema-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.375rem;
+    max-width: 20rem;
+  }
+  .schema-option {
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-sunken);
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: var(--text-pill);
+    color: var(--color-secondary);
+  }
+
   /* Swatches are driven by a data attribute rather than an inline style,
      because inline styles are banned by the lint rules and a foundations
      page that breaks the project's own rules is not much of a foundation. */

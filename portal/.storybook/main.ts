@@ -25,6 +25,27 @@ const config: StorybookConfig = {
     name: "@storybook/nextjs-vite",
     options: {},
   },
+  /**
+   * react-docgen-typescript rather than the default react-docgen.
+   *
+   * The default parses the JavaScript and gets prop names but not much else.
+   * This one reads the TypeScript, so every table carries the real union
+   * members, whether a prop is required, its default, and the doc comment
+   * above it. That is the difference between a props list and something you
+   * can generate CMS fields from.
+   */
+  typescript: {
+    reactDocgen: "react-docgen-typescript",
+    reactDocgenTypescriptOptions: {
+      shouldExtractLiteralValuesFromEnum: true,
+      shouldRemoveUndefinedFromOptional: true,
+      // Without this every component inherits the whole of HTMLAttributes
+      // and the table becomes two hundred rows of noise.
+      propFilter: (prop) =>
+        prop.parent ? !/node_modules/.test(prop.parent.fileName) : true,
+    },
+  },
+
   staticDirs: [],
   viteFinal: async (viteConfig) => {
     // Same alias the app uses. Without it every story import breaks.
