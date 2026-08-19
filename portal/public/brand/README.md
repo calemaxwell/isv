@@ -13,6 +13,10 @@ Wordmark lockups for the ISV prototype.
 Transparent background, roughly 2500px on the long edge, so they scale down
 cleanly and can sit on any ground.
 
+These live in `public/brand` so the app serves them at `/brand/...`, and
+Storybook is pointed at the same directory. One copy of the brand rather
+than two that drift apart.
+
 ## What these are, and are not
 
 **Not ISV's logo file.** These are the wordmark treatment used throughout
@@ -22,13 +26,13 @@ serif stack falls back to after Iowan Old Style. So they match what the
 prototype renders rather than approximating it.
 
 Before the pitch, get ISV's real logo from whoever holds the brand assets
-and replace these. Nothing in the code needs to change: the theme points at
-`isv-horizontal.png`, so a like-for-like file swap is enough.
+and replace these. Nothing in the code needs to change: the Storybook theme
+points at `isv-stacked.png`, so a like-for-like file swap is enough.
 
 ## Regenerating
 
 ```
-bash .storybook/assets/build-wordmark.sh
+bash scripts/build-wordmark.sh
 ```
 
 Needs ImageMagick and the URW fonts. Colours come from the same token values

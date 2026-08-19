@@ -46,10 +46,13 @@ const config: StorybookConfig = {
     },
   },
 
-  // Serves .storybook/assets at /brand, which is where the theme points
-  // brandImage. Kept out of the app's public/ so it never ships with the
-  // product build.
-  staticDirs: [{ from: "./assets", to: "/brand" }],
+  /**
+   * The brand assets live in the app's public folder, not Storybook's, so
+   * there is one copy rather than two drifting apart. Storybook serves the
+   * same directory at the same path, which means /brand/isv-stacked.png
+   * resolves identically in the product and in the design system.
+   */
+  staticDirs: [{ from: "../public/brand", to: "/brand" }],
   viteFinal: async (viteConfig) => {
     // Same alias the app uses. Without it every story import breaks.
     viteConfig.resolve = viteConfig.resolve ?? {};
