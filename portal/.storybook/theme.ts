@@ -14,7 +14,7 @@ export const isvTheme = create({
 
   brandTitle: "Independent Schools Victoria — design system",
   brandUrl: "/",
-  brandImage: "/brand/isv-wordmark.svg",
+  brandImage: "/brand/isv-horizontal.png",
   brandTarget: "_self",
 
   // Brand
