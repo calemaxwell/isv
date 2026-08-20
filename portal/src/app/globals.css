@@ -2808,6 +2808,24 @@
 
   /* The school name in the portal masthead, as a link. Underline on hover
      only — a permanently underlined eyebrow reads as a broken heading. */
+  /* A label with an optional count beside it, in the profile panel's
+     school account rows. The count is what makes the section worth opening
+     rather than a list of three links. */
+  .account-row-lead {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+  .account-row-flag {
+    font-size: var(--text-micro);
+    padding: 0.125rem 0.4375rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-accent-clay);
+    color: var(--color-on-tint);
+    white-space: nowrap;
+  }
+
   .masthead-school {
     color: inherit;
     text-decoration: none;

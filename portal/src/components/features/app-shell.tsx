@@ -9,6 +9,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Wrap } from "@/components/layout";
 import { Bell, Mail, Menu } from "lucide-react";
 import {
+  AppLink,
   Avatar,
   Button,
   ChevronIcon,
@@ -19,6 +20,7 @@ import {
 import { portalAreas } from "@/data/areas";
 import { memberAlerts } from "@/data/alerts";
 import { quicklinks } from "@/data/quicklinks";
+import { staleAccess } from "@/data/roster";
 import { useMember } from "@/lib/member-context";
 import { fullName } from "@/lib/selectors";
 import type { Role } from "@/types";
@@ -356,14 +358,19 @@ export function NavPanel({
       <Eyebrow className="mb-2">Areas</Eyebrow>
       <nav className="mb-10">
         {portalAreas.map((area, i) => (
-          <a key={area.id} href={area.href} className="nav-area">
+          <AppLink
+            key={area.id}
+            href={area.href}
+            className="nav-area"
+            onClick={() => onOpenChange(false)}
+          >
             <span className="nav-area-index">
               {String(i + 1).padStart(2, "0")}
             </span>
             <Text as="span" size="h3">
               {area.label}
             </Text>
-          </a>
+          </AppLink>
         ))}
       </nav>
 
@@ -372,14 +379,19 @@ export function NavPanel({
       </Eyebrow>
       <div className="nav-quick">
         {mine.map((link) => (
-          <a key={link.id} href={link.href} className="nav-quick-row">
+          <AppLink
+            key={link.id}
+            href={link.href}
+            className="nav-quick-row"
+            onClick={() => onOpenChange(false)}
+          >
             <Text as="span" size="small" className="font-medium">
               {link.label}
             </Text>
             <Text as="span" size="micro" tone="tertiary">
               {link.note}
             </Text>
-          </a>
+          </AppLink>
         ))}
       </div>
 
@@ -394,7 +406,40 @@ export function ProfilePanel({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
-  const { member, school, role, setRole } = useMember();
+  const {
+    member,
+    school,
+    role,
+    setRole,
+    invoices,
+    people,
+    accountNeedsConfirming,
+  } = useMember();
+
+  /* Counts, so the section is worth opening rather than a list of links. */
+  const unpaid = invoices.filter((inv) => inv.status !== "paid").length;
+  const stale = staleAccess(people).length;
+
+  const account = [
+    {
+      href: "/school/details",
+      label: "Our details",
+      note: "What ISV holds about the school",
+      flag: accountNeedsConfirming > 0 ? `${accountNeedsConfirming} to confirm` : null,
+    },
+    {
+      href: "/school/people",
+      label: "Our people",
+      note: "Who ISV writes to, and who can sign in",
+      flag: stale > 0 ? `${stale} to review` : null,
+    },
+    {
+      href: "/school/membership",
+      label: "Our membership",
+      note: "Invoices and renewal",
+      flag: unpaid > 0 ? "Outstanding" : null,
+    },
+  ];
 
   return (
     <PanelShell open={open} onOpenChange={onOpenChange} title="My profile">
@@ -411,7 +456,7 @@ export function ProfilePanel({
         {[
           ["Name", fullName(member)],
           ["Role", member.roleLabel],
-          ["School", school.name],
+          ["Our school", school.name],
           ["Email", member.email],
           ["Phone", member.phone],
           ["Membership", school.membershipStatus],
@@ -442,6 +487,42 @@ export function ProfilePanel({
           </li>
         ))}
       </ul>
+
+      {/* Two different profiles, and the split is deliberate. Everything
+          above is the person: their details, their preferences, how they
+          want the portal composed. Below is the institution.
+
+          Changing your own mobile number and changing who ISV writes to when
+          it needs the school are different jobs with different consequences,
+          and collapsing them into one screen is how a portal ends up with a
+          settings page nobody can navigate. They sit in the same panel
+          because this is where somebody looks for either. */}
+      <Eyebrow className="mt-9 mb-2">Our school account</Eyebrow>
+      <Text size="micro" tone="tertiary" className="mb-3">
+        The school rather than the person. Both of us can change these.
+      </Text>
+      <div className="nav-quick">
+        {account.map((item) => (
+          <AppLink
+            key={item.href}
+            href={item.href}
+            className="nav-quick-row"
+            onClick={() => onOpenChange(false)}
+          >
+            <span className="account-row-lead">
+              <Text as="span" size="small" className="font-medium">
+                {item.label}
+              </Text>
+              {item.flag ? (
+                <span className="account-row-flag">{item.flag}</span>
+              ) : null}
+            </span>
+            <Text as="span" size="micro" tone="tertiary">
+              {item.note}
+            </Text>
+          </AppLink>
+        ))}
+      </div>
 
     </PanelShell>
   );
