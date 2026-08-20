@@ -201,7 +201,7 @@ export function UpdateList({ items }: { items: ContentItem[] }) {
 }
 
 /* ============================================================
-   EventCard — date-led, with a near-your-school marker
+   EventCard — date-led, with a proximity marker
    ============================================================ */
 export function EventCard({
   item,
@@ -236,7 +236,7 @@ export function EventCard({
         <span>{[item.format, item.location].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i).join(" · ")}</span>
         {near ? (
           <span className="rounded-sm border border-action-quiet bg-action-quiet px-2 py-0.5 font-semibold text-action">
-            Near your school
+            Nearby
           </span>
         ) : null}
       </p>
@@ -345,7 +345,7 @@ export function IndexList({
                       tone={inverse ? "inverse" : "action"}
                       className="font-semibold"
                     >
-                      Near your school
+                      Nearby
                     </Text>
                   ) : null}
                 </span>
@@ -432,8 +432,11 @@ export function RequestTimeline({ request }: { request: ServiceRequest }) {
           >
             {step.label}
           </span>
+          {/* A dash as a null placeholder is conventional and says nothing.
+              In a timeline the question is whether the step has happened, and
+              "Not yet" answers it. */}
           <span className="text-micro text-tertiary">
-            {step.iso ? formatDate(step.iso) : "—"}
+            {step.iso ? formatDate(step.iso) : "Not yet"}
           </span>
         </li>
       ))}
@@ -492,7 +495,7 @@ export function ScheduleList({
                   .filter((v, i, a) => a.indexOf(v) === i)
                   .join(" · ")}
                 {item.eventIso ? ` · ${relativeUpcoming(item.eventIso)}` : ""}
-                {nearFn?.(item) ? " · Near your school" : ""}
+                {nearFn?.(item) ? " · Nearby" : ""}
               </Text>
             </span>
             <LinkButton
@@ -644,7 +647,7 @@ export function PrefillNote() {
   return (
     <span className="mt-1.5 flex items-center gap-1.5 text-micro text-tertiary">
       <InfoIcon />
-      From your ISV member profile
+      From my ISV member profile
     </span>
   );
 }

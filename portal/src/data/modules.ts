@@ -67,7 +67,7 @@ export const moduleComposition: Record<Role, ModuleDef[]> = {
     },
     {
       id: "mod-learning",
-      heading: "Your leadership development",
+      heading: "My leadership development",
       itemType: "content",
       field: "warm",
       moreLabel: "All learning",
@@ -129,7 +129,7 @@ export const moduleComposition: Record<Role, ModuleDef[]> = {
     },
     {
       id: "mod-requests",
-      heading: "Your requests",
+      heading: "Our requests",
       itemType: "request",
       field: "sand",
       hasFilterBar: false,
@@ -219,7 +219,7 @@ export const moduleComposition: Record<Role, ModuleDef[]> = {
     },
     {
       id: "mod-learning",
-      heading: "Training for you and your team",
+      heading: "Training for our team",
       itemType: "content",
       field: "warm",
       moreLabel: "All learning",
@@ -276,7 +276,7 @@ export const moduleComposition: Record<Role, ModuleDef[]> = {
 export const greetingByRole: Record<Role, string> = {
   // Must match what is actually on the screen beneath it.
   principal:
-    "Four ISV updates since you last looked, your employment relations request has moved forward, and three sessions are running near your school.",
+    "Four ISV updates since I last looked, our employment relations request has moved forward, and three sessions are running near the school.",
   "business-manager":
-    "One request open with ISV, four updates since you last looked, including refreshed people and culture templates, and two sessions near your school.",
+    "One request open with ISV, four updates since I last looked, including refreshed people and culture templates, and two sessions near the school.",
 };

@@ -29,6 +29,12 @@ export const portalNavigation: NavItem[] = [
     navigates: true,
     href: "/events",
   },
+  {
+    id: "nav-school",
+    label: "Our school account",
+    navigates: true,
+    href: "/school",
+  },
   { id: "nav-upload", label: "Share content with ISV", navigates: true, href: "#contact" },
   { id: "nav-profile", label: "My profile", navigates: true, href: "#profile" },
   { id: "nav-contact", label: "Contact ISV", navigates: true, href: "#contact" },

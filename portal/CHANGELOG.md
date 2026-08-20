@@ -1,5 +1,38 @@
 # Changelog
 
+## 0.6.0 — 20 August 2026
+
+The school account, and a voice correction across the portal.
+
+### Added
+
+- **School account.** Five screens under `/school`: a hub that opens on what is wrong rather than on what the school is, editable school details with confirmation ageing, people and portal access, membership, and a payment flow.
+- **One people list.** `schoolRoster` is now held in `MemberProvider` and read by both the school account and event registration. Somebody added under Our people is selectable in the registration picker in the same session; somebody marked as departed disappears from it. QA SA2 fails the build if any page imports the fixture directly and forks the record.
+- **Confirmation ageing.** Every school detail carries the date it was last confirmed. Anything over twelve months old is flagged on the field and counted on the hub. A field nobody has touched in eighteen months previously looked identical to one confirmed yesterday, which is why a record goes stale without anybody deciding to let it.
+- **Portal access.** Three levels — full, standard, none — rather than a permission matrix. Departing somebody revokes their access in the same action, because two separate controls reproduce exactly the failure the screen exists to fix.
+- **Payment, two ways.** Bank transfer and card, presented side by side with neither as the default. The transfer path records the payment against the invoice rather than showing bank details and shrugging.
+- **Seeded defect.** One staff member left in May and still has portal access. The walkthrough has something real to fix rather than a screen of tidy rows.
+- **QA SA1–SA4.** No ISV fee rate or basis; the people list is never forked; the area never asserts a legal obligation; no em dash in product copy.
+
+### Changed
+
+- **Page container 1080 → 1200px, wide 1240 → 1320px.** The old measure put content at 1000px inside the gutters, leaving 180px of dead margin each side on a 1440 screen. Reading measures are set in `ch` and are unaffected, so this widened grids and tiles and left body copy alone.
+- **Portal chrome now speaks in the school's own voice.** "Your requests" became "Our requests", "Included in your membership" became "Included in our membership", "Your profile" became "My profile". The school's things are our; the signed-in person's things are my. ISV's published content — article bodies, service descriptions, event copy — stays in ISV's voice, because rewriting that would make ISV sound like it works at the school.
+- **Renewal and contact alerts** now route into the school account instead of opening the profile panel.
+
+### Fixed after audit
+
+The new area was audited against the content-integrity rules before commit. Eighteen findings, all applied:
+
+- **Three consecutive membership amounts rising ~3.5% a year read as a fee schedule** regardless of the ILLUSTRATIVE label. Prior-year invoices no longer render an amount at all — status, period and how it was paid is the whole job of a filing list — and the held figures are deliberately unordered.
+- **The illustrative-amount label sat inside the open-invoice block**, so it unmounted the moment the invoice was paid. Paying is the scripted demo path, so the amounts would have gone bare live in the room. Moved outside the conditional and repeated through the payment flow.
+- **"Child safety contact" and "Compliance contact"** were removed as nominated roles. Neither is published by ISV, and in Victoria both read as statutory nominations rather than as a name on file. Replaced with professional learning and communications contacts, which are unambiguously administrative.
+- **The street address resolved to a real property in Camberwell.** Replaced.
+- Removed claims ISV has not published: card brands accepted, "the invoice closes immediately", "how most schools do this", "receipts are kept for as long as we are a member school", a renewal-time verification process, and location matching of sessions to a school's address.
+- Fixed a voice collision in the payment flow where "tell us when it went out" meant tell ISV, in an area where "us" is the school everywhere else.
+- Removed the em dash from rendered copy in the nominated-contact selects, two employment fields, an event description and the request timeline placeholder.
+
+
 ## 0.1.0 — 17 August 2026
 
 First build. All seven screens, both personas, the full three-act narrative.

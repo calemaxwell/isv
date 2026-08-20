@@ -109,7 +109,7 @@ export const Updates: Story = {
         <SectionHeader heading="What's changed" moreLabel="All updates" moreHref="/news" />
         <UpdateLead
           items={updates.slice(0, 5)}
-          sinceLabel="Four updates since you last looked"
+          sinceLabel="Four updates since I last looked"
           contextLine="Mostly governance, people and compliance."
         />
       </Wrap>
@@ -244,7 +244,7 @@ export const Furniture: Story = {
           <SectionHeader heading="Empty state" />
           <EmptyState
             heading="No open requests"
-            body="Requests you make through the portal will appear here so you can follow their progress."
+            body="Requests we make through the portal appear here, so we can follow where each one sits."
           />
         </Wrap>
       </Field>

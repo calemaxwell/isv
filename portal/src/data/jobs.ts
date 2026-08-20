@@ -71,7 +71,7 @@ const NOTE = "Fictional vacancy at the fictional demo school.";
 export const seededJobs: JobAd[] = [
   {
     id: "job-classroom-teacher-maths",
-    title: "Classroom Teacher — Mathematics",
+    title: "Classroom Teacher, Mathematics",
     department: "Senior School",
     employmentType: "Full time, ongoing",
     salary: "$88,000 – $118,000",

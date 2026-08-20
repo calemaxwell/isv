@@ -490,6 +490,74 @@ check("C4", "Royal is never used where it would need to clear 4.5:1", () => {
 });
 
 
+/**
+ * Source with comments removed.
+ *
+ * The voice checks below scan for phrasing that must never reach a member. A
+ * comment explaining the rule contains the very phrasing the rule forbids, so
+ * scanning raw source makes every file that documents its own constraint fail.
+ * What ships is the string literals; that is what these read.
+ */
+function code(text) {
+  return text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+}
+
+/* ---------- School account: SA1, SA2, SA3 ---------- */
+
+check("SA1", "Nothing states an ISV fee rate or fee basis", () => {
+  // The prototype carries an illustrative invoice for a fictional school. It
+  // must not imply how ISV actually prices membership — a per-student rate or
+  // a fee schedule is a claim ISV would have to correct in the room.
+  const banned =
+    /\bper\s+(student|enrolment|pupil|head)\b|\bfee\s+(rate|schedule|scale)\b|\brate\s+of\s+\$/i;
+  return sources
+    .filter(({ file }) => /membership|school-account|app\/school\//.test(file))
+    .filter(({ text }) => banned.test(code(text)))
+    .map(({ file }) => `${file} implies an ISV fee basis`);
+});
+
+check("SA2", "The people list is read from context, never imported twice", () => {
+  // One list, two uses. Event registration and the school account read the
+  // same array through the provider. A page importing the fixture directly
+  // would silently fork the record and quietly undo the argument the whole
+  // area is making.
+  return sources
+    .filter(({ file }) => file.startsWith("src/app/"))
+    .filter(({ text }) => /from "@\/data\/roster"/.test(text))
+    .filter(({ text }) => /\bschoolRoster\b/.test(text))
+    .map(({ file }) => `${file} imports schoolRoster instead of using people`);
+});
+
+check("SA3", "The school account never asserts a legal obligation", () => {
+  // Same rule as updates and alerts. A nominated child safety contact is a
+  // name ISV holds so it knows who to write to, not a role the portal is
+  // telling a school it is required to appoint.
+  const banned =
+    /\b(you|schools?|we)\s+(are\s+)?(must|required to|obliged to|legally)\b|\bby law\b|\bcompliance requirement\b/i;
+  return sources
+    .filter(({ file }) => /school-account|membership\.ts|app\/school\//.test(file))
+    .filter(({ text }) => banned.test(code(text)))
+    .map(({ file }) => `${file} reads as a legal obligation`);
+});
+
+
+check("SA4", "No em dash in product copy", () => {
+  // A house style rule, and one that slipped through in the school account on
+  // the first pass. Story names are excluded: they are labels in the design
+  // system's own navigation, read by the team rather than by a member.
+  return sources
+    .filter(({ file }) => !file.includes(".stories."))
+    .flatMap(({ file, text }) => {
+      const stripped = code(text);
+      const found = [
+        ...stripped.matchAll(/"([^"\n]*\u2014[^"\n]*)"/g),
+        ...stripped.matchAll(/>\s*([^<>{}\n]*\u2014[^<>{}\n]*?)\s*</g),
+      ].map((m) => m[1].trim());
+      return found.map((s) => `${file}: ${s.slice(0, 60)}`);
+    });
+});
+
+
 for (const result of results) {
   console.log(
     `${result.ok ? "PASS" : "FAIL"}  ${pad(result.id, 11)} ${result.description}`,

@@ -9,7 +9,7 @@ import type { Role } from "@/types";
  * when you act on it.
  *
  * VOICE RULE, same as updates. Every alert describes an ISV process, never
- * a legal obligation. "Your membership renewal is open" is a fact about
+ * a legal obligation. "Our membership renewal is open" is a fact about
  * ISV's calendar. "You must renew by March or lose registration" is advice
  * ISV has not authorised.
  *
@@ -40,9 +40,9 @@ export const memberAlerts: MemberAlert[] = [
     kind: "action",
     title: "Membership renewal is open",
     detail:
-      "Ashwood Grange School's ISV membership is due for renewal. Confirm your school's details and nominated contacts.",
-    actionLabel: "Review details",
-    href: "#profile",
+      "Our ISV membership is due for renewal. Confirm the school's details and nominated contacts.",
+    actionLabel: "Pay the invoice",
+    href: "/school/membership",
     relevantTo: ["principal", "business-manager"],
     receivedIso: "2026-08-14",
     outstanding: true,
@@ -54,9 +54,9 @@ export const memberAlerts: MemberAlert[] = [
     kind: "action",
     title: "Two staff contacts need confirming",
     detail:
-      "ISV holds contact records for your school that have not been confirmed this year.",
+      "ISV holds contact records for our school that have not been confirmed this year.",
     actionLabel: "Confirm contacts",
-    href: "#profile",
+    href: "/school/details#contacts",
     relevantTo: ["business-manager"],
     receivedIso: "2026-08-11",
     outstanding: true,
@@ -68,7 +68,7 @@ export const memberAlerts: MemberAlert[] = [
     kind: "action",
     title: "School effectiveness survey window opens next month",
     detail:
-      "Register your school's participation to take part in this year's round.",
+      "Register our participation to take part in this year's round.",
     actionLabel: "Register interest",
     href: "#contact",
     relevantTo: ["principal"],
@@ -80,9 +80,9 @@ export const memberAlerts: MemberAlert[] = [
   {
     id: "message-adviser",
     kind: "message",
-    title: "An ISV adviser replied to your request",
+    title: "An ISV adviser replied to our request",
     detail:
-      "Your employment relations request has a response from the adviser assigned to it.",
+      "Our employment relations request has a response from the adviser assigned to it.",
     actionLabel: "Open request",
     href: "/requests/req-seed-001",
     relevantTo: ["principal"],
@@ -94,9 +94,9 @@ export const memberAlerts: MemberAlert[] = [
   {
     id: "message-registration",
     kind: "message",
-    title: "Your registration is confirmed",
+    title: "Our registration is confirmed",
     detail:
-      "Two colleagues from your school are registered for the governance session.",
+      "Two colleagues are registered for the governance session.",
     actionLabel: "View registration",
     href: "#contact",
     relevantTo: ["principal", "business-manager"],

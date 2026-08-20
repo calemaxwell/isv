@@ -15,7 +15,22 @@ import {
   type ApplicantStatus,
   type JobAd,
 } from "@/data/jobs";
+import {
+  seededInvoices,
+  type Invoice,
+  type PaymentMethod,
+} from "@/data/membership";
 import { nextRequestIdentity, seededRequests } from "@/data/requests";
+import {
+  schoolRoster,
+  type StaffAccess,
+  type StaffMember,
+} from "@/data/roster";
+import {
+  accountGroups,
+  nominatedContacts as seededNominated,
+  type NominatedContact,
+} from "@/data/school-account";
 import { getMember, getSchool } from "@/lib/selectors";
 import type { Member, Role, School, Service, ServiceRequest } from "@/types";
 
@@ -67,6 +82,44 @@ interface MemberContextValue {
   closeJob: (id: string) => void;
   reopenJob: (id: string) => void;
   setApplicantStatus: (id: string, status: ApplicantStatus) => void;
+
+  /**
+   * The school account.
+   *
+   * Here for the same reason jobs are, and one reason more. The people list is
+   * read by two areas — the school account writes it, event registration reads
+   * it — so it cannot live in either page. Adding somebody under Our people
+   * and finding them in the registration picker a moment later is the
+   * demonstration the area exists to give, and it only works if the list is
+   * held above both routes.
+   */
+  people: StaffMember[];
+  addPerson: (person: {
+    name: string;
+    role: string;
+    email: string;
+    access: StaffAccess;
+  }) => StaffMember;
+  updatePerson: (id: string, patch: Partial<StaffMember>) => void;
+  setPersonAccess: (id: string, access: StaffAccess) => void;
+  departPerson: (id: string) => void;
+  restorePerson: (id: string) => void;
+  /** Nomination blocking a departure, if any. Drives the guard in the UI. */
+  nominationFor: (staffId: string) => NominatedContact | undefined;
+
+  nominated: NominatedContact[];
+  setNominee: (contactId: string, staffId: string) => void;
+
+  /** School fields, keyed by field id. Only what has been changed is held. */
+  accountValues: Record<string, string>;
+  accountConfirmed: Record<string, string>;
+  setAccountValue: (fieldId: string, value: string) => void;
+  confirmGroup: (groupId: string) => void;
+  accountNeedsConfirming: number;
+
+  invoices: Invoice[];
+  outstanding: number;
+  payInvoice: (id: string, method: PaymentMethod, reference: string) => void;
 }
 
 const MemberContext = createContext<MemberContextValue | null>(null);
@@ -88,6 +141,15 @@ export function MemberProvider({ children }: { children: ReactNode }) {
   const [applicants, setApplicants] = useState<Applicant[]>([
     ...seededApplicants,
   ]);
+  const [people, setPeople] = useState<StaffMember[]>([...schoolRoster]);
+  const [nominated, setNominated] = useState<NominatedContact[]>([
+    ...seededNominated,
+  ]);
+  const [accountValues, setAccountValues] = useState<Record<string, string>>({});
+  const [accountConfirmed, setAccountConfirmed] = useState<
+    Record<string, string>
+  >({});
+  const [invoices, setInvoices] = useState<Invoice[]>([...seededInvoices]);
 
   const getJob = useCallback(
     (id: string) => jobs.find((job) => job.id === id),
@@ -143,6 +205,146 @@ export function MemberProvider({ children }: { children: ReactNode }) {
       );
     },
     [],
+  );
+
+  /* ---------------- School account: people ---------------- */
+
+  const addPerson = useCallback(
+    (draft: {
+      name: string;
+      role: string;
+      email: string;
+      access: StaffAccess;
+    }) => {
+      const person: StaffMember = {
+        id: `staff-${Date.now()}`,
+        name: draft.name,
+        role: draft.role,
+        email: draft.email,
+        alreadyRegisteredFor: [],
+        // Invited, not active. Somebody who has been added has not yet signed
+        // in, and a list that shows them as active is lying about the one
+        // thing this screen is for.
+        status: "invited",
+        access: draft.access,
+        startedIso: new Date().toISOString().slice(0, 10),
+      };
+      setPeople((current) => [person, ...current]);
+      return person;
+    },
+    [],
+  );
+
+  const updatePerson = useCallback((id: string, patch: Partial<StaffMember>) => {
+    setPeople((current) =>
+      current.map((p) => (p.id === id ? { ...p, ...patch } : p)),
+    );
+  }, []);
+
+  const setPersonAccess = useCallback((id: string, access: StaffAccess) => {
+    setPeople((current) =>
+      current.map((p) => (p.id === id ? { ...p, access } : p)),
+    );
+  }, []);
+
+  /**
+   * Departing somebody revokes their access in the same step.
+   *
+   * Two controls would produce exactly the bug the screen exists to fix — a
+   * school marks a leaver as departed, feels finished, and ISV keeps writing
+   * to her. If she has left, she cannot sign in.
+   */
+  const departPerson = useCallback((id: string) => {
+    const today = new Date().toISOString().slice(0, 10);
+    setPeople((current) =>
+      current.map((p) =>
+        p.id === id
+          ? { ...p, status: "departed", departedIso: today, access: "none" }
+          : p,
+      ),
+    );
+  }, []);
+
+  const restorePerson = useCallback((id: string) => {
+    setPeople((current) =>
+      current.map((p) =>
+        p.id === id
+          ? { ...p, status: "active", departedIso: undefined, access: "standard" }
+          : p,
+      ),
+    );
+  }, []);
+
+  const nominationFor = useCallback(
+    (staffId: string) => nominated.find((n) => n.staffId === staffId),
+    [nominated],
+  );
+
+  const setNominee = useCallback((contactId: string, staffId: string) => {
+    setNominated((current) =>
+      current.map((n) => (n.id === contactId ? { ...n, staffId } : n)),
+    );
+  }, []);
+
+  /* ---------------- School account: the record ---------------- */
+
+  const setAccountValue = useCallback((fieldId: string, value: string) => {
+    const today = new Date().toISOString().slice(0, 10);
+    setAccountValues((current) => ({ ...current, [fieldId]: value }));
+    // Changing a field is confirming it. Asking somebody to type a new
+    // enrolment figure and then tick a box to say they meant it is the kind
+    // of thing that makes people stop maintaining a record.
+    setAccountConfirmed((current) => ({ ...current, [fieldId]: today }));
+  }, []);
+
+  const confirmGroup = useCallback((groupId: string) => {
+    const today = new Date().toISOString().slice(0, 10);
+    const group = accountGroups.find((g) => g.id === groupId);
+    if (!group) return;
+    setAccountConfirmed((current) => {
+      const next = { ...current };
+      for (const field of group.fields) next[field.id] = today;
+      return next;
+    });
+  }, []);
+
+  /** How many fields are still sitting on an old confirmation. */
+  const accountNeedsConfirming = useMemo(() => {
+    const cutoff = new Date();
+    cutoff.setFullYear(cutoff.getFullYear() - 1);
+    return accountGroups
+      .flatMap((group) => group.fields)
+      .filter((field) => {
+        const iso = accountConfirmed[field.id] ?? field.confirmedIso;
+        return new Date(iso) < cutoff;
+      }).length;
+  }, [accountConfirmed]);
+
+  /* ---------------- School account: membership ---------------- */
+
+  const payInvoice = useCallback(
+    (id: string, method: PaymentMethod, reference: string) => {
+      const today = new Date().toISOString().slice(0, 10);
+      setInvoices((current) =>
+        current.map((inv) =>
+          inv.id === id
+            ? {
+                ...inv,
+                status: "paid",
+                paidIso: today,
+                paidBy: method,
+                paidReference: reference,
+              }
+            : inv,
+        ),
+      );
+    },
+    [],
+  );
+
+  const outstanding = useMemo(
+    () => invoices.filter((inv) => inv.status !== "paid").length,
+    [invoices],
   );
 
   const resolveAlert = useCallback((id: string) => {
@@ -235,6 +437,23 @@ export function MemberProvider({ children }: { children: ReactNode }) {
       closeJob,
       reopenJob,
       setApplicantStatus,
+      people,
+      addPerson,
+      updatePerson,
+      setPersonAccess,
+      departPerson,
+      restorePerson,
+      nominationFor,
+      nominated,
+      setNominee,
+      accountValues,
+      accountConfirmed,
+      setAccountValue,
+      confirmGroup,
+      accountNeedsConfirming,
+      invoices,
+      outstanding,
+      payInvoice,
     }),
     [
       role,
@@ -262,6 +481,23 @@ export function MemberProvider({ children }: { children: ReactNode }) {
       closeJob,
       reopenJob,
       setApplicantStatus,
+      people,
+      addPerson,
+      updatePerson,
+      setPersonAccess,
+      departPerson,
+      restorePerson,
+      nominationFor,
+      nominated,
+      setNominee,
+      accountValues,
+      accountConfirmed,
+      setAccountValue,
+      confirmGroup,
+      accountNeedsConfirming,
+      invoices,
+      outstanding,
+      payInvoice,
     ],
   );
 

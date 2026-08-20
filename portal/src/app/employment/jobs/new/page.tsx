@@ -143,7 +143,7 @@ export default function NewJobPage() {
                       className="control control-input"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      placeholder="Classroom Teacher — Mathematics"
+                      placeholder="Classroom Teacher, Mathematics"
                     />
                   </label>
 
@@ -194,7 +194,7 @@ export default function NewJobPage() {
                   </label>
 
                   <label className="form-row">
-                    <Eyebrow>Salary range — optional</Eyebrow>
+                    <Eyebrow>Salary range, optional</Eyebrow>
                     <input
                       className="control control-input"
                       value={salary}

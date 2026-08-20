@@ -16,6 +16,15 @@ Product and scope decisions live in the PRD decision log. This file records deci
 | 2026-08-17 | Radix `data-highlighted` styling moved to a `.menu-item` class | Keeps the arbitrary-value grep a clean signal rather than something with known exceptions |
 | 2026-08-17 | Ask ISV sources render as buttons, and only service sources navigate | Content sources point at resource areas the prototype does not build through. A link that goes nowhere is worse than one that visibly does nothing |
 | 2026-08-17 | No Playwright, no automated screenshots | Browser binaries cannot install in the build sandbox. Verification is a render smoke test against the production server plus the manual checklist in the QA gate output |
+| 2026-08-20 | The school account and event registration share one people array in the provider | Two lists would have been easier and would have quietly conceded the point the area is making. Every school already has the person in three systems; the reason ISV writes to a Deputy who left in June is that nobody owns the list. QA SA2 enforces it |
+| 2026-08-20 | Portal access is three levels, not a permission matrix | The question a Business Manager asks is "can she see the compliance material". A matrix answers a question nobody asked and costs a minute of the demo to explain |
+| 2026-08-20 | Departing somebody revokes access in the same action | Two controls reproduce the exact failure the screen exists to fix: a school marks a leaver as departed, feels finished, and ISV keeps writing to her |
+| 2026-08-20 | Departed people retained, never deleted | Past registrations and request history reference them. Losing the past to stop an email is the wrong trade |
+| 2026-08-20 | Prior-year invoices render no amount | Three consecutive figures rising a few per cent a year is a fee schedule and an implied escalation rate whatever the ILLUSTRATIVE label says. A filing list needs status, period and how it was paid; the amount is not the job |
+| 2026-08-20 | Nominated contact roles are administrative only | An earlier draft had a child safety contact and a compliance contact. Neither is published by ISV, and in Victoria both read as statutory nominations — the portal would have been implying a school is required to appoint them |
+| 2026-08-20 | Container widened to 1200 / 1320px | 1080 put content at 1000px inside the gutters, which is a 2016 measure. Reading measure is set in `ch` so prose was unaffected and only grids and tiles widened, which is the right kind of widening |
+| 2026-08-20 | Portal chrome speaks as the school, ISV's published content does not | The portal is the school's space, so its own things are "our" and the signed-in person's are "my". Rewriting article bodies and service descriptions the same way would make ISV sound like it works at the school |
+| 2026-08-20 | Voice and integrity QA checks strip comments before scanning | A comment explaining a rule contains the phrasing the rule forbids, so scanning raw source made every file that documented its own constraint fail. What ships is the string literals |
 
 ## Fixes after code review
 

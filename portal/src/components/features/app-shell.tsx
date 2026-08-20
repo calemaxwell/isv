@@ -192,7 +192,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           >
             <span className="hidden whitespace-nowrap lg:inline">{fullName(member)}</span>
             <Avatar initials={initials} />
-            <VisuallyHidden>Open your profile</VisuallyHidden>
+            <VisuallyHidden>Open my profile</VisuallyHidden>
           </button>
           </div>
         </div>
@@ -397,7 +397,7 @@ export function ProfilePanel({
   const { member, school, role, setRole } = useMember();
 
   return (
-    <PanelShell open={open} onOpenChange={onOpenChange} title="Your profile">
+    <PanelShell open={open} onOpenChange={onOpenChange} title="My profile">
       {/* The role switcher lives here rather than in the header. Switching
           how the portal is composed is a profile setting, not a piece of
           global navigation. Costs one click in the demo, so open the panel
@@ -489,13 +489,13 @@ export function AlertsPanel({
     <PanelShell open={open} onOpenChange={onOpenChange} title="Alerts">
       <Eyebrow className="mb-3">
         {actions.length > 0
-          ? `${actions.length} needing your attention`
-          : "Nothing needs your attention"}
+          ? `${actions.length} needing our attention`
+          : "Nothing needs our attention"}
       </Eyebrow>
 
       {actions.length === 0 ? (
         <Text size="small" tone="secondary">
-          You are up to date. Anything ISV needs from your school will appear
+          We are up to date. Anything ISV needs from the school will appear
           here.
         </Text>
       ) : (
@@ -562,14 +562,14 @@ export function ContactPanel({
   return (
     <PanelShell open={open} onOpenChange={onOpenChange} title="Contact ISV">
       <Text size="small" tone="secondary" measure="narrow">
-        We can help with anything you cannot find in the portal.
+        ISV can help with anything we cannot find in the portal.
       </Text>
 
       <dl className="mt-6 border-t border-line">
         {[
           ["Phone", ISV_PHONE],
           ["Email", ISV_EMAIL],
-          ["Your school", school.name],
+          ["Our school", school.name],
         ].map(([label, value]) => (
           <div
             key={label}

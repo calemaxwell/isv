@@ -7,7 +7,7 @@ import { AskIsv } from "@/components/features/ask-isv";
 import { Field, Wrap } from "@/components/layout";
 import { Button, Eyebrow, Text } from "@/components/primitives";
 import { eventDetail } from "@/data/events";
-import { placesLeft, schoolRoster, type StaffMember } from "@/data/roster";
+import { placesLeft, type StaffMember } from "@/data/roster";
 import { useMember } from "@/lib/member-context";
 import {
   formatDate,
@@ -38,7 +38,7 @@ type Step = "sessions" | "who" | "details" | "done";
 export default function EventRegisterPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
-  const { member, school } = useMember();
+  const { member, school, people } = useMember();
   const event = getContent(params.id);
 
   const detail = eventDetail(params.id);
@@ -57,13 +57,22 @@ export default function EventRegisterPage() {
   const [query, setQuery] = useState("");
 
   const me = useMemo(
-    () => schoolRoster.find((s) => s.name === fullName(member)),
-    [member],
+    () => people.find((s) => s.name === fullName(member)),
+    [people, member],
   );
 
+  /**
+   * Read from the school account's list, not from the fixture.
+   *
+   * Somebody added under Our people is selectable here in the same session,
+   * and somebody marked as departed is gone from it. That is the point of
+   * holding one list: a school that keeps its own record current gets a
+   * registration picker that is current, without doing anything twice.
+   */
   const colleagues = useMemo(
-    () => schoolRoster.filter((s) => s.id !== me?.id),
-    [me],
+    () =>
+      people.filter((s) => s.id !== me?.id && s.status !== "departed"),
+    [people, me],
   );
 
   /**

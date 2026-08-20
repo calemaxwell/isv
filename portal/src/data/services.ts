@@ -88,7 +88,7 @@ const commonRequestable = {
   contactEmail: ISV_EMAIL,
   contactPhone: ISV_PHONE,
   includedInMembership: true,
-  inclusionNote: "Included in your school's ISV membership",
+  inclusionNote: "Included in our ISV membership",
   deliveredBy: "An ISV adviser",
   nextStepNote: "An ISV adviser will be in touch",
 };

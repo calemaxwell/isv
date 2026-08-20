@@ -211,7 +211,7 @@ export function ServiceTile({
         <span className="mb-4">
           <TilePill tone={tone}>
             {service.includedInMembership
-              ? "Included in your membership"
+              ? "Included in our membership"
               : service.externalLabel}
           </TilePill>
         </span>
@@ -294,7 +294,7 @@ export function LeadEventTile({
         )}
       >
         {item.eventIso ? relativeUpcoming(item.eventIso) : "Running now"}
-        {near ? " · Near your school" : ""}
+        {near ? " · Nearby" : ""}
       </span>
 
       <span className="mb-5 block">
@@ -350,7 +350,7 @@ export function EventTile({
           <Text as="span" size="micro" tone="tertiary" className="mt-1.5 block">
             {meta(item)}
             {item.eventIso ? ` · ${relativeUpcoming(item.eventIso)}` : ""}
-            {near ? " · Near your school" : ""}
+            {near ? " · Nearby" : ""}
           </Text>
           {/* Summary on the secondary tiles too. Without it they were a
               title and a meta line floating in a large box. */}

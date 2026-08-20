@@ -80,7 +80,7 @@ const DETAILS: Record<string, EventDetail> = {
       { time: "7.45am", label: "Discussion opens" },
       { time: "8.45am", label: "Close" },
     ],
-    cost: "Included in your membership",
+    cost: "Included in our membership",
     deliveryNote: "Joining or venue details are emailed after you register.",
     presenters: [],
     helpEmail: "enquiries@is.vic.edu.au",
@@ -88,7 +88,7 @@ const DETAILS: Record<string, EventDetail> = {
   "event-business-managers-forum": {
     about: [
       "A working forum for the people who run the operational side of Independent schools. It is built around what Business Managers are actually dealing with in the current term rather than a fixed agenda set months ahead.",
-      "ISV brings the sector view — what we are seeing across member schools — and the room brings the detail. Both halves matter.",
+      "ISV brings the sector view, what we are seeing across member schools, and the room brings the detail. Both halves matter.",
     ],
     covers: [
       "Operational pressures across the term",
@@ -104,7 +104,7 @@ const DETAILS: Record<string, EventDetail> = {
       { time: "10.45am", label: "Working discussion" },
       { time: "12.00pm", label: "Close and lunch" },
     ],
-    cost: "Included in your membership",
+    cost: "Included in our membership",
     deliveryNote: "Joining or venue details are emailed after you register.",
     presenters: [],
     helpEmail: "enquiries@is.vic.edu.au",
@@ -138,7 +138,7 @@ const DETAILS: Record<string, EventDetail> = {
       { time: "4.30pm", label: "Questions" },
       { time: "5.00pm", label: "Close" },
     ],
-    cost: "Included in your membership",
+    cost: "Included in our membership",
     deliveryNote:
       "Online. A joining link is emailed 24 hours before the session.",
     helpEmail: "learning@is.vic.edu.au",
@@ -162,7 +162,7 @@ const DETAILS: Record<string, EventDetail> = {
       { time: "11.15am", label: "Questions" },
       { time: "11.30am", label: "Close" },
     ],
-    cost: "Included in your membership",
+    cost: "Included in our membership",
     deliveryNote: "Joining or venue details are emailed after you register.",
     presenters: [],
     helpEmail: "enquiries@is.vic.edu.au",
@@ -189,7 +189,7 @@ const DETAILS: Record<string, EventDetail> = {
       "Principals, Deputy Principals, Business Managers, and staff holding child safety or compliance responsibility.",
     venueNote: "Online. Attend the sessions that suit you.",
     runsheet: [],
-    cost: "Included in your membership",
+    cost: "Included in our membership",
     deliveryNote:
       "Online. A joining link is emailed 24 hours before each session you have registered for.",
     recordingNote:
@@ -254,7 +254,7 @@ const DETAILS: Record<string, EventDetail> = {
     audience: "Open to member schools, students and families.",
     venueNote: "Programme and venue detail published closer to the date.",
     runsheet: [],
-    cost: "Included in your membership",
+    cost: "Included in our membership",
     deliveryNote: "Joining or venue details are emailed after you register.",
     presenters: [],
     helpEmail: "enquiries@is.vic.edu.au",
@@ -262,7 +262,7 @@ const DETAILS: Record<string, EventDetail> = {
 };
 
 const LEARNING_FALLBACK: EventDetail = {
-  cost: "Included in your membership",
+  cost: "Included in our membership",
   deliveryNote: "Joining or venue details are emailed after you register.",
   presenters: [],
   helpEmail: "enquiries@is.vic.edu.au",

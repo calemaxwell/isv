@@ -122,7 +122,7 @@ function ModuleBody({ module }: { module: ModuleDef }) {
         return (
           <EmptyState
             heading="No open requests"
-            body="Requests you make through the portal will appear here so you can follow their progress."
+            body="Requests we make through the portal appear here, so we can follow where each one sits."
           />
         );
       }
@@ -285,7 +285,7 @@ function ModuleBody({ module }: { module: ModuleDef }) {
       if (items.length === 0) {
         return (
           <EmptyState
-            heading="Nothing new since your last visit"
+            heading="Nothing new since my last visit"
             body="Updates to ISV resources, guidance and briefings will appear here."
           />
         );
@@ -293,7 +293,7 @@ function ModuleBody({ module }: { module: ModuleDef }) {
       return (
         <UpdateLead
           items={items}
-          sinceLabel="Since your last visit"
+          sinceLabel="Since my last visit"
           contextLine={updateContextLine(items)}
         />
       );
@@ -303,7 +303,7 @@ function ModuleBody({ module }: { module: ModuleDef }) {
       return (
         <EmptyState
           heading="Nothing saved yet"
-          body="Resources you save from the library will appear here so you can come back to them."
+          body="Resources we save from the library appear here, ready to come back to."
         />
       );
 
@@ -332,8 +332,14 @@ function Masthead() {
     <div>
       <div className="masthead-row">
         <div className="masthead-lead">
+          {/* The school name is the way into the school account. It is the
+              one thing on this page that is unambiguously about the school
+              rather than the person, so it is where somebody looks. */}
           <Eyebrow className="mb-3.5">
-            {school.name} · {school.suburb}
+            <AppLink href="/school" className="masthead-school">
+              {school.name}
+            </AppLink>{" "}
+            · {school.suburb}
           </Eyebrow>
           <Text as="h1" size="mega">
             {greeting},
@@ -373,7 +379,7 @@ function Masthead() {
           </Tile>
 
           <Tile tone="sand">
-            <TileHeading className="text-h3">Near your school</TileHeading>
+            <TileHeading className="text-h3">Near us</TileHeading>
             <Text as="span" size="small" tone="secondary" className="mt-2 block">
               {nearCount} {nearCount === 1 ? "session" : "sessions"} running in{" "}
               {school.region.toLowerCase()}
@@ -476,7 +482,7 @@ function ParentsBand() {
         ))}
       </StoryGrid>
       <Text size="micro" tone="tertiary" className="mt-6">
-        Published by ISV on The Parents Website. Share these with your school
+        Published by ISV on The Parents Website. Ready to share with our school
         community.
       </Text>
     </>
@@ -612,7 +618,7 @@ function updateContextLine(items: { category: string }[]): string {
     areas.length > 1
       ? `${areas.slice(0, -1).join(", ")} and ${areas[areas.length - 1]}`
       : areas[0];
-  return `updates across ${list}. Each one touches resources your school uses.`;
+  return `updates across ${list}. Each one touches resources we use.`;
 }
 
 /**
