@@ -2600,6 +2600,41 @@
     color: var(--isv-ink);
   }
 
+  /* Waiting on us.
+
+     Borrowed .applicant-row at first, which is 1fr auto auto for three
+     columns of text. Here the first child is a 2rem icon, so it took the 1fr
+     and pushed the copy against the right edge with the mark stranded on its
+     own. Its own shape: the mark takes what it needs, the copy takes the
+     rest and reads from the left, and the action sits at the right where the
+     eye finishes. */
+  .attention-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.125rem var(--cell-padding);
+    border-bottom: 1px solid var(--color-line);
+    text-decoration: none;
+    color: inherit;
+    transition: background-color var(--isv-duration-base) var(--isv-ease);
+  }
+  .attention-row:last-child {
+    border-bottom: 0;
+  }
+  .attention-row:hover {
+    background-color: color-mix(in srgb, var(--color-action) 5%, transparent);
+  }
+  @media (min-width: 48rem) {
+    .attention-row {
+      grid-template-columns: auto 1fr auto;
+      gap: 1.25rem;
+    }
+    .attention-row > :last-child {
+      margin-left: 1.25rem;
+    }
+  }
+
   /* A label with a flag beside it, on the details form. */
   .field-label {
     display: flex;
@@ -2666,11 +2701,31 @@
     color: var(--color-secondary);
   }
 
+  /* The controls column.
+
+     Two things were wrong with it. The grid's third track is `auto`, which
+     resolves to min-content, and min-content for a two-word button is the
+     longest word — so "They've left" broke onto two lines. nowrap raises the
+     min-content width and the track widens to suit.
+
+     The selects were also sizing to whichever option was chosen, so a row
+     reading Full sat narrower than one reading Standard.
+
+     Both are the same underlying fault: every .listing-row is its own grid,
+     so an auto track is measured per row rather than down the column, and
+     rows with different content land on different widths. Two fixed tracks
+     fixes it properly — every row identical, right edge straight. */
   .person-controls {
-    display: flex;
+    display: grid;
+    grid-template-columns: 7.25rem 8.5rem;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.625rem;
     flex: none;
+    white-space: nowrap;
+  }
+  .person-controls > * {
+    min-width: 0;
+    width: 100%;
   }
   .person-guard {
     padding: 0 0 0.875rem;

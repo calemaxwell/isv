@@ -66,7 +66,12 @@ export function total(invoice: Invoice): number {
   return subtotal(invoice) + gst(invoice);
 }
 
-/** Australian format, no cents on whole amounts a Business Manager scans. */
+/**
+ * Australian format, cents always shown.
+ *
+ * An invoice is a tax document and a Business Manager reconciles it against a
+ * bank line, so 17,220 and 17,220.00 are not the same thing on the page.
+ */
 export function money(amount: number): string {
   return amount.toLocaleString("en-AU", {
     style: "currency",

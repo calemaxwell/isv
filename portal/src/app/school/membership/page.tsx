@@ -15,7 +15,11 @@ import {
   total,
 } from "@/data/membership";
 import { useMember } from "@/lib/member-context";
-import { formatDateWithYear, relativeUpcoming } from "@/lib/selectors";
+import {
+  formatDateWithYear,
+  relativeUpcoming,
+  relativeUpcomingInline,
+} from "@/lib/selectors";
 
 /**
  * Our membership.
@@ -47,7 +51,7 @@ export default function MembershipPage() {
           </Text>
           <Text size="lede" tone="secondary" measure="reading" className="mt-4">
             {unpaid.length > 0
-              ? `${money(owing)} outstanding on invoice ${open.number}, due ${relativeUpcoming(open.dueIso)}.`
+              ? `${money(owing)} outstanding on invoice ${open.number}, due ${relativeUpcomingInline(open.dueIso)}.`
               : "Everything is paid. Our invoices and receipts are kept here."}
           </Text>
         </Wrap>

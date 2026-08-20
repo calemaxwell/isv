@@ -4,6 +4,10 @@ node_modules/
 # Next.js build output
 .next/
 out/
+# A truncated .next left behind when the workspace mount refused an unlink
+# mid-build. Generated output either way, and the directory cannot be
+# removed from inside the sandbox.
+.nv/
 next-env.d.ts
 *.tsbuildinfo
 

@@ -17,7 +17,11 @@ import { money, total } from "@/data/membership";
 import { staleAccess } from "@/data/roster";
 import { accountGroups, lastConfirmed } from "@/data/school-account";
 import { useMember } from "@/lib/member-context";
-import { formatDateWithYear, relativeUpcoming } from "@/lib/selectors";
+import {
+  formatDateWithYear,
+  relativeUpcoming,
+  relativeUpcomingInline,
+} from "@/lib/selectors";
 
 /**
  * The school account.
@@ -56,7 +60,7 @@ export default function SchoolAccountPage() {
       ? {
           id: "attention-invoice",
           title: `${money(owing)} outstanding`,
-          detail: `Invoice ${unpaid[0].number} · due ${relativeUpcoming(unpaid[0].dueIso)}`,
+          detail: `Invoice ${unpaid[0].number} · due ${relativeUpcomingInline(unpaid[0].dueIso)}`,
           href: "/school/membership",
           action: "Pay it",
         }
@@ -125,7 +129,7 @@ export default function SchoolAccountPage() {
                 <AppLink
                   key={item.id}
                   href={item.href}
-                  className="applicant-row"
+                  className="attention-row"
                 >
                   <span className="attention-mark" aria-hidden>
                     <AlertTriangle className="size-4" strokeWidth={1.9} />

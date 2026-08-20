@@ -182,6 +182,21 @@ export function relativeUpcoming(iso: string, from: Date = new Date()): string {
   return months <= 1 ? "Next month" : `In ${months} months`;
 }
 
+/**
+ * The same phrase, for use inside a sentence.
+ *
+ * relativeUpcoming is sentence case because it usually stands alone in a pill
+ * or an eyebrow. Dropped mid-sentence it produced "due Next month", which is
+ * the kind of thing that reads as sloppy long before anyone works out why.
+ */
+export function relativeUpcomingInline(
+  iso: string,
+  from: Date = new Date(),
+): string {
+  const phrase = relativeUpcoming(iso, from);
+  return phrase ? phrase.charAt(0).toLowerCase() + phrase.slice(1) : phrase;
+}
+
 export function selectRequests(
   requests: ServiceRequest[],
   member: Member,
