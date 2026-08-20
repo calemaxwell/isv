@@ -1854,6 +1854,62 @@
   }
 
   /* ------------------------------------------------------------------
+     The ISV lockup
+
+     Mark and wordmark on one baseline. The wordmark is set in the product's
+     own sans at the light weight the identity uses, so it sits with the
+     mark rather than being a second, competing typeface.
+     ------------------------------------------------------------------ */
+  /* The wordmark is part of the mark, so it takes the logo's own blue
+     rather than the page's ink. This is the one place --isv-blue is used
+     on screen — everywhere else it is too light to carry text. */
+  .isv-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6875rem;
+    color: var(--color-brand-mark);
+  }
+  .isv-logo-inverse {
+    color: var(--color-inverse);
+  }
+  .isv-mark {
+    display: block;
+    width: auto;
+    height: 2.125rem;
+    flex: none;
+  }
+  /* Two lines have to sit inside the mark's height, or the type leads and
+     the mark becomes a bullet point next to it. 0.8125rem at 1.15 gives
+     1.87rem against the mark's 2.125rem. */
+  .isv-wordmark {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 0.8125rem;
+    line-height: 1.15;
+    letter-spacing: -0.002em;
+    white-space: nowrap;
+  }
+  @media (max-width: 40rem) {
+    .isv-mark {
+      height: 1.75rem;
+    }
+    .isv-wordmark {
+      font-size: 0.6875rem;
+    }
+  }
+  /* In the public footer the lockup sits on navy and has room, so it runs
+     larger than it does in a header. */
+  .public-footer .isv-mark {
+    height: 2.75rem;
+  }
+  .public-footer .isv-wordmark {
+    font-size: 1.0625rem;
+  }
+  .public-footer .isv-logo {
+    gap: 0.875rem;
+  }
+
+  /* ------------------------------------------------------------------
      Employment and HR
 
      The only area where the member is working rather than reading, so the
@@ -2246,12 +2302,23 @@
      Circles are a component from a different design system; a rule with
      three labelled segments is the same language as the rest of the page.
      ------------------------------------------------------------------ */
+  /* Auto-fit rather than a fixed three. Registration has three steps or
+     four depending on whether the event is a series, and posting a job has
+     four — a hard-coded count wrapped the last one onto its own row. Runs
+     the full width of the container so the rail reads as a progress bar
+     rather than a row of labels. */
   .step-rail {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
     gap: 0.75rem;
     margin-top: 2.25rem;
-    max-width: 34rem;
+  }
+  @media (max-width: 40rem) {
+    .step-rail {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
   .step-rail > li {
     padding-top: 0.625rem;

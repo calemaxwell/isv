@@ -1,13 +1,13 @@
 #!/bin/bash
 #
-# Wordmark lockups.
+# Lockups, built from ISV's own mark.
 #
-# URW Palladio L is a metric clone of Palatino, which is exactly what the
-# product's serif stack falls back to after Iowan Old Style. So these match
-# what the prototype renders rather than approximating it.
+# isv-mark.png is ISV's artwork and is not generated here — it is the file
+# ISV supplied, trimmed to its own bounds. This script only composes it with
+# the wordmark and writes the horizontal and stacked lockups the product and
+# Storybook use.
 #
-# Writes into public/brand, which both the app and Storybook serve at /brand,
-# so there is one copy of the brand rather than two drifting apart.
+# When the vector arrives, replace isv-mark.png and re-run.
 #
 #   bash scripts/build-wordmark.sh
 #
@@ -15,48 +15,46 @@
 set -e
 cd "$(dirname "$0")/.."
 OUT="public/brand"
-mkdir -p "$OUT"
 
-# The new identity is a light geometric sans, not a serif. URW Gothic is
-# the closest metric-compatible face available here; the real brand font
-# replaces it when it arrives.
 FONT="URWGothic-Book"
-INK="#12233d"      # --isv-ink
-DEEP="#2756a0"     # --isv-deep (Deep Blue)
+MARK="#0071b9"     # --isv-blue, the logo's own colour
+DEEP="#2756a0"     # --isv-deep
 PAPER="#ffffff"    # --isv-paper
-PT=180             # large, so it scales down cleanly
+# Type is sized so the two-line block sits inside the mark rather than
+# overrunning it. The mark leads; the words are the caption.
+PT=105
+MARK_H=250
 
-render () {   # $1 out  $2 colour-first  $3 colour-second  $4 layout
-  local out="$OUT/$1" c1="$2" c2="$3" layout="$4"
+compose () {   # $1 out  $2 text colour  $3 mark file  $4 layout
+  local out="$OUT/$1" colour="$2" mark="$3" layout="$4"
 
-  convert -background none -fill "$c1" -font "$FONT" -pointsize $PT \
-    label:"Independent Schools" "$OUT/_a.png"
-  convert -background none -fill "$c2" -font "$FONT" -pointsize $PT \
-    label:"Victoria" "$OUT/_b.png"
+  convert "$mark" -resize x$MARK_H "$OUT/_m.png"
 
   if [ "$layout" = "horizontal" ]; then
-    # One line. A word space between the two colours, sized off the point
-    # size rather than guessed.
-    convert -background none "$OUT/_a.png" \
-      \( -size $((PT/4))x1 xc:none \) "$OUT/_b.png" \
-      +append "$out"
+    convert -background none -fill "$colour" -font "$FONT" -pointsize $PT \
+      label:"Independent Schools Victoria" "$OUT/_t.png"
   else
-    # Stacked, left aligned. Centring a two-word-over-one-word lockup
-    # leaves the second line floating.
-    convert -background none "$OUT/_a.png" "$OUT/_b.png" \
-      -gravity west -append "$out"
+    convert -background none -fill "$colour" -font "$FONT" -pointsize $PT \
+      label:"Independent Schools" "$OUT/_t1.png"
+    convert -background none -fill "$colour" -font "$FONT" -pointsize $PT \
+      label:"Victoria" "$OUT/_t2.png"
+    convert -background none "$OUT/_t1.png" "$OUT/_t2.png" \
+      -gravity west -append "$OUT/_t.png"
   fi
 
-  # Trim to the glyphs, then give it clear space proportional to the type.
-  # A mark with no breathing room gets crushed against whatever sits next
-  # to it.
-  convert "$out" -trim +repage -bordercolor none -border $((PT/3))x$((PT/4)) "$out"
+  # Mark then type, vertically centred, with a gap sized off the type.
+  convert -background none "$OUT/_m.png" \
+    \( -size $((PT/3))x1 xc:none \) "$OUT/_t.png" \
+    -gravity center +append "$out"
+
+  convert "$out" -trim +repage -bordercolor none \
+    -border $((PT/3))x$((PT/4)) "$out"
 }
 
-render isv-horizontal.png          "$INK"   "$DEEP"  horizontal
-render isv-stacked.png             "$INK"   "$DEEP"  stacked
-render isv-horizontal-reversed.png "$PAPER" "$PAPER" horizontal
-render isv-stacked-reversed.png    "$PAPER" "$PAPER" stacked
+compose isv-horizontal.png          "$MARK"  "$OUT/isv-mark.png"          horizontal
+compose isv-stacked.png             "$MARK"  "$OUT/isv-mark.png"          stacked
+compose isv-horizontal-reversed.png "$PAPER" "$OUT/isv-mark-reversed.png" horizontal
+compose isv-stacked-reversed.png    "$PAPER" "$OUT/isv-mark-reversed.png" stacked
 
-rm -f "$OUT/_a.png" "$OUT/_b.png"
-echo "wordmarks → $OUT"
+rm -f "$OUT"/_m.png "$OUT"/_t.png "$OUT"/_t1.png "$OUT"/_t2.png
+echo "lockups → $OUT"

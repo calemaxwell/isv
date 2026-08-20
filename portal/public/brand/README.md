@@ -1,39 +1,47 @@
 # Brand assets
 
-Wordmark lockups for the ISV prototype.
+## The mark
+
+`isv-mark.png` is **ISV's own artwork**, supplied by ISV and trimmed to its
+own bounds. It is not a redraw. `isv-mark-reversed.png` is the same shape in
+paper white for navy and other dark grounds.
+
+A PNG rather than an SVG because that is the file we have. When the vector
+arrives, replace `isv-mark.png` at this path and re-run the lockup script —
+nothing in the code changes.
+
+## Lockups
 
 | File | Use |
 |---|---|
-| `isv-horizontal.png` | One line. Headers, Storybook chrome, anywhere wide and short. |
-| `isv-stacked.png` | Two lines, left aligned. Narrow columns, footers, square spaces. |
-| `isv-horizontal-reversed.png` | The same, in paper white, for navy and other dark grounds. |
+| `isv-horizontal.png` | Mark plus one line of type. Wide, short spaces. |
+| `isv-stacked.png` | Mark plus two lines. Narrow columns, Storybook, square spaces. |
+| `isv-horizontal-reversed.png` | The same in paper white, for dark grounds. |
 | `isv-stacked-reversed.png` | As above, stacked. |
-| `isv-wordmark.svg` | Vector. Live text, so it can be recoloured or re-set. |
+| `isv-wordmark.svg` | Type only, as live text, for recolouring or re-setting. |
 
-Transparent background, roughly 2500px on the long edge, so they scale down
-cleanly and can sit on any ground.
+Transparent background, roughly 2000–2600px on the long edge.
 
 These live in `public/brand` so the app serves them at `/brand/...`, and
 Storybook is pointed at the same directory. One copy of the brand rather
 than two that drift apart.
 
-## What these are, and are not
+## In the product
 
-**Not ISV's logo file.** These are the wordmark treatment used throughout
-the prototype — ink for "Independent Schools", navy for "Victoria" — set in
-URW Palladio L, a metric clone of Palatino, which is what the product's
-serif stack falls back to after Iowan Old Style. So they match what the
-prototype renders rather than approximating it.
+Everything on screen goes through the `Logo` component in
+`src/components/features/app-shell.tsx` — portal header, public header,
+public footer, sign-in. It composes the mark with the wordmark set in the
+product's own sans at the identity's light weight, so the type in the
+lockup and the type on the page are the same face.
 
-Before the pitch, get ISV's real logo from whoever holds the brand assets
-and replace these. Nothing in the code needs to change: the Storybook theme
-points at `isv-stacked.png`, so a like-for-like file swap is enough.
+`variant="mark"` renders the mark alone, for anywhere the name is already
+on screen or the space is tight.
 
-## Regenerating
+## Regenerating the lockups
 
 ```
 bash scripts/build-wordmark.sh
 ```
 
-Needs ImageMagick and the URW fonts. Colours come from the same token values
-the product uses, so they cannot drift from the palette.
+Composes `isv-mark.png` with the wordmark. Needs ImageMagick and the URW
+fonts. Colours come from the same token values the product uses.

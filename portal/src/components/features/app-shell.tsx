@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import clsx from "clsx";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
@@ -30,21 +31,42 @@ const ROLE_OPTIONS: { role: Role; label: string }[] = [
   { role: "business-manager", label: "Business Manager" },
 ];
 
-export function Logo({ inverse = false }: { inverse?: boolean }) {
+/**
+ * The ISV lockup.
+ *
+ * The mark is ISV's own artwork, not a redraw. It is a PNG rather than an
+ * SVG because that is the file we have; when the vector arrives it drops in
+ * at the same path and nothing here changes.
+ *
+ * One component for every surface — portal header, public header, public
+ * footer, sign-in, Storybook — so replacing the brand is replacing a file
+ * rather than hunting for markup.
+ */
+export function Logo({
+  inverse = false,
+  variant = "lockup",
+}: {
+  inverse?: boolean;
+  /** Mark alone where the name is already on screen or space is tight. */
+  variant?: "lockup" | "mark";
+}) {
   return (
-    // The wrapper has to carry a colour. Left to inherit, "Independent
-    // Schools" took the default ink and disappeared into the navy footer
-    // while "Victoria" stayed legible.
-    <span
-      className={clsx(
-        "font-display text-h3 whitespace-nowrap",
-        inverse ? "text-inverse" : "text-primary",
-      )}
-    >
-      Independent Schools{" "}
-      <span className={inverse ? "text-inverse-soft" : "text-action"}>
-        Victoria
-      </span>
+    <span className={clsx("isv-logo", inverse && "isv-logo-inverse")}>
+      <Image
+        src={inverse ? "/brand/isv-mark-reversed.png" : "/brand/isv-mark.png"}
+        alt={variant === "mark" ? "Independent Schools Victoria" : ""}
+        width={1163}
+        height={684}
+        className="isv-mark"
+        priority
+      />
+      {variant === "lockup" ? (
+        <span className="isv-wordmark">
+          Independent Schools
+          <br />
+          Victoria
+        </span>
+      ) : null}
     </span>
   );
 }
