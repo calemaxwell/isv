@@ -1869,6 +1869,18 @@
     gap: 0.6875rem;
     color: var(--color-brand-mark);
   }
+  /* Centred on the mark's own height.
+     
+     The two lines are real spans rather than a <br>, because a line break
+     inside a flex column is not a flex item and cannot be centred. Stretched
+     to the mark's height and centred inside it, the words sit on the mark's
+     middle rather than on the text block's. */
+  .isv-wordmark {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: stretch;
+  }
   .isv-logo-inverse {
     color: var(--color-inverse);
   }
@@ -1878,15 +1890,20 @@
     height: 2.125rem;
     flex: none;
   }
-  /* Two lines have to sit inside the mark's height, or the type leads and
-     the mark becomes a bullet point next to it. 0.8125rem at 1.15 gives
-     1.87rem against the mark's 2.125rem. */
+  /* Weight 500, not 300.
+  
+     The identity's own lockup is light, and it works there because it is
+     set large. At 14px a 300 weight in mid-blue is thin enough to be hard
+     to read — the light weight is a display decision, not a UI one.
+  
+     Two lines still sit inside the mark: 14px at 1.15 gives 32px against
+     the mark's 34px, so the mark leads and the words stay the caption. */
   .isv-wordmark {
     font-family: var(--font-display);
-    font-weight: 300;
-    font-size: 0.8125rem;
+    font-weight: 500;
+    font-size: 0.875rem;
     line-height: 1.15;
-    letter-spacing: -0.002em;
+    letter-spacing: -0.006em;
     white-space: nowrap;
   }
   @media (max-width: 40rem) {
@@ -1894,7 +1911,7 @@
       height: 1.75rem;
     }
     .isv-wordmark {
-      font-size: 0.6875rem;
+      font-size: 0.75rem;
     }
   }
   /* In the public footer the lockup sits on navy and has room, so it runs
@@ -1902,8 +1919,11 @@
   .public-footer .isv-mark {
     height: 2.75rem;
   }
+  /* Larger and on navy, so it can carry the lighter weight the identity
+     uses. This is the one place the wordmark is set at display size. */
   .public-footer .isv-wordmark {
-    font-size: 1.0625rem;
+    font-size: 1.125rem;
+    font-weight: 400;
   }
   .public-footer .isv-logo {
     gap: 0.875rem;

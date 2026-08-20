@@ -62,9 +62,8 @@ export function Logo({
       />
       {variant === "lockup" ? (
         <span className="isv-wordmark">
-          Independent Schools
-          <br />
-          Victoria
+          <span>Independent Schools</span>
+          <span>Victoria</span>
         </span>
       ) : null}
     </span>
