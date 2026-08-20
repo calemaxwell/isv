@@ -15,9 +15,9 @@ import type {
 const text = cva("", {
   variants: {
     size: {
-      mega: "font-serif text-mega font-normal",
-      display: "font-serif text-display font-normal",
-      h2: "font-serif text-h2 font-normal",
+      mega: "font-display text-mega font-normal",
+      display: "font-display text-display font-normal",
+      h2: "font-display text-h2 font-normal",
       h3: "text-h3 font-semibold",
       lede: "text-lede",
       body: "text-body",

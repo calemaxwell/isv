@@ -82,3 +82,53 @@ Direction: updates treatment A at the top of the page, mosaic tiles as an in-pag
 | Filter bars removed, Discovery-status copy removed | The dashed disabled chips read as unfinished and the caveats undercut a sales asset. Noted as a deliberate reversal of PRD s12: the prototype now presents as complete, and the Discovery framing moves to the spoken walkthrough |
 | Hairline grid technique changed | Cells previously sat on a line-coloured background with 1px gaps, so an incomplete final row rendered as a filled slab. Borders now sit on the cells, so empty space stays empty |
 | Portal navigation became two ruled columns | Seven items never divide into three columns. Sub-labels and the Discovery note came out, and every item now presents as a real destination |
+
+## 2026-08-20 — Rebrand to the new ISV identity
+
+ISV launched a new brand. Royal Blue `#2985e0`, Deep Blue `#2756a0`, Ocean
+Blue `#a0dbec`, Sunshine Yellow `#fce17c`, plus the logo's own `#0071b9`.
+Values supplied by Cale; the logo blue was read from the wordmark SVG on
+is.vic.edu.au.
+
+**Decision: replace, not theme.** No toggle, no legacy palette. Walking into
+an ISV room with the identity they retired is worse than any polish item on
+the list.
+
+**Deep is the action colour, not Royal.** Royal is the brighter blue and
+reads as the obvious primary. At 3.80:1 on white it fails AA for text.
+Deep clears 4.5:1 at 7.18. Royal is now reserved for things that are seen
+rather than read — focus rings, marks, the logo gradient, large display
+type. QA check C4 fails the build if `--color-action` ever points anywhere
+but Deep.
+
+**Ocean and Sunshine inverted.** The old red and gold were dark blocks
+carrying white text. Both new colours are *lighter* than most page grounds
+— 1.52:1 and 1.30:1 — so they are bright tints carrying dark text. Every
+tile, the masthead alert and the story cards flipped. This is the single
+biggest behavioural change and the one most likely to catch a future
+contributor out, hence C3.
+
+**Neutrals moved from warm to cool.** The old ramp was warm because navy
+and red go corporate against pure white. ISV's stated intent is freshness
+and clarity; warm greys read as heritage against it.
+
+**The serif is gone.** Palatino said 1949. The new wordmark is a light
+geometric sans and its lightness does most of the work, so display sizes
+drop in weight rather than reaching for a second family. Avenir Next ships
+on macOS and is the closest match to the wordmark, so the demo machine
+renders the intended thing without a webfont dependency. Nunito Sans is the
+fallback. Replace with ISV's licensed font when it arrives — one token.
+
+**Radius held at 4px, deliberately.** The new mark is entirely curve and the
+obvious move is to soften the interface to match. That would make the portal
+look like every other SaaS product. A fluid logo against a disciplined
+interface is a position, and it is now a position rather than a default —
+worth being able to defend out loud.
+
+**Four contrast checks added to QA.** With two brand colours lighter than
+the page and one blue failing AA, the palette is one careless swap from an
+inaccessible product. C1–C4 read the real hex values out of globals.css and
+do the maths on every run.
+
+Outstanding: confirm the four hex values against the brand guide, and get
+the licensed brand font name.

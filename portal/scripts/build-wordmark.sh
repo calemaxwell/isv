@@ -17,10 +17,13 @@ cd "$(dirname "$0")/.."
 OUT="public/brand"
 mkdir -p "$OUT"
 
-FONT="URW-Palladio-L-Roman"
-INK="#161a22"      # --isv-ink
-NAVY="#16294a"     # --isv-navy
-PAPER="#fbfaf8"    # --isv-paper
+# The new identity is a light geometric sans, not a serif. URW Gothic is
+# the closest metric-compatible face available here; the real brand font
+# replaces it when it arrives.
+FONT="URWGothic-Book"
+INK="#12233d"      # --isv-ink
+DEEP="#2756a0"     # --isv-deep (Deep Blue)
+PAPER="#ffffff"    # --isv-paper
 PT=180             # large, so it scales down cleanly
 
 render () {   # $1 out  $2 colour-first  $3 colour-second  $4 layout
@@ -50,8 +53,8 @@ render () {   # $1 out  $2 colour-first  $3 colour-second  $4 layout
   convert "$out" -trim +repage -bordercolor none -border $((PT/3))x$((PT/4)) "$out"
 }
 
-render isv-horizontal.png          "$INK"   "$NAVY"  horizontal
-render isv-stacked.png             "$INK"   "$NAVY"  stacked
+render isv-horizontal.png          "$INK"   "$DEEP"  horizontal
+render isv-stacked.png             "$INK"   "$DEEP"  stacked
 render isv-horizontal-reversed.png "$PAPER" "$PAPER" horizontal
 render isv-stacked-reversed.png    "$PAPER" "$PAPER" stacked
 

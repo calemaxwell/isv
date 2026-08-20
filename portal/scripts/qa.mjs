@@ -415,6 +415,81 @@ check("REF-EVENT", "Every event has a date and location", () =>
 /* ---------- Report ---------- */
 const pad = (s, n) => String(s).padEnd(n);
 console.log("\nISV Member Portal — QA gate (PRD s18)\n");
+/* ---------- Contrast: C1–C4 ----------
+   The rebrand made this non-optional. Two of the four brand colours are
+   lighter than the page ground and one of the blues fails AA for text, so
+   the palette is one careless swap away from an inaccessible product.
+   These read the real values out of globals.css and do the maths. --- */
+const css = readFileSync(
+  new URL("../src/app/globals.css", import.meta.url),
+  "utf8",
+);
+const tok = (name) => {
+  const m = css.match(new RegExp(`${name}:\\s*(#[0-9a-fA-F]{6})`));
+  return m ? m[1] : null;
+};
+const srgb = (c) => {
+  c /= 255;
+  return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+};
+const lum = (hex) => {
+  const h = hex.replace("#", "");
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
+  return 0.2126 * srgb(r) + 0.7152 * srgb(g) + 0.0722 * srgb(b);
+};
+const ratio = (a, b) => {
+  const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m);
+  return (x + 0.05) / (y + 0.05);
+};
+
+const PAGE_GROUNDS = [
+  "--isv-paper", "--isv-paper-cool", "--isv-ocean-tint",
+  "--isv-sun-tint", "--isv-royal-tint", "--isv-deep-tint",
+];
+
+check("C1", "Body, secondary and faint ink clear AA on every page ground", () => {
+  const bad = [];
+  for (const g of PAGE_GROUNDS) {
+    for (const t of ["--isv-ink", "--isv-ink-soft", "--isv-ink-faint"]) {
+      const r = ratio(tok(t), tok(g));
+      if (r < 4.5) bad.push(`${t} on ${g} ${r.toFixed(2)}`);
+    }
+  }
+  return bad;
+});
+
+check("C2", "The action colour clears AA on every page ground", () => {
+  const bad = [];
+  for (const g of PAGE_GROUNDS) {
+    const r = ratio(tok("--isv-deep"), tok(g));
+    if (r < 4.5) bad.push(`action on ${g} ${r.toFixed(2)}`);
+  }
+  return bad;
+});
+
+check("C3", "Ocean and Sunshine tiles clear AA with their own text pair", () => {
+  const bad = [];
+  for (const g of ["--isv-ocean", "--isv-sun"]) {
+    for (const t of ["--isv-on-tint", "--isv-on-tint-soft", "--isv-deep"]) {
+      const r = ratio(tok(t), tok(g));
+      if (r < 4.5) bad.push(`${t} on ${g} ${r.toFixed(2)}`);
+    }
+  }
+  return bad;
+});
+
+check("C4", "Royal is never used where it would need to clear 4.5:1", () => {
+  // Royal is 3.80:1 on white. It is legitimate for marks, focus rings and
+  // large display type, and wrong for a link, a label or a text ground.
+  // If it ever becomes the action colour this check fails loudly.
+  const action = css.match(/--color-action:\s*var\((--isv-[a-z-]+)\)/);
+  if (action && action[1] === "--isv-deep") return [];
+  return [
+    `--color-action points at ${action ? action[1] : "nothing"}, not --isv-deep`,
+  ];
+});
+
+
 for (const result of results) {
   console.log(
     `${result.ok ? "PASS" : "FAIL"}  ${pad(result.id, 11)} ${result.description}`,

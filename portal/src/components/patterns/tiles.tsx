@@ -22,36 +22,45 @@ export type TileTone =
   | "forest";
 
 /**
- * No white tiles. A white box on a warm page reads as a component sitting on
- * top of the design rather than part of it, and eight of them in a column is
+ * No white tiles. A white box on a page reads as a component sitting on top
+ * of the design rather than part of it, and eight of them in a column is
  * what made the middle of the page feel repetitive. Every tone is a tint of
  * the palette instead.
+ *
+ * The 2026 rebrand inverted five of these six. Ocean and Sunshine are
+ * lighter than the page ground rather than darker than it, so where clay
+ * and ochre used to be dark blocks with white text, they are now bright
+ * tints with dark text. Only Deep still carries inverse copy.
  */
 const TONE: Record<TileTone, string> = {
   paper: "border-transparent bg-sunken text-primary",
   sand: "border-transparent bg-field-sand text-primary",
   mist: "border-transparent bg-field-mist text-primary",
-  ochre: "bg-accent-ochre text-inverse",
-  clay: "bg-accent-clay text-inverse",
+  ochre: "border-transparent bg-accent-ochre text-on-tint",
+  clay: "border-transparent bg-accent-clay text-on-tint",
   forest: "bg-field-forest text-inverse",
 };
 
 const PILL: Record<TileTone, string> = {
   paper: "bg-page text-action",
-  sand: "bg-page text-secondary",
+  sand: "bg-page text-action",
   mist: "bg-page text-action",
-  ochre: "bg-page text-primary",
-  clay: "bg-inverse text-accent-clay",
+  ochre: "bg-page text-action",
+  clay: "bg-page text-action",
   forest: "bg-inverse text-action",
 };
 
-/** Gold is a dark tone now, so it uses inverse body copy like navy and red. */
+/**
+ * Only the Deep field takes inverse body copy. On Ocean and Sunshine the
+ * page's own faint tone fails 4.5:1, so those two use a dedicated pair
+ * solved against the tint: 5.50 on Ocean, 6.44 on Sunshine.
+ */
 const BODY: Record<TileTone, string> = {
   paper: "text-secondary",
   sand: "text-secondary",
   mist: "text-secondary",
-  ochre: "text-inverse-soft",
-  clay: "text-inverse-soft",
+  ochre: "text-on-tint-soft",
+  clay: "text-on-tint-soft",
   forest: "text-inverse-soft",
 };
 
@@ -160,7 +169,7 @@ export function TileHeading({
     <h3
       className={clsx(
         serif
-          ? "font-serif text-display font-normal"
+          ? "font-display text-display font-normal"
           : "text-h2 font-semibold",
         className,
       )}
@@ -243,7 +252,7 @@ function EventDate({
     <span className="flex flex-none items-baseline gap-1.5">
       <span
         className={clsx(
-          "font-serif leading-none",
+          "font-display leading-none",
           large ? "text-mega" : "text-display",
         )}
       >
@@ -273,7 +282,8 @@ export function LeadEventTile({
   tone?: TileTone;
   action?: ReactNode;
 }) {
-  const inverse = tone === "forest" || tone === "clay" || tone === "ochre";
+  // Only Deep is a dark ground now. Ocean and Sunshine are bright tints.
+  const inverse = tone === "forest";
 
   return (
     <Tile tone={tone} span={2} rows={2}>

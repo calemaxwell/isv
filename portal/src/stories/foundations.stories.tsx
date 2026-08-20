@@ -76,39 +76,39 @@ function Swatch({
 
 const BRAND = [
   {
-    token: "--isv-navy",
-    name: "Navy",
-    job: "Action. Every control that does something.",
+    token: "--isv-deep",
+    name: "Deep Blue",
+    job: "Action. The only brand blue that clears 4.5:1.",
   },
   {
-    token: "--isv-red",
-    name: "Red",
-    job: "Accent. Attention, never a default state.",
+    token: "--isv-royal",
+    name: "Royal Blue",
+    job: "Seen, not read. Marks, focus, display. 3.80:1.",
   },
   {
-    token: "--isv-gold",
-    name: "Gold",
-    job: "Third voice. Darkened to clear AA on white.",
+    token: "--isv-ocean",
+    name: "Ocean Blue",
+    job: "Bright tint. Dark text on it, never text itself.",
   },
   {
-    token: "--isv-teal",
-    name: "Teal",
-    job: "Supporting. Used sparingly, mostly in tints.",
+    token: "--isv-sun",
+    name: "Sunshine Yellow",
+    job: "Attention. A ground, never a label.",
   },
 ];
 
 const FIELDS = [
   { token: "--color-page", name: "Paper", job: "The default page ground." },
-  { token: "--color-field-warm", name: "Warm", job: "Alternate band." },
+  { token: "--color-field-warm", name: "Cool", job: "Alternate band." },
   { token: "--color-field-sand", name: "Sand", job: "Aside and decision blocks." },
   { token: "--color-field-mist", name: "Mist", job: "Quiet informational band." },
-  { token: "--color-accent-clay", name: "Clay", job: "Red field. Urgency." },
-  { token: "--color-field-forest", name: "Forest", job: "Navy field. Statement." },
+  { token: "--color-accent-clay", name: "Sunshine", job: "Attention. Dark text." },
+  { token: "--color-field-forest", name: "Deep", job: "Statement. White text." },
 ];
 
 const TYPE = [
-  { size: "mega" as const, name: "Mega", job: "Page statement. Serif." },
-  { size: "display" as const, name: "Display", job: "Screen title. Serif." },
+  { size: "mega" as const, name: "Mega", job: "Page statement. Light weight." },
+  { size: "display" as const, name: "Display", job: "Screen title. Light weight." },
   { size: "h2" as const, name: "H2", job: "Section heading." },
   { size: "h3" as const, name: "H3", job: "Card and row heading." },
   { size: "lede" as const, name: "Lede", job: "Standfirst under a title." },
@@ -122,7 +122,7 @@ export const Colour: Story = {
     <>
       <Panel
         heading="Brand"
-        note="Navy carries action and red carries accent, not the other way round. A page where every button is red has no way left to say something is urgent. Gold was darkened from ISV's published value because the original failed AA badly on white — that change is logged in DECISIONS.md and needs confirming against the brand guidelines before the pitch."
+        note="The 2026 identity, and the roles are not the obvious ones. Royal is the brightest blue and reads as the natural primary, but at 3.80:1 it fails AA for text — so Deep carries every control and every link, and Royal is reserved for the things that are seen rather than read. Ocean and Sunshine are lighter than most page grounds, which makes them tint tiles with dark copy, the exact inverse of the red and gold blocks they replace."
       >
         <div className="story-swatches">
           {BRAND.map((c) => (
@@ -149,7 +149,7 @@ export const Typography: Story = {
   render: () => (
     <Panel
       heading="Type scale"
-      note="Serif for statements, sans for everything you actually read. The jump between mega and body is deliberate and large — a scale with eight indistinguishable steps gives a designer nothing to work with."
+      note="One family, differentiated by weight. The old system used a Palatino serif for statements; the new wordmark is a light geometric sans and its lightness does most of the work, so display sizes drop in weight rather than reaching for a second family. Avenir Next ships on macOS and is the closest match; swap in ISV's licensed font when it arrives."
     >
       <div className="grid gap-8">
         {TYPE.map((t) => (
@@ -172,7 +172,7 @@ export const Radius: Story = {
   render: () => (
     <Panel
       heading="Shape"
-      note="Four pixels, not eighteen. The whole visual argument is editorial rather than app-like, and a soft corner is the fastest way to lose that. Pills are the one exception, and only for labels."
+      note="Held at 4px through the rebrand, deliberately. The new mark is entirely curve and the obvious move is to soften the interface to match — which would make the portal look like every other SaaS product. A fluid logo against a disciplined interface is a position, and the restraint is what keeps this reading as an institution."
     >
       <div className="story-swatches">
         <div className="grid gap-2.5">

@@ -133,7 +133,7 @@ export function UpdateLead({
 
         <aside className="bg-field-mist p-cell">
           <Eyebrow className="mb-3">{sinceLabel}</Eyebrow>
-          <p className="font-serif text-mega leading-none">{items.length}</p>
+          <p className="font-display text-mega leading-none">{items.length}</p>
           <Text size="small" tone="secondary" className="mt-3">
             {contextLine}
           </Text>
@@ -468,7 +468,7 @@ export function ScheduleList({
           <div className="row-hover row-rule schedule-row py-4">
             {item.eventIso ? (
               <span className="flex flex-none items-baseline gap-1.5">
-                <span className="font-serif text-h2 leading-none">
+                <span className="font-display text-h2 leading-none">
                   {formatDate(item.eventIso).split(" ")[0]}
                 </span>
                 <span className="text-micro font-semibold uppercase tracking-badge text-tertiary">

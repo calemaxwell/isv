@@ -6,49 +6,80 @@
    means editing this block and nothing else.
    ============================================================ */
 :root {
-  /* ---- ISV brand ----
-     VERIFY BEFORE THE PITCH: these two are the whole identity and they are
-     my reading of ISV's red and navy, not sampled from a brand guide.
-     Confirm both hex values and replace here. Nothing else needs to change,
-     which is the point of keeping brand at the primitive layer. */
-  --isv-red: #c8102e;
-  --isv-navy: #16294a;
+  /* ---- ISV brand, 2026 identity ----
+     The four palette colours as supplied. Everything below is derived from
+     them, and every contrast pair in the product was solved numerically
+     against these exact values. --- */
+  --isv-royal: #2985e0;   /* Royal Blue      */
+  --isv-deep:  #2756a0;   /* Deep Blue       */
+  --isv-ocean: #a0dbec;   /* Ocean Blue      */
+  --isv-sun:   #fce17c;   /* Sunshine Yellow */
 
-  /* brand extensions, derived from the two above */
-  --isv-red-deep: #9c0c24;
-  --isv-red-tint: #fae9ec;
-  --isv-navy-deep: #0e1b33;
-  --isv-navy-tint: #e3e8f1;
+  /* The logo's own blue, from the wordmark SVG. Identity only. */
+  --isv-blue: #0071b9;
 
-  /* supporting palette
-     A red and navy pairing goes cold and corporate very quickly, so the
-     neutrals stay slightly warm and gold carries the third accent. */
-  /* Darkened from #A8792A, which failed badly as a block: body copy measured
-     2.27:1 and white 3.71:1. Gold is now a dark tone like navy and red, so
-     all three colour blocks use inverse text and behave the same way. */
-  --isv-gold: #7d591c;
-  --isv-gold-tint: #f6efdf;
-  --isv-teal: #1a6a63;
+  /* ---- what each one can and cannot do ----
 
-  /* ink and paper */
-  --isv-ink: #161a22;
-  --isv-ink-soft: #444b58;
-  /* Carries most of the small type in the product, so it has to clear 4.5:1
-     on every ground it lands on. Solved against all six: 5.80 on paper,
-     4.77 on stone, 4.92 on navy tint, 5.16 on red tint. */
-  --isv-ink-faint: #5c6370;
-  --isv-paper: #fbfaf8;
-  --isv-paper-warm: #f4f2ee;
-  --isv-stone: #e8e4dd;
-  --isv-stone-deep: #d8d2c8;
+     This is the whole rebrand in four lines, and it is not what the old
+     palette did.
+
+     Deep (7.18:1 on white) is the only brand colour that can carry text.
+     It is the action colour, the link colour and the dark field.
+
+     Royal (3.80:1) cannot. It clears 3:1, so it is legitimate for large
+     display type, focus rings, marks and gradients — and wrong for a link,
+     a label, or a ground with text on it. Reaching for it as the primary
+     button because it is the brightest blue would fail AA on every screen.
+
+     Ocean (1.52:1) and Sunshine (1.30:1) are lighter than most page
+     grounds. They are tint tiles carrying dark text, never text themselves.
+     The old palette's red and gold were dark blocks with white text; these
+     are the exact inverse, which is the single biggest behavioural change
+     in the system. --- */
+
+  --isv-deep-deep: #1b3a6d;
+  --isv-deep-tint: #e9eef6;
+  --isv-royal-tint: #eef5fd;
+  --isv-ocean-tint: #dbf1f8;
+  --isv-sun-tint: #fef2c4;
+
+  /* ink and paper
+     Cool, not warm. The old ramp sat on warm greys because navy and red go
+     corporate against pure white. This identity asks for freshness and
+     clarity, and warm greys read as heritage against it, so the whole
+     neutral ramp is pulled onto the blue side. */
+  --isv-ink: #12233d;
+  --isv-ink-soft: #3f5169;
+  /* Carries most of the small type, so it clears 4.5:1 on every page
+     ground: 5.36 white, 5.14 cool, 4.58 ocean tint, 4.78 sun tint,
+     4.88 royal tint, 4.60 deep tint. */
+  --isv-ink-faint: #5f6c7b;
+
+  /* Text on the two brand tints. Ocean and Sunshine are strong enough that
+     the page's faint tone fails on them, so tiles in those tones use their
+     own pair. */
+  --isv-on-tint: #12233d;
+  --isv-on-tint-soft: #3d4f68;
+
+  --isv-paper: #ffffff;
+  --isv-paper-cool: #f6fbfd;
+  --isv-stone: #dbf1f8;
+  --isv-stone-deep: #bfe4f2;
 
   /* lines */
-  --isv-line: #e4e0d9;
-  --isv-line-firm: #cbc6bd;
+  --isv-line: #e3edf3;
+  --isv-line-firm: #c4d8e4;
   /* Control boundaries need 3:1 under WCAG 1.4.11. line-firm is a hairline
-     rule colour and is fine for decoration, wrong for the edge of an input. */
-  --isv-line-control: #878172;
+     rule colour: fine for decoration, wrong for the edge of an input. */
+  --isv-line-control: #7a8997;
   --isv-white: #ffffff;
+
+  /* status
+     Held clearly outside the brand blues. A success or an error that reads
+     as a brand colour is a message nobody registers. */
+  --isv-success: #0f6d5f;
+  --isv-error: #b3261e;
+  --isv-error-tint: #fbeceb;
 
   /* raw motion */
   --isv-duration-fast: 150ms;
@@ -65,68 +96,86 @@
 @theme {
   /* surface and field roles
      Named by job, not by colour, so a brand change never leaves a token
-     called "forest" pointing at navy. */
+     called "forest" pointing at navy. The 2026 rebrand proved the point:
+     every one of these kept its name and changed its value. */
   --color-page: var(--isv-paper);
   --color-surface: var(--isv-white);
-  --color-sunken: var(--isv-paper-warm);
-  --color-field-warm: var(--isv-paper-warm);
+  --color-sunken: var(--isv-paper-cool);
+  --color-field-warm: var(--isv-paper-cool);
   --color-field-sand: var(--isv-stone);
   --color-field-sand-deep: var(--isv-stone-deep);
-  --color-field-mist: var(--isv-navy-tint);
-  --color-field-clay: var(--isv-red-tint);
-  --color-field-forest: var(--isv-navy-deep);
-  --color-field-ink: var(--isv-ink);
+  --color-field-mist: var(--isv-deep-tint);
+  --color-field-clay: var(--isv-sun-tint);
+  --color-field-forest: var(--isv-deep);
+  --color-field-ink: var(--isv-deep-deep);
 
   /* text roles */
   --color-primary: var(--isv-ink);
   --color-secondary: var(--isv-ink-soft);
   --color-tertiary: var(--isv-ink-faint);
-  --color-inverse: var(--isv-paper);
-  /* Alphas solved against the lightest dark ground we use, which is red.
-     At 72% body copy measured 3.42:1 on red and failed. 87% clears 4.5:1 on
-     red, navy and gold. The faint tone is for non-essential meta only and
-     clears the 3:1 large-text threshold on all three. */
-  --color-inverse-soft: rgb(251 250 247 / 0.87);
-  --color-inverse-faint: rgb(251 250 247 / 0.66);
+  --color-on-tint: var(--isv-on-tint);
+  --color-on-tint-soft: var(--isv-on-tint-soft);
+  --color-inverse: var(--isv-white);
+  /* Solved against the lightest dark ground we use, which is Royal at
+     5.84:1 for pure white. The soft step clears 4.5:1 on Royal and Deep;
+     the faint step is non-essential meta only and clears 3:1 on both. */
+  --color-inverse-soft: #dbe6f4;
+  --color-inverse-faint: #aec3de;
 
   /* line roles */
   --color-line: var(--isv-line);
   --color-line-firm: var(--isv-line-firm);
   --color-line-control: var(--isv-line-control);
-  --color-line-inverse: rgb(255 255 255 / 0.18);
-  --color-line-inverse-firm: rgb(255 255 255 / 0.32);
+  --color-line-inverse: rgb(255 255 255 / 0.22);
+  --color-line-inverse-firm: rgb(255 255 255 / 0.38);
 
   /* action and status roles
-     Navy is the action colour, not red. Red as the primary button in a
-     portal reads as danger and collides with the error state, so it stays
-     the editorial accent where it can carry weight without instructing. */
-  --color-action: var(--isv-navy);
-  --color-action-hover: var(--isv-navy-deep);
-  --color-action-quiet: var(--isv-navy-tint);
-  --color-success: var(--isv-teal);
-  /* Deliberately browner than the brand red so an error never reads as an
-     accent block, and an accent block never reads as an error. */
-  --color-error: #a3231f;
-  --color-error-quiet: #f9ece9;
-  --color-accent-clay: var(--isv-red);
-  --color-accent-ochre: var(--isv-gold);
+     Deep is the action colour, because it is the only brand blue that
+     clears 4.5:1. Royal is brighter and reads as the obvious primary, and
+     using it that way would fail contrast on every screen in the product. */
+  --color-action: var(--isv-deep);
+  --color-action-hover: var(--isv-deep-deep);
+  --color-action-quiet: var(--isv-deep-tint);
+  /* Royal, for the things that are seen rather than read: focus rings,
+     marks, the gradient in the logo, oversized display numerals. */
+  --color-bright: var(--isv-royal);
+  --color-success: var(--isv-success);
+  --color-error: var(--isv-error);
+  --color-error-quiet: var(--isv-error-tint);
+  /* Kept under their old names so every component that referenced an accent
+     still resolves. Clay was red and is now Sunshine; ochre was gold and is
+     now Ocean. Both are light tints now rather than dark blocks, which is
+     the single biggest behavioural change in the rebrand. */
+  --color-accent-clay: var(--isv-sun);
+  --color-accent-ochre: var(--isv-ocean);
+  --color-brand-mark: var(--isv-blue);
 
-  /* typography */
-  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
-    Georgia, "Times New Roman", serif;
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif;
+  /* typography
+     One family, differentiated by weight. The new wordmark is a light
+     geometric sans and its lightness does most of the work, so display
+     sizes drop to 300 rather than reaching for a second family. The old
+     Palatino serif said 1949; this says movement.
+
+     Avenir Next ships on macOS and is the closest match to the wordmark, so
+     the demo machine renders the intended thing. Nunito Sans is the nearest
+     free equivalent for anywhere it is missing. Swap in ISV's licensed
+     brand font when it arrives — one line. */
+  --font-display: "Avenir Next", Avenir, "Nunito Sans", "Segoe UI Variable",
+    "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-sans: "Avenir Next", Avenir, "Nunito Sans", "Segoe UI Variable",
+    "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Helvetica, Arial,
+    sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
 
   --text-mega: 3.625rem;
   --text-mega--line-height: 1.05;
-  --text-mega--letter-spacing: -0.022em;
+  --text-mega--letter-spacing: -0.014em;
   --text-display: 2.5rem;
   --text-display--line-height: 1.12;
-  --text-display--letter-spacing: -0.018em;
+  --text-display--letter-spacing: -0.012em;
   --text-h2: 1.4375rem;
   --text-h2--line-height: 1.25;
-  --text-h2--letter-spacing: -0.012em;
+  --text-h2--letter-spacing: -0.008em;
   --text-h3: 1.0625rem;
   --text-h3--line-height: 1.38;
   --text-h3--letter-spacing: -0.004em;
@@ -148,11 +197,14 @@
   --tracking-kbd: 0.02em;
 
   /* radius
-     The editorial system is square. Tiles carry the mosaic structure and
-     the colour blocks, but not bento softness: 4px, hairlines, no lift.
-     Rounded cards read as a different product to the one we signed off. */
+     Held at 4px through the rebrand, deliberately. The new mark is entirely
+     curve, and the obvious move is to soften the interface to match. That
+     would make the portal look like every other SaaS product. A fluid logo
+     against a disciplined interface is a position, and the restraint is
+     what keeps this reading as an institution rather than an app.
+     Softened one step from 3px to 4px on controls to meet it halfway. */
   --radius-sm: 2px;
-  --radius-md: 3px;
+  --radius-md: 4px;
   --radius-lg: 4px;
   --radius-tile: 4px;
   --radius-chip: 4px;
@@ -166,8 +218,8 @@
 
   /* elevation */
   --shadow-raised:
-    0 1px 2px rgb(32 29 25 / 0.05), 0 12px 32px rgb(32 29 25 / 0.10);
-  --shadow-panel: -8px 0 32px rgb(32 29 25 / 0.10);
+    0 1px 2px rgb(18 35 61 / 0.05), 0 12px 32px rgb(18 35 61 / 0.10);
+  --shadow-panel: -8px 0 32px rgb(18 35 61 / 0.12);
 
   /* motion */
   --ease-isv: var(--isv-ease);
@@ -580,7 +632,7 @@
     display: grid;
     place-items: center;
     border-radius: var(--radius-pill);
-    background-color: var(--color-accent-clay);
+    background-color: var(--color-error);
     color: var(--color-inverse);
     font-size: 0.5625rem;
     font-weight: 700;
@@ -801,7 +853,7 @@
     top: 8%;
     width: 14%;
     height: 14%;
-    background-color: var(--isv-ink);
+    background-color: var(--color-action);
     border-radius: var(--radius-pill);
   }
 
@@ -833,7 +885,7 @@
     bottom: 26%;
     width: 14%;
     height: 32%;
-    background-color: var(--isv-ink);
+    background-color: var(--color-action);
     transform: rotate(12deg);
   }
   .artwork-b .artwork-canvas > i:nth-child(5) {
@@ -957,6 +1009,10 @@
   /* A horizontal pill, not a tile. An alert is one line of news and an
      action, so it earns a bar rather than a box — and a box in clay at
      this size competed with the three tiles directly below it. */
+  /* Sunshine at 1.30:1 cannot carry white text, so the alert inverted with
+     the rebrand: a bright ground with dark copy rather than a dark ground
+     with light copy. It still reads as the loudest thing in the masthead
+     because it is the only saturated colour on the screen. */
   .masthead-alert {
     align-self: flex-start;
     display: inline-flex;
@@ -966,14 +1022,14 @@
     padding: 0.5625rem 1rem 0.5625rem 1.125rem;
     border-radius: var(--radius-pill);
     background-color: var(--color-accent-clay);
-    color: var(--color-inverse);
+    color: var(--color-on-tint);
     text-align: left;
     cursor: pointer;
     transition: background-color var(--isv-duration-base) var(--isv-ease);
   }
 
   .masthead-alert:hover {
-    background-color: var(--isv-red-deep);
+    background-color: var(--isv-sun-tint);
   }
 
   .masthead-alert-mark {
@@ -981,7 +1037,7 @@
     width: 0.4375rem;
     height: 0.4375rem;
     border-radius: var(--radius-pill);
-    background-color: var(--color-inverse);
+    background-color: var(--color-action);
   }
 
   .masthead-alert-flag {
@@ -990,7 +1046,7 @@
     font-weight: 700;
     letter-spacing: var(--tracking-badge);
     text-transform: uppercase;
-    color: var(--color-inverse-soft);
+    color: var(--color-action);
   }
 
   .masthead-alert-title {
@@ -1139,13 +1195,13 @@
     aspect-ratio: 4 / 3;
     background-color: var(--color-field-sand-deep);
   }
-  /* A quiet warm-up so photographs from different sources sit together
+  /* A quiet cool cast so photographs from different sources sit together
      without fighting the palette. */
   .story-image::after {
     content: "";
     position: absolute;
     inset: 0;
-    background-color: var(--isv-navy);
+    background-color: var(--isv-deep);
     opacity: 0.06;
   }
 
@@ -1266,10 +1322,10 @@
       grid-template-columns: repeat(4, 1fr);
     }
   }
-  [data-swatch="--isv-navy"] { background-color: var(--isv-navy); }
-  [data-swatch="--isv-red"] { background-color: var(--isv-red); }
-  [data-swatch="--isv-gold"] { background-color: var(--isv-gold); }
-  [data-swatch="--isv-teal"] { background-color: var(--isv-teal); }
+  [data-swatch="--isv-deep"] { background-color: var(--isv-deep); }
+  [data-swatch="--isv-royal"] { background-color: var(--isv-royal); }
+  [data-swatch="--isv-ocean"] { background-color: var(--isv-ocean); }
+  [data-swatch="--isv-sun"] { background-color: var(--isv-sun); }
   [data-swatch="--color-page"] { background-color: var(--color-page); }
   [data-swatch="--color-field-warm"] { background-color: var(--color-field-warm); }
   [data-swatch="--color-field-sand"] { background-color: var(--color-field-sand); }
@@ -1353,7 +1409,7 @@
     bottom: 0;
     width: 0;
     height: 2px;
-    background-color: var(--color-accent-clay);
+    background-color: var(--color-bright);
     transform: translateX(-50%);
     transition: width var(--isv-duration-base) var(--isv-ease);
   }
@@ -1586,7 +1642,7 @@
   @media (min-width: 48rem) {
     .highlight-card {
       border-bottom: 0;
-      border-top: 2px solid var(--color-accent-clay);
+      border-top: 2px solid var(--color-action);
       padding-top: 1.25rem;
     }
   }
@@ -1914,7 +1970,7 @@
     width: 0.3125rem;
     height: 0.3125rem;
     border-radius: var(--radius-pill);
-    background-color: var(--color-accent-clay);
+    background-color: var(--color-bright);
   }
 
   /* Session series. Modelled on how ISV publishes a recurring programme:
@@ -2022,7 +2078,7 @@
     color: var(--color-tertiary);
   }
   .step-rail > li[data-state="current"] {
-    border-top-color: var(--color-accent-clay);
+    border-top-color: var(--color-bright);
     color: var(--color-primary);
   }
   .step-rail > li[data-state="done"] {
@@ -2160,7 +2216,7 @@
     padding-left: 0.875rem;
   }
   .notice-error {
-    border-left-color: var(--color-accent-clay);
+    border-left-color: var(--color-error);
   }
 
   .summary-list {

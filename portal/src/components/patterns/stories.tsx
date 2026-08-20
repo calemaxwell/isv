@@ -22,8 +22,8 @@ export type StoryTone = "image" | "navy" | "clay" | "ochre" | "sand" | "mist";
 const TONE: Record<StoryTone, string> = {
   image: "bg-field-sand text-primary",
   navy: "bg-field-forest text-inverse",
-  clay: "bg-accent-clay text-inverse",
-  ochre: "bg-accent-ochre text-inverse",
+  clay: "bg-accent-clay text-on-tint",
+  ochre: "bg-accent-ochre text-on-tint",
   sand: "bg-field-sand text-primary",
   mist: "bg-field-mist text-primary",
 };
@@ -31,8 +31,8 @@ const TONE: Record<StoryTone, string> = {
 const BODY: Record<StoryTone, string> = {
   image: "text-secondary",
   navy: "text-inverse-soft",
-  clay: "text-inverse-soft",
-  ochre: "text-inverse-soft",
+  clay: "text-on-tint-soft",
+  ochre: "text-on-tint-soft",
   sand: "text-secondary",
   mist: "text-secondary",
 };
@@ -66,7 +66,9 @@ export function StoryCard({
   const withImage = tone === "image" && imageUrl;
   // Text tone has to be stated. Left to inherit, the primitive applies its
   // own default colour and the headings on the dark cards went black.
-  const inverse = tone === "navy" || tone === "clay" || tone === "ochre";
+  // Only navy is a dark ground after the rebrand. Sunshine and Ocean are
+  // bright tints, so they take the same dark copy as a paper card.
+  const inverse = tone === "navy";
 
   return (
     <article className={clsx("story-card", TONE[tone])}>

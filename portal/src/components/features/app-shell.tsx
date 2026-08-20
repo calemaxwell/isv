@@ -37,7 +37,7 @@ export function Logo({ inverse = false }: { inverse?: boolean }) {
     // while "Victoria" stayed legible.
     <span
       className={clsx(
-        "font-serif text-h3 whitespace-nowrap",
+        "font-display text-h3 whitespace-nowrap",
         inverse ? "text-inverse" : "text-primary",
       )}
     >

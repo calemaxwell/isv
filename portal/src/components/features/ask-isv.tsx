@@ -217,7 +217,7 @@ export function AskIsv({
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Ask ISV a question"
                   aria-label="Ask ISV a question"
-                  className="flex-1 bg-transparent font-serif text-h2 text-inverse outline-none placeholder:text-inverse-faint"
+                  className="flex-1 bg-transparent font-display text-h2 text-inverse outline-none placeholder:text-inverse-faint"
                 />
                 <Button
                   type="submit"
