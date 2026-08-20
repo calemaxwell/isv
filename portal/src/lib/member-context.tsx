@@ -8,6 +8,13 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import {
+  seededApplicants,
+  seededJobs,
+  type Applicant,
+  type ApplicantStatus,
+  type JobAd,
+} from "@/data/jobs";
 import { nextRequestIdentity, seededRequests } from "@/data/requests";
 import { getMember, getSchool } from "@/lib/selectors";
 import type { Member, Role, School, Service, ServiceRequest } from "@/types";
@@ -43,6 +50,23 @@ interface MemberContextValue {
   /** Alerts the member has actioned this session */
   resolvedAlerts: string[];
   resolveAlert: (id: string) => void;
+
+  /**
+   * Employment and HR.
+   *
+   * The one area where the member changes something rather than reading it,
+   * so the state has to survive navigation: post an ad on one screen, see it
+   * in the list on the next, shortlist on a third. Kept here for the same
+   * reason Ask ISV is — the pages are mounted per route and this is not.
+   */
+  jobs: JobAd[];
+  applicants: Applicant[];
+  getJob: (id: string) => JobAd | undefined;
+  applicantsFor: (jobId: string) => Applicant[];
+  postJob: (job: Omit<JobAd, "id" | "status" | "postedIso">) => JobAd;
+  closeJob: (id: string) => void;
+  reopenJob: (id: string) => void;
+  setApplicantStatus: (id: string, status: ApplicantStatus) => void;
 }
 
 const MemberContext = createContext<MemberContextValue | null>(null);
@@ -60,6 +84,66 @@ export function MemberProvider({ children }: { children: ReactNode }) {
   const [contactOpen, setContactOpen] = useState(false);
   const [alertsOpen, setAlertsOpen] = useState(false);
   const [resolvedAlerts, setResolvedAlerts] = useState<string[]>([]);
+  const [jobs, setJobs] = useState<JobAd[]>([...seededJobs]);
+  const [applicants, setApplicants] = useState<Applicant[]>([
+    ...seededApplicants,
+  ]);
+
+  const getJob = useCallback(
+    (id: string) => jobs.find((job) => job.id === id),
+    [jobs],
+  );
+
+  /** Newest first. A business manager wants what just arrived. */
+  const applicantsFor = useCallback(
+    (jobId: string) =>
+      applicants
+        .filter((a) => a.jobId === jobId)
+        .sort((a, b) => b.appliedIso.localeCompare(a.appliedIso)),
+    [applicants],
+  );
+
+  const postJob = useCallback(
+    (draft: Omit<JobAd, "id" | "status" | "postedIso">) => {
+      const job: JobAd = {
+        ...draft,
+        id: `job-${Date.now()}`,
+        status: "open",
+        postedIso: new Date().toISOString().slice(0, 10),
+      };
+      setJobs((current) => [job, ...current]);
+      return job;
+    },
+    [],
+  );
+
+  const closeJob = useCallback((id: string) => {
+    const today = new Date().toISOString().slice(0, 10);
+    setJobs((current) =>
+      current.map((job) =>
+        job.id === id ? { ...job, status: "closed", closedIso: today } : job,
+      ),
+    );
+  }, []);
+
+  // Closing an ad by accident is the obvious mistake in this flow, so it is
+  // reversible rather than a confirmation dialogue nobody reads.
+  const reopenJob = useCallback((id: string) => {
+    setJobs((current) =>
+      current.map((job) =>
+        job.id === id ? { ...job, status: "open", closedIso: undefined } : job,
+      ),
+    );
+  }, []);
+
+  const setApplicantStatus = useCallback(
+    (id: string, status: ApplicantStatus) => {
+      setApplicants((current) =>
+        current.map((a) => (a.id === id ? { ...a, status } : a)),
+      );
+    },
+    [],
+  );
 
   const resolveAlert = useCallback((id: string) => {
     setResolvedAlerts((current) =>
@@ -143,6 +227,14 @@ export function MemberProvider({ children }: { children: ReactNode }) {
       setAlertsOpen,
       resolvedAlerts,
       resolveAlert,
+      jobs,
+      applicants,
+      getJob,
+      applicantsFor,
+      postJob,
+      closeJob,
+      reopenJob,
+      setApplicantStatus,
     }),
     [
       role,
@@ -162,6 +254,14 @@ export function MemberProvider({ children }: { children: ReactNode }) {
       alertsOpen,
       resolvedAlerts,
       resolveAlert,
+      jobs,
+      applicants,
+      getJob,
+      applicantsFor,
+      postJob,
+      closeJob,
+      reopenJob,
+      setApplicantStatus,
     ],
   );
 

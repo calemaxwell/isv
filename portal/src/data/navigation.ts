@@ -10,6 +10,12 @@ import type { NavItem } from "@/types";
  */
 export const portalNavigation: NavItem[] = [
   {
+    id: "nav-employment",
+    label: "Employment and HR",
+    navigates: true,
+    href: "/employment",
+  },
+  {
     id: "nav-resources",
     label: "Resources and knowledge",
     navigates: true,

@@ -30,7 +30,7 @@ export interface PortalArea {
 export const portalAreas: PortalArea[] = [
   {
     id: "area-employment",
-    href: "/resources?topic=people-culture",
+    href: "/employment",
     label: "Employment and HR",
     derivedFrom: "ISV employment relations and isRecruit, is.vic.edu.au",
   },

@@ -37,8 +37,8 @@ export const quicklinks: Quicklink[] = [
   {
     id: "ql-templates",
     label: "Employment templates",
-    note: "Resource library",
-    href: "/resources",
+    note: "Employment and HR",
+    href: "/employment#templates",
     relevantTo: ["business-manager"],
   },
   {
@@ -71,9 +71,16 @@ export const quicklinks: Quicklink[] = [
   },
   {
     id: "ql-vacancies",
-    label: "Advertise a vacancy",
-    note: "Careers",
-    href: "/resources",
+    label: "Post a job ad",
+    note: "Employment and HR",
+    href: "/employment/jobs/new",
+    relevantTo: ["business-manager"],
+  },
+  {
+    id: "ql-applicants",
+    label: "Review applicants",
+    note: "Employment and HR",
+    href: "/employment",
     relevantTo: ["business-manager"],
   },
   {

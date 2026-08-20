@@ -167,6 +167,18 @@ export const moduleComposition: Record<Role, ModuleDef[]> = {
       itemIds: [],
     },
     {
+      // Only the Business Manager sees this. Hiring is their work, and a
+      // Principal who needs it goes through the menu like anything else.
+      id: "mod-hiring",
+      heading: "Hiring",
+      itemType: "hiring",
+      field: "paper",
+      moreLabel: "Employment and HR",
+      moreHref: "/employment",
+      hasFilterBar: false,
+      itemIds: [],
+    },
+    {
       id: "mod-services",
       heading: "Get an answer from ISV",
       itemType: "service",

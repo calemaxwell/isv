@@ -1854,6 +1854,191 @@
   }
 
   /* ------------------------------------------------------------------
+     Employment and HR
+
+     The only area where the member is working rather than reading, so the
+     rows are denser and the actions sit inside the row rather than at the
+     end of a page.
+     ------------------------------------------------------------------ */
+  .applicant-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 1.125rem var(--cell-padding);
+    border-bottom: 1px solid var(--color-line);
+    text-decoration: none;
+    color: inherit;
+    transition: background-color var(--isv-duration-base) var(--isv-ease);
+  }
+  .applicant-row:last-child {
+    border-bottom: 0;
+  }
+  .applicant-row:hover {
+    background-color: color-mix(in srgb, var(--color-action) 5%, transparent);
+  }
+  @media (min-width: 48rem) {
+    .applicant-row {
+      grid-template-columns: 1fr auto auto;
+      gap: 2.5rem;
+    }
+  }
+
+  /* The one number on the landing page that means work rather than
+     reading. Sized to be readable across a room during the walkthrough. */
+  .hiring-figure {
+    display: block;
+    font-size: 4.5rem;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  /* The count on an open role. Large enough to scan a grid of tiles and
+     know which one needs attention without reading a word. */
+  .applicant-tally {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-top: 0.625rem;
+  }
+  .tally-figure {
+    font-size: var(--text-h2);
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  /* --- filter segments --- */
+  .segment {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  .segment-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4375rem;
+    padding: 0.4375rem 0.75rem;
+    border-radius: var(--radius-md);
+    font-size: var(--text-small);
+    color: var(--color-secondary);
+    transition:
+      background-color var(--isv-duration-base) var(--isv-ease),
+      color var(--isv-duration-base) var(--isv-ease);
+  }
+  .segment-option:hover {
+    background-color: var(--color-action-quiet);
+  }
+  .segment-option[data-active] {
+    background-color: var(--color-action);
+    color: var(--color-inverse);
+    font-weight: 600;
+  }
+  .segment-count {
+    font-size: var(--text-pill);
+    font-variant-numeric: tabular-nums;
+    opacity: 0.8;
+  }
+
+  /* --- applicant cards --- */
+  .applicant-list {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .applicant-card {
+    padding: 1.5rem;
+    border-radius: var(--radius-tile);
+    background-color: var(--color-page);
+    border: 1px solid var(--color-line);
+    transition: border-color var(--isv-duration-base) var(--isv-ease);
+  }
+  /* A decision already made recedes. It stays readable and stops competing
+     with the applicants still waiting on one. */
+  .applicant-card[data-status="declined"] {
+    opacity: 0.62;
+  }
+  .applicant-card[data-status="shortlisted"] {
+    border-color: var(--color-action);
+  }
+
+  .applicant-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .applicant-flag {
+    flex: none;
+    padding: 0.1875rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-pill);
+    font-weight: 700;
+    letter-spacing: var(--tracking-badge);
+    text-transform: uppercase;
+    background-color: var(--color-action-quiet);
+    color: var(--color-action);
+  }
+  .applicant-flag[data-status="declined"] {
+    background-color: var(--color-sunken);
+    color: var(--color-tertiary);
+  }
+
+  .applicant-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem 1.25rem;
+    margin-top: 0.875rem;
+    padding-top: 0.875rem;
+    border-top: 1px solid var(--color-line);
+  }
+  .applicant-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    margin-top: 1.125rem;
+  }
+
+  /* --- templates --- */
+  .template-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 48rem) {
+    .template-grid {
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 3rem;
+    }
+  }
+  .template-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.875rem;
+    align-items: start;
+    padding: 1rem 0.75rem;
+    margin-inline: -0.75rem;
+    border-bottom: 1px solid var(--color-line);
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--isv-duration-base) var(--isv-ease);
+  }
+  .template-row:hover {
+    color: var(--color-action);
+  }
+
+  /* --- forms --- */
+  .form-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .form-row {
+    display: block;
+  }
+  .form-row > :first-child {
+    display: block;
+    margin-bottom: 0.4375rem;
+  }
+
+  /* ------------------------------------------------------------------
      Listing screens
 
      Filters sit on one line above a ruled index. Not a sidebar: a sidebar

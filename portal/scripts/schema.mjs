@@ -15,6 +15,12 @@
  *
  * Writes src/generated/component-schema.json, which the Storybook content
  * model page renders and which anything else can consume.
+ *
+ * Scope note. This reads React components. JobAd and Applicant in
+ * src/data/jobs.ts are records a member writes rather than content a
+ * component renders, so they are not here — they are typed and commented in
+ * that file, and a CMS would model them as editable records rather than as
+ * published content types.
  */
 
 import fs from "node:fs";

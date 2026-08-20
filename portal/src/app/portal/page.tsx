@@ -112,6 +112,9 @@ function ModuleBody({ module }: { module: ModuleDef }) {
     case "parents":
       return <ParentsBand />;
 
+    case "hiring":
+      return <HiringBand />;
+
 
     case "request": {
       const mine = selectRequests(requests, member);
@@ -477,6 +480,81 @@ function ParentsBand() {
         community.
       </Text>
     </>
+  );
+}
+
+/**
+ * Hiring, on the Business Manager's landing page.
+ *
+ * A count and the roles it belongs to. The number is deliberately large
+ * because this is the one module on the page that represents work waiting
+ * rather than something to read, and it should be readable from across a
+ * room during the walkthrough.
+ */
+function HiringBand() {
+  const { jobs, applicants, applicantsFor } = useMember();
+  const open = jobs.filter((job) => job.status === "open");
+  const waiting = applicants.filter(
+    (a) => a.status === "new" && open.some((job) => job.id === a.jobId),
+  ).length;
+
+  if (open.length === 0) {
+    return (
+      <EmptyState
+        heading="No roles open"
+        body="Post a job ad and applications will appear here."
+      />
+    );
+  }
+
+  return (
+    <TileGrid>
+      <Tile tone="forest" span={2} rows={2}>
+        <span className="mb-4">
+          <TilePill tone="forest">Waiting on you</TilePill>
+        </span>
+        <span className="block">
+          <span className="hiring-figure">{waiting}</span>
+        </span>
+        <TileHeading serif>
+          {waiting === 1 ? "application to review" : "applications to review"}
+        </TileHeading>
+        <TileBody tone="forest">
+          Across {open.length} open {open.length === 1 ? "role" : "roles"}.
+          Shortlist or set aside, both reversible.
+        </TileBody>
+        <span className="mt-auto pt-7 block">
+          <LinkButton variant="onInverse" size="sm" href="/employment">
+            Review applicants
+          </LinkButton>
+        </span>
+      </Tile>
+
+      {open.slice(0, 2).map((job) => {
+        const list = applicantsFor(job.id);
+        return (
+          <Tile key={job.id} tone="sand" span={2} className="justify-center">
+            <TileHeading className="text-h3">
+              <AppLink
+                href={`/employment/jobs/${job.id}`}
+                className="tile-title-link"
+              >
+                {job.title}
+              </AppLink>
+            </TileHeading>
+            <Text as="span" size="micro" tone="tertiary" className="mt-1.5 block">
+              {job.employmentType} · closes {relativeUpcoming(job.closesIso)}
+            </Text>
+            <TileBody>
+              {list.length} {list.length === 1 ? "application" : "applications"}
+              {list.filter((a) => a.status === "shortlisted").length > 0
+                ? `, ${list.filter((a) => a.status === "shortlisted").length} shortlisted`
+                : ""}
+            </TileBody>
+          </Tile>
+        );
+      })}
+    </TileGrid>
   );
 }
 

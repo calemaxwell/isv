@@ -144,6 +144,7 @@ export type ModuleItemType =
   | "nav"
   | "update"
   | "parents"
+  | "hiring"
   | "empty";
 
 export interface ModuleDef {
